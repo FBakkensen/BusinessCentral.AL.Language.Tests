@@ -11,114 +11,239 @@ codeunit 60059 "Test Record Triggers"
 
     [Test]
     procedure Record_Init_SetsIntegerToZero()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Init()');
+        Rec."Entry No." := 1;
+        Rec."Integer Field" := 99;
+        Rec.Init();
+        Assert.AreEqual(0, Rec."Integer Field", 'Init() must reset Integer Field to 0');
     end;
 
     [Test]
     procedure Record_Init_SetsTextToEmpty()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Init()');
+        Rec."Text Field" := 'hello';
+        Rec.Init();
+        Assert.AreEqual('', Rec."Text Field", 'Init() must reset Text Field to empty string');
     end;
 
     [Test]
     procedure Record_Init_SetsDateToEmpty()
+    var
+        Rec: Record "ALT Universal";
+        EmptyDate: Date;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Init()');
+        Rec."Date Field" := Today();
+        Rec.Init();
+        Assert.AreEqual(EmptyDate, Rec."Date Field", 'Init() must reset Date Field to empty date');
     end;
 
     [Test]
     procedure Record_Init_DoesNotInsert()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Init()');
+        Rec."Entry No." := 1;
+        Rec.Init();
+        Assert.AreEqual(0, Rec.Count(), 'Init() must not insert the record');
+    end;
+
+    [Test]
+    procedure Record_Init_SetsAllFieldsToDefault()
+    var
+        Rec: Record "ALT Universal";
+    begin
+        Initialize();
+        Rec."Integer Field" := 42;
+        Rec."Entry No." := 5;
+        Rec."Text Field" := 'test';
+        Rec.Init();
+        Assert.AreEqual(0, Rec."Entry No.", 'Init() must reset Entry No. to 0');
+        Assert.AreEqual(0, Rec."Integer Field", 'Init() must reset Integer Field to 0');
+        Assert.AreEqual('', Rec."Text Field", 'Init() must reset Text Field to empty');
     end;
 
     [Test]
     procedure Record_AddLink_LinkCountIncreases()
+    var
+        Rec: Record "ALT Universal";
+        LinkId: Integer;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.AddLink()');
+        Rec."Entry No." := 1;
+        Rec.Insert();
+        Rec.Get(1);
+        LinkId := Rec.AddLink('https://example.com');
+        Assert.IsTrue(LinkId > 0, 'AddLink must return a positive link ID');
+        Assert.IsTrue(Rec.HasLinks(), 'HasLinks must return true after AddLink');
     end;
 
     [Test]
     procedure Record_HasLinks_ReturnsTrueAfterAdd()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.HasLinks()');
+        Rec."Entry No." := 2;
+        Rec.Insert();
+        Rec.Get(2);
+        Rec.AddLink('https://example.com');
+        Assert.IsTrue(Rec.HasLinks(), 'HasLinks must return true after adding a link');
     end;
 
     [Test]
     procedure Record_DeleteLink_RemovesLink()
+    var
+        Rec: Record "ALT Universal";
+        LinkId: Integer;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.DeleteLink()');
+        Rec."Entry No." := 3;
+        Rec.Insert();
+        Rec.Get(3);
+        LinkId := Rec.AddLink('https://example.com');
+        Rec.DeleteLink(LinkId);
+        Assert.IsFalse(Rec.HasLinks(), 'HasLinks must return false after deleting the link');
     end;
 
     [Test]
     procedure Record_DeleteLinks_RemovesAll()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.DeleteLinks()');
+        Rec."Entry No." := 4;
+        Rec.Insert();
+        Rec.Get(4);
+        Rec.AddLink('https://example.com');
+        Rec.AddLink('https://example2.com');
+        Rec.DeleteLinks();
+        Assert.IsFalse(Rec.HasLinks(), 'HasLinks must be false after DeleteLinks');
     end;
 
     [Test]
     procedure Record_CopyLinksTable_CopiesLinks()
+    var
+        SourceRec: Record "ALT Universal";
+        TargetRec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.CopyLinks()');
+        SourceRec."Entry No." := 5;
+        SourceRec.Insert();
+        SourceRec.Get(5);
+        SourceRec.AddLink('https://example.com');
+
+        TargetRec."Entry No." := 6;
+        TargetRec.Insert();
+        TargetRec.Get(6);
+        SourceRec.CopyLinks(TargetRec);
+        Assert.IsTrue(TargetRec.HasLinks(), 'CopyLinks must copy links to target record');
     end;
 
     [Test]
     procedure Record_TableName_ReturnsCorrectName()
+    var
+        Rec: Record "ALT Universal";
+        TableName: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.TableName()');
+        TableName := Rec.TableName();
+        Assert.AreEqual('ALT Universal', TableName, 'TableName() must return the correct table name');
     end;
 
     [Test]
     procedure Record_TableCaption_ReturnsCaption()
+    var
+        Rec: Record "ALT Universal";
+        Caption: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.TableCaption()');
+        Caption := Rec.TableCaption();
+        Assert.AreNotEqual('', Caption, 'TableCaption() must return a non-empty caption');
     end;
 
     [Test]
     procedure Record_FieldNo_ReturnsFieldNumber()
+    var
+        Rec: Record "ALT Universal";
+        FieldNo: Integer;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FieldNo()');
+        FieldNo := Rec.FieldNo(Rec."Entry No.");
+        Assert.AreEqual(1, FieldNo, 'FieldNo() must return the correct field number for Entry No.');
     end;
 
     [Test]
     procedure Record_FieldName_ReturnsFieldName()
+    var
+        Rec: Record "ALT Universal";
+        FieldName: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FieldName()');
+        FieldName := Rec.FieldName(Rec."Entry No.");
+        Assert.AreEqual('Entry No.', FieldName, 'FieldName() must return the correct field name');
+    end;
+
+    [Test]
+    procedure Record_FieldCaption_ReturnsCaption()
+    var
+        Rec: Record "ALT Universal";
+        Caption: Text;
+    begin
+        Initialize();
+        Caption := Rec.FieldCaption(Rec."Entry No.");
+        Assert.AreNotEqual('', Caption, 'FieldCaption() must return a non-empty caption');
+    end;
+
+    [Test]
+    procedure Record_FieldActive_EnabledField_ReturnsTrue()
+    var
+        Rec: Record "ALT Universal";
+        IsActive: Boolean;
+    begin
+        Initialize();
+        IsActive := Rec.FieldActive(Rec."Entry No.");
+        Assert.IsTrue(IsActive, 'FieldActive() must return true for Entry No. field');
     end;
 
     [Test]
     procedure Record_ReadPermission_ReturnsTrue()
+    var
+        Rec: Record "ALT Universal";
+        HasPermission: Boolean;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.ReadPermission()');
+        HasPermission := Rec.ReadPermission();
+        Assert.IsTrue(HasPermission, 'ReadPermission() must return true (TestPermissions=Disabled)');
     end;
 
     [Test]
     procedure Record_WritePermission_ReturnsTrue()
+    var
+        Rec: Record "ALT Universal";
+        HasPermission: Boolean;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.WritePermission()');
+        HasPermission := Rec.WritePermission();
+        Assert.IsTrue(HasPermission, 'WritePermission() must return true (TestPermissions=Disabled)');
     end;
 
     [Test]
     procedure Record_CurrentCompany_ReturnsCompanyName()
+    var
+        Rec: Record "ALT Universal";
+        CompanyName: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.CurrentCompany()');
+        CompanyName := Rec.CurrentCompany();
+        Assert.AreNotEqual('', CompanyName, 'CurrentCompany() must return a non-empty company name');
     end;
 
     local procedure Initialize()

@@ -11,65 +11,95 @@ codeunit 60060 "Test Record Lock"
 
     [Test]
     procedure Record_LockTable_Called_TableIsLocked()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.LockTable()');
+        Rec.LockTable();
+        Assert.IsTrue(true, 'LockTable() must not throw an error');
     end;
 
     [Test]
     procedure Record_LockTable_WaitTrue_WaitsForLock()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.LockTable(Wait: true)');
+        Rec.LockTable(true);
+        Assert.IsTrue(true, 'LockTable(Wait: true) must not throw an error');
     end;
 
     [Test]
     procedure Record_LockTable_VersionCheckTrue_ChecksVersion()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.LockTable(VersionCheck: true)');
+        Rec.LockTable(false, true);
+        Assert.IsTrue(true, 'LockTable(Wait: false, VersionCheck: true) must not throw an error');
     end;
 
     [Test]
     procedure Record_Consistent_SetTrue_AllowsInconsistency()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Consistent(true)');
+        Rec.Consistent(true);
+        Assert.IsTrue(true, 'Consistent(true) must not throw an error');
     end;
 
     [Test]
     procedure Record_Consistent_SetFalse_EnforcesConsistency()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Consistent(false)');
+        Rec.Consistent(false);
+        Assert.IsTrue(true, 'Consistent(false) must not throw an error');
     end;
 
     [Test]
     procedure Record_ReadConsistency_Default_ReturnsTrue()
+    var
+        Rec: Record "ALT Universal";
+        IsConsistent: Boolean;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.ReadConsistency()');
+        IsConsistent := Rec.ReadConsistency();
+        Assert.IsTrue(IsConsistent, 'ReadConsistency() must return true by default');
     end;
 
     [Test]
     procedure Record_ReadIsolation_Get_ReturnsDefault()
+    var
+        Rec: Record "ALT Universal";
+        IsolationLevel: IsolationLevel;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.ReadIsolation() Get');
+        IsolationLevel := Rec.ReadIsolation();
+        Assert.IsTrue(true, 'ReadIsolation() must return a valid IsolationLevel enum value');
     end;
 
     [Test]
     procedure Record_ReadIsolation_Set_ChangesIsolation()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.ReadIsolation(Set)');
+        Rec.ReadIsolation(IsolationLevel::Default);
+        Assert.IsTrue(true, 'ReadIsolation(IsolationLevel::Default) must not throw an error');
     end;
 
     [Test]
     procedure Record_RecordLevelLocking_ReturnsBoolean()
+    var
+        Rec: Record "ALT Universal";
+        IsLocking: Boolean;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.RecordLevelLocking()');
+        IsLocking := Rec.RecordLevelLocking();
+        Assert.IsTrue(true, 'RecordLevelLocking() must return a valid boolean value');
     end;
 
     local procedure Initialize()

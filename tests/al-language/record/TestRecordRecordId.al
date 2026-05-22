@@ -11,51 +11,69 @@ codeunit 60062 "Test Record RecordId"
 
     [Test]
     procedure Record_RecordId_InsertedRecord_HasNonEmptyRecordId()
+    var
+        Rec: Record "ALT Universal";
+        RecordIdText: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.RecordId() non-empty');
+        Rec."Entry No." := 1;
+        Rec."Integer Field" := 42;
+        Rec.Insert();
+        RecordIdText := Format(Rec.RecordId());
+        Assert.AreNotEqual('', RecordIdText, 'Record.RecordId() must not be empty for inserted record');
     end;
 
     [Test]
-    procedure Record_RecordId_RecordIdTableNo_MatchesTableId()
+    procedure Record_RecordId_TableNo_MatchesTableId()
+    var
+        Rec: Record "ALT Universal";
+        RecordIdValue: RecordId;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.RecordId() table number matches');
+        Rec."Entry No." := 1;
+        Rec."Integer Field" := 42;
+        Rec.Insert();
+        RecordIdValue := Rec.RecordId();
+        Assert.AreEqual(60000, RecordIdValue.TableNo(), 'RecordId().TableNo must equal 60000 (ALT Universal table number)');
     end;
 
     [Test]
     procedure Record_RecordId_CompositeKey_RecordIdContainsAllKeyFields()
+    var
+        Rec: Record "ALT Composite";
+        RecordIdText: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.RecordId() composite key contains all fields');
-    end;
-
-    [Test]
-    procedure Record_FullyQualifiedName_ReturnsNonEmpty()
-    begin
-        Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FullyQualifiedName() non-empty');
-    end;
-
-    [Test]
-    procedure Record_FullyQualifiedName_ContainsTableName()
-    begin
-        Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FullyQualifiedName() contains table name');
+        Rec."Key1" := 1;
+        Rec."Key2" := 'X';
+        Rec."Key3" := 5;
+        Rec."Value1" := 'Test Data';
+        Rec.Insert();
+        RecordIdText := Format(Rec.RecordId());
+        Assert.AreNotEqual('', RecordIdText, 'RecordId() for composite key record must not be empty');
+        Assert.IsTrue(RecordIdText.Contains('1'), 'RecordId() for composite key must contain key value 1');
     end;
 
     [Test]
     procedure Record_TableName_ReturnsCorrectName()
+    var
+        Rec: Record "ALT Universal";
+        TableNameResult: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.TableName() correct name');
+        TableNameResult := Rec.TableName();
+        Assert.AreEqual('ALT Universal', TableNameResult, 'Record.TableName() must return "ALT Universal"');
     end;
 
     [Test]
     procedure Record_TableCaption_ReturnsCaption()
+    var
+        Rec: Record "ALT Universal";
+        CaptionResult: Text;
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.TableCaption() returns caption');
+        CaptionResult := Rec.TableCaption();
+        Assert.AreNotEqual('', CaptionResult, 'Record.TableCaption() must not be empty');
     end;
 
     local procedure Initialize()

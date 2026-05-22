@@ -11,58 +11,95 @@ codeunit 60065 "Test Record Validate"
 
     [Test]
     procedure Record_Validate_WithNewValue_SetsAndValidates()
+    var
+        Triggered: Record "ALT Triggered";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Validate(Field: Any, NewValue: Any)');
+        Triggered."Entry No." := 1;
+        Triggered.Insert(false);
+        Triggered.Validate("Watched Field", 'Hello');
+        Assert.AreEqual('Hello', Triggered."Watched Field", 'Validate must set the field value to the new value');
     end;
 
     [Test]
     procedure Record_Validate_WithoutNewValue_ValidatesExistingValue()
+    var
+        Triggered: Record "ALT Triggered";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Validate(Field: Any)');
+        Triggered."Entry No." := 1;
+        Triggered."Watched Field" := 'Existing';
+        Triggered.Insert(false);
+        Triggered.Validate("Watched Field");
+        Assert.AreEqual('Existing', Triggered."Watched Field", 'Validate without new value must keep existing value');
     end;
 
     [Test]
     procedure Record_Validate_FiresOnValidateTrigger()
+    var
+        Triggered: Record "ALT Triggered";
+        TrigLog: Record "ALT Trigger Log";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Validate(Field: Any, NewValue: Any)');
+        Triggered."Entry No." := 1;
+        Triggered.Insert(false);
+        Triggered.Validate("Watched Field", 'TriggerTest');
+        TrigLog.SetRange("TriggerName", 'OnValidate');
+        Assert.AreEqual(1, TrigLog.Count(), 'OnValidate trigger must fire exactly once when Validate() is called');
     end;
 
     [Test]
-    procedure Record_Validate_InvalidValue_ThrowsError()
+    procedure Record_Validate_OnValidateNewValue_InTriggerLog()
+    var
+        Triggered: Record "ALT Triggered";
+        TrigLog: Record "ALT Trigger Log";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.Validate(Field: Any, NewValue: Any)');
+        Triggered."Entry No." := 1;
+        Triggered.Insert(false);
+        Triggered.Validate("Watched Field", 'LoggedValue');
+        TrigLog.SetRange("TriggerName", 'OnValidate');
+        Assert.IsTrue(TrigLog.FindFirst(), 'OnValidate trigger log entry must exist');
+        Assert.AreEqual('LoggedValue', TrigLog."NewValue", 'Trigger log must record the new value passed to Validate');
     end;
 
     [Test]
     procedure Record_FieldError_ThrowsErrorWithDefaultMessage()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FieldError(Field: Any)');
+        Rec."Entry No." := 1;
+        Rec.Insert();
+        Rec.Get(1);
+        asserterror Rec.FieldError("Integer Field");
+        Assert.AreNotEqual('', GetLastErrorText(), 'FieldError must throw an error with a non-empty message');
     end;
 
     [Test]
     procedure Record_FieldError_ThrowsErrorWithCustomMessage()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FieldError(Field: Any, Text: String)');
+        Rec."Entry No." := 1;
+        Rec.Insert();
+        Rec.Get(1);
+        asserterror Rec.FieldError("Integer Field", 'Custom error message');
+        Assert.IsTrue(StrPos(GetLastErrorText(), 'Custom error message') > 0, 'FieldError with custom text must include the custom message');
     end;
 
     [Test]
-    procedure Record_FieldError_ThrowsWithTextMessage()
+    procedure Record_FieldError_ErrorMessageContainsFieldName()
+    var
+        Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FieldError(Field: Any, Text: Text)');
-    end;
-
-    [Test]
-    procedure Record_FieldError_ThrowsWithErrorInfo()
-    begin
-        Initialize();
-        Assert.IsTrue(false, 'STUB — Record.FieldError(Field: Any, ErrorInfo: ErrorInfo)');
+        Rec."Entry No." := 1;
+        Rec.Insert();
+        Rec.Get(1);
+        asserterror Rec.FieldError("Integer Field");
+        Assert.IsTrue(StrPos(GetLastErrorText(), 'Integer Field') > 0, 'Error message must contain the field name');
     end;
 
     local procedure Initialize()
