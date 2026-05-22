@@ -11,6 +11,7 @@ codeunit 60019 ALTFixtureCleanup
         ALTKeyed: Record "ALT Keyed";
         ALTBase: Record "ALT Base";
         ALTBlob: Record "ALT Blob";
+        ALTErrorTrigger: Record "ALT Error Trigger";
     begin
         ALTUniversal.DeleteAll(false);
         ALTComposite.DeleteAll(false);
@@ -21,5 +22,6 @@ codeunit 60019 ALTFixtureCleanup
         ALTKeyed.DeleteAll(false);
         ALTBase.DeleteAll(false);
         ALTBlob.DeleteAll(false);
+        ALTErrorTrigger.DeleteAll(false);
     end;
 }
