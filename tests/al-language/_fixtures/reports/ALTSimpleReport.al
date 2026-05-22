@@ -1,7 +1,7 @@
 report 60018 "ALT Simple Report"
 {
     Caption = 'ALT Simple Report';
-    UsageCategory = None;
+    UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
     ProcessingOnly = true;
 

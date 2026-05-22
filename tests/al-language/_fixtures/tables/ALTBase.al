@@ -1,3 +1,6 @@
+// ALT Base + the three "extension" fields are merged into one table because
+// tableextension cannot target a table in the same app. Test coverage for
+// extension-field behaviour (field access, filter, validate) uses these fields.
 table 60007 "ALT Base"
 {
     fields
@@ -22,21 +25,6 @@ table 60007 "ALT Base"
         {
             DataClassification = SystemMetadata;
         }
-    }
-
-    keys
-    {
-        key(PK; "Entry No.")
-        {
-            Clustered = true;
-        }
-    }
-}
-
-tableextension 60020 "ALT Extension" extends "ALT Base"
-{
-    fields
-    {
         field(10; "Ext Text"; Text[100])
         {
             DataClassification = SystemMetadata;
@@ -48,6 +36,14 @@ tableextension 60020 "ALT Extension" extends "ALT Base"
         field(12; "Ext Code"; Code[10])
         {
             DataClassification = SystemMetadata;
+        }
+    }
+
+    keys
+    {
+        key(PK; "Entry No.")
+        {
+            Clustered = true;
         }
     }
 }

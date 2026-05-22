@@ -25,7 +25,7 @@ table 60002 "ALT Triggered"
                 TrigLog."TriggerName" := 'OnValidate';
                 TrigLog."SourceEntryNo" := Rec."Entry No.";
                 TrigLog."NewValue" := Rec."Watched Field";
-                TrigLog."Timestamp" := CurrentDateTime();
+                TrigLog."LoggedAt" := CurrentDateTime();
                 TrigLog.Insert();
             end;
         }
@@ -46,7 +46,7 @@ table 60002 "ALT Triggered"
         TrigLog."TriggerName" := 'OnInsert';
         TrigLog."SourceEntryNo" := Rec."Entry No.";
         TrigLog."NewValue" := Rec."Watched Field";
-        TrigLog."Timestamp" := CurrentDateTime();
+        TrigLog."LoggedAt" := CurrentDateTime();
         TrigLog.Insert();
     end;
 
@@ -56,7 +56,7 @@ table 60002 "ALT Triggered"
     begin
         TrigLog."TriggerName" := 'OnModify';
         TrigLog."SourceEntryNo" := Rec."Entry No.";
-        TrigLog."Timestamp" := CurrentDateTime();
+        TrigLog."LoggedAt" := CurrentDateTime();
         TrigLog.Insert();
     end;
 
@@ -66,7 +66,7 @@ table 60002 "ALT Triggered"
     begin
         TrigLog."TriggerName" := 'OnDelete';
         TrigLog."SourceEntryNo" := Rec."Entry No.";
-        TrigLog."Timestamp" := CurrentDateTime();
+        TrigLog."LoggedAt" := CurrentDateTime();
         TrigLog.Insert();
     end;
 
@@ -76,7 +76,7 @@ table 60002 "ALT Triggered"
     begin
         TrigLog."TriggerName" := 'OnRename';
         TrigLog."SourceEntryNo" := Rec."Entry No.";
-        TrigLog."Timestamp" := CurrentDateTime();
+        TrigLog."LoggedAt" := CurrentDateTime();
         TrigLog.Insert();
     end;
 }
@@ -106,7 +106,7 @@ table 60003 "ALT Trigger Log"
         {
             DataClassification = SystemMetadata;
         }
-        field(6; "Timestamp"; DateTime)
+        field(6; "LoggedAt"; DateTime)  // renamed from Timestamp (conflicts with SystemRowVersion)
         {
             DataClassification = SystemMetadata;
         }
