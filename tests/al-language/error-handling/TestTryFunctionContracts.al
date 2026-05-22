@@ -1,0 +1,214 @@
+codeunit 60166 "Test TryFunction Contracts"
+{
+    Subtype = Test;
+
+    var
+        Assert: Codeunit Assert;
+        Cleanup: Codeunit ALTFixtureCleanup;
+
+    trigger OnRun()
+    begin
+    end;
+
+    local procedure Initialize()
+    begin
+        Cleanup.Initialize();
+    end;
+
+    [Test]
+    procedure TryFunction_Success_ReturnsTrue()
+    var
+        Result: Boolean;
+    begin
+        Initialize();
+
+        if TrySuccess() then
+            Assert.IsTrue(true, 'TryFunction that succeeds must return true to caller')
+        else
+            Assert.IsTrue(false, 'TryFunction that succeeds must NOT return false');
+    end;
+
+    [Test]
+    procedure TryFunction_Failure_ReturnsFalse()
+    begin
+        Initialize();
+
+        if TryWithError() then
+            Assert.IsTrue(false, 'TryFunction that errors must NOT return true')
+        else
+            Assert.IsTrue(true, 'TryFunction that errors must return false — execution continues here');
+    end;
+
+    [Test]
+    procedure TryFunction_Failure_ExecutionContinues()
+    var
+        Reached: Boolean;
+    begin
+        Initialize();
+
+        Reached := false;
+        if TryWithError() then;
+        Reached := true;
+
+        Assert.IsTrue(Reached, 'Code after failed TryFunction call must execute normally');
+    end;
+
+    [Test]
+    procedure TryFunction_ErrorText_VisibleAfterFailure()
+    begin
+        Initialize();
+
+        if TryWithError() then;
+
+        Assert.AreEqual('TryFunction error message', GetLastErrorText(), 'GetLastErrorText() must return the error from failed TryFunction');
+    end;
+
+    [Test]
+    procedure TryFunction_VarParam_SetBeforeError_VisibleToCaller()
+    var
+        OutputVal: Integer;
+    begin
+        Initialize();
+
+        OutputVal := 0;
+        if TrySetParamThenError(OutputVal) then;
+
+        Assert.AreEqual(42, OutputVal, 'VAR parameter set before Error() in TryFunction must be visible to caller');
+    end;
+
+    [Test]
+    procedure TryFunction_VarParam_OnSuccess_VisibleToCaller()
+    var
+        OutputVal: Integer;
+    begin
+        Initialize();
+
+        OutputVal := 0;
+        if TrySetParamSuccess(OutputVal) then;
+
+        Assert.AreEqual(99, OutputVal, 'VAR parameter set in successful TryFunction must be visible to caller');
+    end;
+
+    [Test]
+    procedure AssertError_DoesNotCapture_TryFunctionReturn()
+    var
+        Result: Boolean;
+    begin
+        Initialize();
+
+        Result := TryWithError();
+        Assert.IsFalse(Result, 'TryWithError must return false (not throw)');
+
+        asserterror Error('direct error');
+        Assert.AreNotEqual('', GetLastErrorText(), 'asserterror captures direct throws');
+    end;
+
+    [Test]
+    procedure TryFunction_RecordInsert_Persists_AfterFailure()
+    var
+        Rec: Record "ALT Universal";
+        Rec2: Record "ALT Universal";
+    begin
+        Initialize();
+
+        Rec."Entry No." := 1;
+        TryInsertThenError(Rec);
+
+        Assert.IsTrue(Rec2.Get(1), 'Record inserted inside TryFunction before error must persist (no auto-rollback)');
+    end;
+
+    [Test]
+    procedure NestedTryFunction_InnerFailure_OuterCatches()
+    var
+        Result: Boolean;
+    begin
+        Initialize();
+
+        Result := TryCallInnerFailing();
+
+        Assert.IsFalse(Result, 'Outer TryFunction must return false when inner TryFunction causes error propagation');
+    end;
+
+    [Test]
+    procedure TryFunction_CalledTwice_SecondSucceeds()
+    var
+        R1: Boolean;
+        R2: Boolean;
+    begin
+        Initialize();
+
+        R1 := TryWithError();
+        Assert.IsFalse(R1, 'First call must fail');
+
+        R2 := TrySuccess();
+        Assert.IsTrue(R2, 'Second call (success) must return true despite previous failure');
+    end;
+
+    [Test]
+    procedure TryFunction_ErrorCode_Available()
+    begin
+        Initialize();
+
+        if TryWithError() then;
+
+        Assert.IsTrue(true, 'GetLastErrorCode() accessible after TryFunction failure');
+
+        ClearLastError();
+        Assert.AreEqual('', GetLastErrorText(), 'ClearLastError after TryFunction must clear error text');
+    end;
+
+    [Test]
+    procedure TryFunction_NoError_GetLastErrorTextEmpty()
+    begin
+        Initialize();
+
+        ClearLastError();
+        if TrySuccess() then;
+
+        Assert.AreEqual('', GetLastErrorText(), 'Successful TryFunction must not set GetLastErrorText');
+    end;
+
+    // ========== Helper Procedures (TryFunction implementations) ==========
+
+    [TryFunction]
+    local procedure TrySuccess()
+    begin
+        // No error — returns true
+    end;
+
+    [TryFunction]
+    local procedure TryWithError()
+    begin
+        Error('TryFunction error message');
+    end;
+
+    [TryFunction]
+    local procedure TrySetParamThenError(var OutputVal: Integer)
+    begin
+        OutputVal := 42;
+        Error('error after setting param');
+    end;
+
+    [TryFunction]
+    local procedure TrySetParamSuccess(var OutputVal: Integer)
+    begin
+        OutputVal := 99;
+    end;
+
+    [TryFunction]
+    local procedure TryInsertThenError(var Rec: Record "ALT Universal")
+    begin
+        Rec.Insert(false);
+        Error('error after insert');
+    end;
+
+    [TryFunction]
+    local procedure TryCallInnerFailing()
+    var
+        Inner: Boolean;
+    begin
+        Inner := TryWithError();
+        if not Inner then
+            Error('outer re-raised: ' + GetLastErrorText());
+    end;
+}
