@@ -1,0 +1,26 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "AL Language Coverage Tests",
+  "publisher": "AL Language",
+  "version": "1.0.0.0",
+  "brief": "Executable proof that the AL language works correctly against a real BC instance.",
+  "description": "Ground-up test suite covering the in-scope AL language surface. Every test proves one documented behavior. Designed to run against a local BC Docker container, not the AL Runner.",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "16.0.0.0",
+  "idRanges": [
+    {
+      "from": 60000,
+      "to": 60999
+    }
+  ],
+  "features": [],
+  "runtime": "7.0",
+  "target": "OnPrem"
+}

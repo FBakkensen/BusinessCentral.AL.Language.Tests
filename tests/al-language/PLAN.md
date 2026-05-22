@@ -1,0 +1,399 @@
+# AL Language Coverage Test Suite — Plan
+
+## What This Is
+
+A ground-up, human- and agent-readable test suite that proves the AL language works
+correctly against a real Business Central instance. It is **not** a runner regression
+suite. Its only job is to serve as an executable specification of the AL language.
+
+Every test in this suite is a proof. A reader — human or agent — should be able to
+open any test file, read one test method, and know exactly:
+
+1. Which AL language feature it covers
+2. What the BC documentation says should happen
+3. That BC actually does that thing when run against a real container
+
+## Why Start From Scratch
+
+The existing `tests/bucket-*` suites are runner regression tests. They were written
+incrementally alongside runner development, mix concerns, have per-test boilerplate
+tables and helper codeunits, and are not structured for language-coverage navigation.
+Salvaging them into a coverage document would cost more than building clean.
+
+The existing tests remain valuable — they stay in place as runner CI — but they are
+not this.
+
+## Relationship to the AL Runner
+
+This folder is **isolated from the runner**. The runner CI picks up `tests/bucket-*/`
+only. This folder has its own `app.json` and is never compiled or executed by the
+runner pipeline.
+
+**Target runtime:** Real BC container (`docker compose up` from `bc-linux`).
+**Credentials:** `BCRUNNER` / `Admin123!` (local dev defaults, see `.local-bc` skill).
+**Publish:** `bc-publish` or direct `curl` to port 7049.
+**Run:** `python3 run-bc-tests.py` (to be written, same pattern as bucket-1).
+
+A test that passes on the runner but fails here means the runner has a gap.
+A test that passes here but fails on the runner is a runner bug to fix.
+
+## Design Principles
+
+### 1. One test = one thing
+Each `[Test]` procedure covers exactly one method, one overload, or one behavioral
+rule. If the test name does not tell you the complete scope, it is too broad.
+
+Good: `Record_Insert_DuplicateKey_Throws`
+Bad: `RecordTests`
+
+### 2. Tests prove, not just execute
+Every test must fail if the implementation is broken. Ask: would this test still pass
+if the method always returned a default value (0, '', false)?  If yes, strengthen it.
+
+Good: `Assert.AreEqual(3, Rec.Count(), '...')`
+Bad: `Assert.IsTrue(Rec.FindFirst(), '...')` when you do not check the field values
+
+### 3. No forced file separation
+If the test needs a small helper procedure, it lives in the same file as the test.
+Multi-object `.al` files are legal AL. Use them.
+
+Only create a separate file when:
+- The object is shared across more than one test area, OR
+- The object is a fixture table / enum / interface from the shared fixture library
+
+### 4. Minimal boilerplate
+Every test uses shared fixture tables. No per-test table definitions.
+`Initialize()` is a call to the shared cleanup codeunit — one line.
+The test body is setup (2-5 lines) + act (1 line) + assert (1-2 lines).
+
+### 5. Discoverable by name
+A developer searching for "how does SetRange work with Date fields" must find the
+test in under 10 seconds. Folder path + file name + procedure name together spell
+out the complete claim.
+
+Pattern: `tests/al-language/<area>/<type-or-feature>/Test<TypeName><Method>.al`
+Procedure: `<Type>_<Method>_<Scenario>_<ExpectedOutcome>`
+
+### 6. Documentation-anchored
+Every test area has a doc-link comment pointing to the BC documentation page that
+specifies the behavior being tested. If the BC docs change, the test must be reviewed.
+
+---
+
+## In-Scope Boundary
+
+Derived from `docs/scope.md` in the runner repo. Tests are only written for features
+the runner is designed to support. Out-of-scope features are explicitly listed so
+agents do not write tests for them.
+
+**In scope (test everything):**
+- Record CRUD, filters, FlowFields, keys, triggers, locking, SystemId, RecordId
+- RecordRef / FieldRef full API
+- Codeunit instantiation, interfaces, events (subscribe/publish/bind)
+- Error handling: Error(), asserterror, ErrorInfo, collected errors
+- Text, TextBuilder, BigText
+- JSON (JsonObject, JsonArray, JsonToken, JsonValue)
+- XML (XmlDocument, XmlElement, XmlAttribute, XmlNamespaceManager)
+- Streams (InStream, OutStream, Blob)
+- Date/Time arithmetic and formatting
+- Integer, Decimal, Boolean arithmetic and edge cases
+- Guid, Variant, RecordId coercions
+- List<T>, Dictionary<T,U>, Array
+- Session functions: UserId, CompanyName, Today, CurrentDateTime, Format, Evaluate
+- Database: Commit, IsEmpty, Count, LockTable (in-scope overloads)
+- NavApp: GetCurrentModuleInfo, resource access
+- Notification dispatch (handler-captured)
+- Page handler dispatch (TestPage API — in-scope operations only)
+- Report handler dispatch (RequestPage callback — no rendering)
+- DataTransfer — out of scope outside upgrade/install context (test that it throws)
+
+**Out of scope (do NOT write tests — write one negative test confirming it throws):**
+- File.Upload / File.Download (browser round-trip)
+- SMTP / email sending
+- HttpClient (throws in runner; write one "blocks with error" test)
+- OData / SOAP endpoints
+- Background task scheduling / job queue execution
+- Report rendering to PDF/Word
+- Printing
+
+---
+
+## Fixture Library
+
+All tests share a common set of objects defined in `_fixtures/`. These objects are
+never modified by tests — tests insert/modify/delete data, not schema.
+
+### Tables
+
+| Object | Purpose |
+|---|---|
+| `ALT Universal` (50900) | All primitive field types on one table. Single integer PK. Covers filter, sort, validate, field metadata tests for every data type. |
+| `ALT Composite` (50901) | 3-field composite PK: Integer + Code[20] + Integer. Covers multi-field Get, Rename, composite filter tests. |
+| `ALT Triggered` (50902) | All five triggers (OnInsert, OnModify, OnDelete, OnRename, OnValidate on one field). Writes fired trigger name to `ALT Trigger Log`. |
+| `ALT Trigger Log` (50903) | Side-car: records which trigger fired and with what values. Lets tests assert trigger sequence. |
+| `ALT Parent` (50904) | Parent side of a FlowField pair. FlowFields: Count of children, Sum of child Amount, Lookup of first child Code. |
+| `ALT Child` (50905) | Child side: FK to ALT Parent, Code[20] + Amount Decimal. |
+| `ALT Keyed` (50906) | 3 secondary keys with different field combinations. Covers SetCurrentKey, key ordering, IsEmpty with filter. |
+| `ALT Base` (50907) | Base table for table extension tests. Has 5 fields. |
+| `ALT Extension` (table extension on 50907) | Adds 3 fields. Tests that extension fields participate in Get, filter, validate. |
+| `ALT Blob` (50908) | Blob field + Code PK. Covers InStream/OutStream read-write, Blob.HasValue, export/import. |
+
+### Enums
+
+| Object | Purpose |
+|---|---|
+| `ALT Status` (50900) | 4-value enum (Draft, Active, Closed, Archived). Covers Enum.FromInteger, ordinal coercion, enum fields in filter/validate. |
+| `ALT Color` (50901) | 3-value enum (Red, Green, Blue). Used in combination-filter tests. |
+
+### Interfaces + Implementations
+
+| Object | Purpose |
+|---|---|
+| `IALTCompute` | Interface with `Compute(X: Integer): Integer`. Two implementations: `ALTDouble` (returns 2×X) and `ALTSquare` (returns X²). Covers interface injection, typecheck, codeunit-as-variable. |
+
+### Event Infrastructure
+
+| Object | Purpose |
+|---|---|
+| `ALT Event Publisher` (50910) | Codeunit with 3 published events: `OnBeforeAction` (integration event), `OnAfterAction` (business event), `OnInternalStep` (internal event). Has `TriggerBefore`, `TriggerAfter`, `TriggerInternal` procedures that fire each. |
+| `ALT Event Subscriber` (50911) | Default subscriber — records which events fired into `ALT Trigger Log`. Tests bind/unbind it explicitly. |
+
+### Pages
+
+| Object | Purpose |
+|---|---|
+| `ALT List Page` (50900) | Minimal list page on ALT Universal. Covers page handler dispatch, TestPage navigation (FindFirst, Next), field access. |
+| `ALT Card Page` (50901) | Card page on ALT Universal. Covers modal handler, action invocation dispatch. |
+
+### Report
+
+| Object | Purpose |
+|---|---|
+| `ALT Simple Report` (50900) | Single-dataitem report on ALT Universal. No rendering tested. Covers RequestPage handler dispatch, OnPreReport trigger, SaveAs (throws — out of scope). |
+
+---
+
+## Folder Structure
+
+```
+tests/al-language/
+  PLAN.md                          ← this file
+  app.json                         ← standalone AL package, id-range 60000..60999
+  run-bc-tests.py                  ← same runner script as bucket-1
+  _fixtures/
+    tables/
+      ALTUniversal.al
+      ALTComposite.al
+      ALTTriggered.al
+      ALTTriggerLog.al
+      ALTParentChild.al            ← ALT Parent + ALT Child in one file
+      ALTKeyed.al
+      ALTBase.al                   ← ALT Base + ALT Extension (tableextension) in one file
+      ALTBlob.al
+    enums/
+      ALTStatus.al
+      ALTColor.al
+    interfaces/
+      IALTCompute.al               ← interface + both implementations in one file
+    events/
+      ALTEventPublisher.al
+      ALTEventSubscriber.al
+    pages/
+      ALTListPage.al
+      ALTCardPage.al
+    reports/
+      ALTSimpleReport.al
+    ALTFixtureCleanup.al           ← codeunit with DeleteAll on every fixture table
+  record/
+    TestRecordInsert.al
+    TestRecordModify.al
+    TestRecordDelete.al
+    TestRecordGet.al
+    TestRecordFind.al
+    TestRecordFilter.al
+    TestRecordSort.al
+    TestRecordRename.al
+    TestRecordFlowField.al
+    TestRecordTriggers.al
+    TestRecordLock.al
+    TestRecordSystemId.al
+    TestRecordRecordId.al
+    TestRecordCount.al
+    TestRecordTransferFields.al
+    TestRecordValidate.al
+    TestRecordTestField.al
+  recordref/
+    TestRecordRefOpen.al
+    TestRecordRefCRUD.al
+    TestRecordRefFilter.al
+    TestRecordRefField.al
+    TestRecordRefKeys.al
+    TestRecordRefGetSet.al
+  fieldref/
+    TestFieldRefValue.al
+    TestFieldRefValidate.al
+    TestFieldRefFilter.al
+    TestFieldRefMetadata.al
+    TestFieldRefFieldError.al
+  codeunit/
+    TestCodeunitInstantiation.al
+    TestCodeunitInterface.al
+    TestCodeunitEvents.al
+    TestCodeunitSubscriber.al
+    TestCodeunitErrorPropagation.al
+  error-handling/
+    TestAssertError.al
+    TestErrorInfo.al
+    TestCollectedErrors.al
+    TestGetLastError.al
+  text/
+    TestTextOperations.al
+    TestTextBuilder.al
+    TestBigText.al
+    TestFormat.al
+    TestEvaluate.al
+  collections/
+    TestList.al
+    TestDictionary.al
+    TestArray.al
+  types/
+    TestVariant.al
+    TestGuid.al
+    TestEnum.al
+    TestOption.al
+    TestDate.al
+    TestDecimal.al
+    TestBoolean.al
+  json/
+    TestJsonObject.al
+    TestJsonArray.al
+    TestJsonToken.al
+    TestJsonValue.al
+  xml/
+    TestXmlDocument.al
+    TestXmlElement.al
+    TestXmlNamespace.al
+  streams/
+    TestInOutStream.al
+    TestBlob.al
+  session/
+    TestSessionFunctions.al
+    TestDatabase.al
+    TestNavApp.al
+  handlers/
+    TestNotificationHandler.al
+    TestPageHandler.al
+    TestReportHandler.al
+    TestMessageHandler.al
+  out-of-scope/
+    TestOutOfScopeConfirmed.al    ← one test per OOS surface confirming it throws
+```
+
+---
+
+## Naming Conventions
+
+### Files
+`Test<TypeName><Aspect>.al` — e.g., `TestRecordInsert.al`, `TestJsonObject.al`
+
+### Procedures
+`<Type>_<Method>_<Scenario>_<ExpectedOutcome>`
+
+Examples:
+- `Record_Insert_DuplicateKey_Throws`
+- `Record_SetRange_DateField_FiltersCorrectly`
+- `Record_Get_NonExistentKey_ReturnsFalse`
+- `RecordRef_Field_UnboundRef_Throws`
+- `JsonObject_Get_MissingKey_ReturnsFalse`
+- `Enum_FromInteger_OutOfRange_ReturnsOrdinal`
+
+The full claim is readable from the procedure name alone without opening the body.
+
+### Doc-link comment
+Each test file opens with a comment block:
+
+```al
+// BC Documentation: https://learn.microsoft.com/en-us/dynamics365/business-central/
+//   dev-itpro/developer/methods-auto/record/record-insert-method
+// Scope: in-scope (runner supports Record.Insert)
+// Fixtures used: ALT Universal, ALT Triggered
+```
+
+---
+
+## How to Add a New Test
+
+1. Identify the method and overload from `al-surface-inscope.json` (generated by scraper).
+2. Pick the correct test file (or create one following naming conventions).
+3. Write `Initialize();` as the first line.
+4. Write setup in 2-5 lines using fixture tables.
+5. Call the method under test.
+6. Assert a specific, non-default value.
+7. Run against BC container. Must pass.
+
+---
+
+## Build Workflow
+
+### Phase 1 — Surface manifest (scripted)
+`scripts/scrape-al-surface.py`:
+- Crawls `learn.microsoft.com/.../methods-auto/library` and all linked subpages
+- Extracts: type → method → overloads → parameters → return type
+- Outputs `al-surface.json`
+
+`scripts/filter-inscope.py`:
+- Reads `al-surface.json` + `docs/scope.md`
+- Outputs `al-surface-inscope.json` with in-scope/out-of-scope annotation
+
+`scripts/coverage-gap.py`:
+- Reads `al-surface-inscope.json`
+- Greps existing test files for method name references
+- Outputs `coverage-gap.md`: method → covered / not covered
+
+### Phase 2 — Fixture library (human + agent)
+Design and write the fixture objects in `_fixtures/`. This is done once.
+Every subsequent phase depends on these being stable and correct.
+
+### Phase 3 — Stub generation (scripted)
+`scripts/generate-stubs.py`:
+- Reads `al-surface-inscope.json`
+- For each uncovered in-scope method, emits a stub test procedure:
+  ```al
+  [Test]
+  procedure Record_Insert_DuplicateKey_Throws()
+  // STUB — https://learn.microsoft.com/.../record-insert-method
+  // TODO: fill in proving assertions
+  begin
+      Initialize();
+      Assert.IsTrue(false, 'STUB — not implemented');
+  end;
+  ```
+- Places stub in the correct file under the correct area folder
+- Every stub fails by construction until filled
+
+### Phase 4 — Fill stubs (Haiku agents, batched by area)
+Each agent receives:
+- The stub procedure(s) for one area (e.g., all Record.Insert overloads)
+- The BC doc page for that method
+- The fixture table definitions it can use
+- 3 example filled tests from an adjacent area
+- The rule: "would this test still pass if the method always returned a default value? If yes, rewrite."
+
+Agent output: filled `.al` file. Compile + BC run after each batch.
+
+### Phase 5 — Validate and lock
+- All tests pass against BC container → suite is locked
+- Suite is added to `docs/coverage.yaml` in the runner repo
+- Any future runner work that touches a method in `al-surface-inscope.json` must
+  also have a corresponding passing test in this suite
+
+---
+
+## What "Done" Looks Like
+
+- `al-surface-inscope.json` exists and covers all in-scope types + methods
+- Every in-scope method has at least one positive test and one negative test
+- All tests pass against the BC 16.x container
+- `coverage-gap.md` shows 0 uncovered in-scope methods
+- Any agent can search for `Record_SetRange` and find the test in under 5 seconds
+- Any agent can add a new test by following this document without asking questions
