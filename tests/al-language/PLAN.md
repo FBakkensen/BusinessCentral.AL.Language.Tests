@@ -29,13 +29,129 @@ This folder is **isolated from the runner**. The runner CI picks up `tests/bucke
 only. This folder has its own `app.json` and is never compiled or executed by the
 runner pipeline.
 
-**Target runtime:** Real BC container (`docker compose up` from `bc-linux`).
-**Credentials:** `BCRUNNER` / `Admin123!` (local dev defaults, see `.local-bc` skill).
-**Publish:** `bc-publish` or direct `curl` to port 7049.
-**Run:** `python3 run-bc-tests.py` (to be written, same pattern as bucket-1).
-
 A test that passes on the runner but fails here means the runner has a gap.
 A test that passes here but fails on the runner is a runner bug to fix.
+
+---
+
+## How to Compile, Publish, and Run
+
+### Prerequisites
+
+A local BC Docker container must be running. Start it from the `bc-linux` repo:
+
+```bash
+cd ~/Documents/Repos/community/bc-linux
+docker compose up -d --wait
+```
+
+First boot takes 5–10 minutes (image pull + DB restore). Subsequent starts ~20 seconds.
+Default credentials: `BCRUNNER` / `Admin123!`.
+
+Verify BC is up:
+```bash
+curl -sf -u BCRUNNER:Admin123! http://localhost:7049/BC/dev/metadata > /dev/null \
+  && echo "BC is running" || echo "BC is NOT running"
+```
+
+### 1. Download symbols (first time only)
+
+Run from `tests/al-language/`:
+
+```bash
+mkdir -p .alpackages
+for app in "System" "System Application" "Base Application" "Application"; do
+  curl -sf -u BCRUNNER:Admin123! \
+    "http://localhost:7049/BC/dev/packages?publisher=Microsoft&appName=$(echo $app | sed 's/ /%20/g')&appVersion=0.0.0.0" \
+    -o ".alpackages/${app}.app" && echo "Downloaded ${app}"
+done
+```
+
+### 2. Compile
+
+Run from `tests/al-language/`:
+
+```bash
+al-compile
+```
+
+Or directly with the AL compiler:
+```bash
+dotnet /path/to/alc/alc.dll /project:. /packagecachepath:.alpackages /out:ALLanguageCoverage.app
+```
+
+Compilation must produce zero errors. Warnings are allowed.
+
+### 3. Publish
+
+```bash
+curl -sf -u BCRUNNER:Admin123! \
+  -X POST \
+  -F "file=@AL\ Language\ Coverage\ Tests_1.0.0.0.app;type=application/octet-stream" \
+  "http://localhost:7049/BC/dev/apps?SchemaUpdateMode=forcesync" \
+  && echo "Published OK"
+```
+
+Or using `bc-publish` (auto-detects credentials and server):
+```bash
+bc-publish
+```
+
+### 4. Run all tests
+
+```bash
+python3 run-bc-tests.py
+```
+
+Run a specific area (by codeunit ID range):
+```bash
+python3 run-bc-tests.py --ids "60000..60099"
+```
+
+Run a specific codeunit:
+```bash
+python3 run-bc-tests.py --ids "60010"
+```
+
+Workers default to 4 (parallel). Use `--workers 1` if tests share mutable data
+or if you need ordered output:
+```bash
+python3 run-bc-tests.py --workers 1 --output results.json
+```
+
+### 5. Expected output
+
+```
+Connecting to BC...
+Company ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+Running 47 test codeunits with 4 workers...
+  [1/47] PASS 60000
+  [2/47] PASS 60001
+  ...
+  [47/47] PASS 60046
+
+Results: 47 passed, 0 failed (of 47)
+Saved to: results.json
+```
+
+Any failing test prints the method name and BC's error message:
+```
+  [12/47] FAIL 60010 (2 methods):
+      Record_Insert_DuplicateKey_Throws: Assert.ExpectedError failed. Expected: already exists. Actual: ''
+      Record_Get_NonExistentKey_ReturnsFalse: ...
+```
+
+### 6. Full cycle (compile → publish → run)
+
+```bash
+cd tests/al-language
+al-compile && \
+curl -sf -u "BCRUNNER:${BC_PASSWORD:-Admin123!}" \
+  -X POST \
+  -F "file=@AL\ Language\ Coverage\ Tests_1.0.0.0.app;type=application/octet-stream" \
+  "http://${BC_SERVER:-localhost}:7049/BC/dev/apps?SchemaUpdateMode=forcesync" && \
+python3 run-bc-tests.py
+```
 
 ## Design Principles
 
