@@ -11,5 +11,6 @@ permissionset 60022 ALTPermissionSet
         tabledata "ALT Keyed" = RIMD,
         tabledata "ALT Base" = RIMD,
         tabledata "ALT Blob" = RIMD,
-        tabledata "ALT Error Trigger" = RIMD;
+        tabledata "ALT Error Trigger" = RIMD,
+        tabledata "ALT Init Value" = RIMD;
 }

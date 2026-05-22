@@ -63,8 +63,8 @@ codeunit 60192 "Test Type Conversion Contracts"
         Result: Text;
     begin
         Initialize();
-        Result := LowerCase(Format(true));
-        Assert.AreEqual('true', Result, 'Format(true) must be "True" or "true"');
+        Result := Format(true);
+        Assert.AreEqual('Yes', Result, 'Format(true) must return "Yes" (BC English locale default)');
     end;
 
     [Test]
@@ -73,8 +73,8 @@ codeunit 60192 "Test Type Conversion Contracts"
         Result: Text;
     begin
         Initialize();
-        Result := LowerCase(Format(false));
-        Assert.AreEqual('false', Result, 'Format(false) must be "False" or "false"');
+        Result := Format(false);
+        Assert.AreEqual('No', Result, 'Format(false) must return "No" (BC English locale default)');
     end;
 
     // ── Format(Zero) ────────────────────────────────────────────────────────
