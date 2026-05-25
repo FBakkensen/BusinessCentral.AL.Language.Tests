@@ -5,13 +5,12 @@ name: AL Language Test Suite
 # runner required) via StefanMaron/MsDyn365Bc.On.Linux.
 #
 # Adding a new BC version:
-#   1. Append it to the matrix below.
-#   2. If the new version requires a different AL compiler, add an `include:`
-#      entry with its al_tool_version (find via:
-#      dotnet tool search Microsoft.Dynamics.BusinessCentral.Development.Tools.Linux)
-#   3. If new API/keywords only exist from that version, guard tests with
-#      #if BC<major><minor>PLUS  (e.g. #if BC28PLUS) and define the symbol
-#      in the matrix include below.
+#   1. In the prepare job, add an include entry to the else-branch JSON:
+#      {"bc_version":"29.0","preprocessor_symbols":"BC27PLUS,BC28PLUS,BC29PLUS"}
+#   2. If new API/keywords only exist from that version, guard tests with
+#      #if BC29PLUS and define the symbol in the include entry above.
+#   al_tool_version and runtime_version are auto-derived from bc_version
+#   by the bc-linux reusable workflow — no manual entry needed.
 
 on:
   push:
@@ -35,9 +34,15 @@ jobs:
         run: |
           OVERRIDE='${{ github.event.inputs.bc_version }}'
           if [ -n "$OVERRIDE" ]; then
-            JSON=$(python3 -c "import json; print(json.dumps({'bc_version': ['$OVERRIDE']}))")
+            MAJOR=$(echo "$OVERRIDE" | cut -d. -f1)
+            SYMS=""
+            for v in 27 28; do
+              [ "$v" -le "$MAJOR" ] || break
+              SYMS="${SYMS:+$SYMS,}BC${v}PLUS"
+            done
+            JSON=$(python3 -c "import json; print(json.dumps({'include':[{'bc_version':'$OVERRIDE','preprocessor_symbols':'$SYMS'}]}))")
           else
-            JSON='{"bc_version":["27.5","28.1"]}'
+            JSON='{"include":[{"bc_version":"27.5","preprocessor_symbols":"BC27PLUS"},{"bc_version":"28.1","preprocessor_symbols":"BC27PLUS,BC28PLUS"}]}'
           fi
           echo "matrix=$JSON" >> "$GITHUB_OUTPUT"
 
@@ -49,15 +54,12 @@ jobs:
       matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     uses: StefanMaron/MsDyn365Bc.On.Linux/.github/workflows/bc-test-from-source.yml@master
     with:
-      bc_version:     ${{ matrix.bc_version }}
-      bc_country:     "w1"
-      app_dirs:       ""               # no production app — test suite IS the app
-      test_app_dirs:  "tests/al-language"
-      codeunit_range: "60000..60999"   # full id range declared in app.json
-      # app.json declares runtime 16.1 (BC 27+), so the 16.2.x compiler
-      # works for both BC 27.5 and 28.1. Bump this when a future BC version
-      # requires a higher runtime declaration in app.json.
-      al_tool_version: "16.2.28.57946"
+      bc_version:           ${{ matrix.bc_version }}
+      bc_country:           "w1"
+      app_dirs:             ""
+      test_app_dirs:        "tests/al-language"
+      codeunit_range:       "60000..60999"
+      preprocessor_symbols: ${{ matrix.preprocessor_symbols }}
 
     # Optional: supply a base64-encoded BC developer license.
     # Without this, BC boots with the public Cronus license (sufficient
