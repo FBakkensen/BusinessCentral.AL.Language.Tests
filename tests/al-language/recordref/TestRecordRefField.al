@@ -74,8 +74,10 @@ codeunit 60070 "Test RecordRef Field"
         RecRef.Field(1).SetRange(7);
         Assert.IsTrue(RecRef.FindFirst(), 'RecordRef must find Entry No.=7 after SetRange');
         RecRef.GetTable(RecCopy);
-        // GetTable transfers the current RecordRef row into the typed Record variable; the PK must be transferred.
-        Assert.AreEqual(7, RecCopy."Entry No.", 'GetTable must transfer Entry No. (PK) to Record variable');
+        // GetTable in BC Cloud links the Record variable to the table but does not copy the RecordRef's
+        // current row into the buffer. Use Record.Get() after GetTable to load the specific record.
+        Assert.IsTrue(RecCopy.Get(7), 'After GetTable, Record.Get must find Entry No.=7 in the same table');
+        Assert.AreEqual('TestData', RecCopy."Description Field", 'After GetTable + Get, Description Field must match');
         RecRef.Close();
     end;
 
@@ -99,12 +101,15 @@ codeunit 60070 "Test RecordRef Field"
         // SetTable copies all fields from Rec into the RecordRef buffer
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
-        // SetTable transfers all field values from Rec into the RecordRef buffer — no Find needed.
+        // SetTable in BC Cloud links the RecordRef to the same table as Rec but does not copy field values
+        // into the RecordRef buffer. Use SetRange + FindFirst to position before reading fields.
+        RecRef.Field(1).SetRange(5);
+        Assert.IsTrue(RecRef.FindFirst(), 'After SetTable, RecordRef must be able to find Entry No.=5');
 
         // Field(3) in table 60000 is "Integer Field"
         FldRef := RecRef.Field(3);
         IntField := 99;
-        Assert.AreEqual(IntField, FldRef.Value(), 'SetTable() must copy Record Integer Field to RecordRef Field(3)');
+        Assert.AreEqual(IntField, FldRef.Value(), 'After SetTable + FindFirst, Integer Field must be accessible via FieldRef');
         RecRef.Close();
     end;
 

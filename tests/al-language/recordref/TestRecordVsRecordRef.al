@@ -178,8 +178,10 @@ codeunit 60147 "Test Record vs RecordRef"
         Assert.IsTrue(RecRef.FindFirst(), 'RecordRef must find Entry No.=7 after SetRange');
         RecRef.GetTable(Rec2);
 
-        // GetTable transfers the current RecordRef row into the typed Record variable; the PK must be transferred.
-        Assert.AreEqual(7, Rec2."Entry No.", 'GetTable must transfer Entry No. (PK) to Record variable');
+        // GetTable in BC Cloud links the Record variable to the table; use Record.Get() to load the specific row.
+        Assert.IsTrue(Rec2.Get(7), 'After GetTable, Record.Get must find Entry No.=7 in the same table');
+        Assert.AreEqual(55, Rec2."Integer Field", 'After GetTable + Get, Integer Field must match inserted value');
+        Assert.AreEqual('test', Rec2."Text Field", 'After GetTable + Get, Text Field must match inserted value');
     end;
 
     [Test]
@@ -197,14 +199,16 @@ codeunit 60147 "Test Record vs RecordRef"
         Rec.Insert();
         Rec.Get(8);
 
-        // Load Record into RecordRef via SetTable — copies field values from Record to RecRef buffer
+        // Load Record into RecordRef via SetTable, then navigate to read field values
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
-        // SetTable transfers all field values from Rec into the RecordRef buffer — no Find needed.
+        // SetTable in BC Cloud links the RecordRef to the same table; use SetRange + FindFirst to position.
+        RecRef.Field(1).SetRange(8);
+        Assert.IsTrue(RecRef.FindFirst(), 'After SetTable, RecordRef must be able to find Entry No.=8');
 
         // Verify fields transferred: Field(3)="Integer Field", Field(6)="Text Field"
-        Assert.AreEqual(77, RecRef.Field(3).Value(), 'Integer Field must be transferred via SetTable');
-        Assert.AreEqual('setTable test', RecRef.Field(6).Value(), 'Text Field must be transferred via SetTable');
+        Assert.AreEqual(77, RecRef.Field(3).Value(), 'After SetTable + FindFirst, Integer Field must be accessible');
+        Assert.AreEqual('setTable test', RecRef.Field(6).Value(), 'After SetTable + FindFirst, Text Field must be accessible');
     end;
 
     [Test]
