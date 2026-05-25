@@ -54,12 +54,14 @@ jobs:
       matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     uses: StefanMaron/MsDyn365Bc.On.Linux/.github/workflows/bc-test-from-source.yml@master
     with:
-      bc_version:           ${{ matrix.bc_version }}
-      bc_country:           "w1"
-      app_dirs:             ""
-      test_app_dirs:        "tests/al-language"
-      codeunit_range:       "60000..60999"
-      preprocessor_symbols: ${{ matrix.preprocessor_symbols }}
+      bc_version:     ${{ matrix.bc_version }}
+      bc_country:     "w1"
+      app_dirs:       ""
+      test_app_dirs:  "tests/al-language"
+      codeunit_range: "60000..60999"
+      # preprocessor_symbols intentionally omitted — no #if-gated code yet.
+      # BC 28's raw alc (nupkg extraction path) doesn't support /preprocessorsymbols;
+      # re-enable once bc-linux fixes that and we have version-gated tests.
 
     # Optional: supply a base64-encoded BC developer license.
     # Without this, BC boots with the public Cronus license (sufficient
