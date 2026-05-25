@@ -109,10 +109,25 @@ codeunit 60161 "Test Arithmetic Contracts"
         R2 := Round(2.6, 1, '=');
         R3 := Round(2.4, 1, '=');
 
-        // Assert
-        Assert.IsTrue((R1 = 2.0) or (R1 = 3.0), 'Round(2.5, 1, "=") must return either 2.0 or 3.0');
+        // BC uses half-away-from-zero for '=' direction, NOT banker's rounding.
+        Assert.AreEqual(3.0, R1, 'Round(2.5, 1, "=") must return 3.0 — BC uses half-away-from-zero, not banker''s rounding');
         Assert.AreEqual(3.0, R2, 'Round(2.6, 1, "=") must round to 3.0');
         Assert.AreEqual(2.0, R3, 'Round(2.4, 1, "=") must round to 2.0');
+    end;
+
+    [Test]
+    procedure Round_DefaultDirection_IsHalfAwayFromZero()
+    // CLAIM: Round(n, precision) without direction uses half-away-from-zero.
+    //        Round(2.5, 1) = 3.0, not 2.0. BC does NOT use banker's rounding as default.
+    var
+        R1: Decimal;
+        R2: Decimal;
+    begin
+        R1 := Round(2.5, 1);
+        R2 := Round(-2.5, 1);
+
+        Assert.AreEqual(3.0, R1, 'Round(2.5, 1) must equal 3.0 — half-away-from-zero rounds up');
+        Assert.AreEqual(-3.0, R2, 'Round(-2.5, 1) must equal -3.0 — half-away-from-zero rounds away from zero');
     end;
 
     [Test]

@@ -95,6 +95,35 @@ codeunit 60110 "Test Blob"
         Assert.AreEqual('StreamTest', ReadText, 'Creating in/out streams sequentially must work correctly');
     end;
 
+    // ── CalcFields requirement ────────────────────────────────────────────────────
+
+    [Test]
+    procedure Blob_Get_WithoutCalcFields_InStreamReadsEmpty()
+    // CLAIM: After Rec.Get(), Blob fields are NOT loaded from the database (lazy loading).
+    //        Reading from an InStream created on an unloaded Blob returns empty string.
+    //        CalcFields(BlobField) must be called after Get() before reading Blob data.
+    var
+        BlobRec: Record "ALT Blob";
+        OutStr: OutStream;
+        InStr: InStream;
+        Content: Text;
+    begin
+        Initialize();
+        BlobRec.Code := 'LAZY';
+        BlobRec.Data.CreateOutStream(OutStr);
+        OutStr.WriteText('NotLoaded');
+        BlobRec.Insert();
+
+        // Re-fetch without CalcFields — Blob data is NOT loaded
+        BlobRec.Get('LAZY');
+        // Intentionally NO CalcFields call here
+        BlobRec.Data.CreateInStream(InStr);
+        InStr.ReadText(Content);
+
+        // Blob data is lazily loaded; without CalcFields the stream is empty
+        Assert.AreEqual('', Content, 'Reading Blob InStream without CalcFields returns empty — CalcFields required after Get');
+    end;
+
     local procedure Initialize()
     begin
         Cleanup.Initialize();
