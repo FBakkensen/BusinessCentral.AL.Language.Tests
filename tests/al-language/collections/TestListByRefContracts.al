@@ -39,7 +39,7 @@ codeunit 60182 "Test List ByRef Contracts"
     end;
 
     [Test]
-    procedure List_ValueParam_CallerNotAffected()
+    procedure List_ValueParam_SharesReference()
     var
         L: List of [Integer];
         OrigCount: Integer;
@@ -52,7 +52,7 @@ codeunit 60182 "Test List ByRef Contracts"
 
         AddToByValue(L);
 
-        Assert.AreEqual(OrigCount, L.Count(), 'List passed by value must NOT show changes in caller');
+        Assert.AreEqual(OrigCount + 2, L.Count(), 'List passed by value also uses reference semantics — changes ARE visible to caller');
     end;
 
     [Test]

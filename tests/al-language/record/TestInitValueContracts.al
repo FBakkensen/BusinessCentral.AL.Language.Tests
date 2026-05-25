@@ -98,7 +98,10 @@ codeunit 60195 "Test InitValue Contracts"
         Initialize();
 
         // Act
+        // Set PK to a non-zero value
         Rec."Entry No." := 42;
+        // Init() should reset ALL fields including the PK to their language defaults
+        // (InitValue only applies to non-PK fields; PK always resets to 0)
         Rec.Init();
 
         // Assert
@@ -186,11 +189,16 @@ codeunit 60195 "Test InitValue Contracts"
         Initialize();
 
         // Act
+        // WITHOUT calling Init(), insert a record
+        // InitValue should NOT apply because Init() was never called
         Rec."Entry No." := 2;
+        // Status is not set — using language default (0)
         Rec.Insert();
         Rec.Get(2);
 
         // Assert
+        // Status should be 0 (the language default), NOT 1 (the InitValue)
+        // because Init() was not called before Insert()
         Assert.AreEqual(0, Rec."Status", 'Without Init(), Status must be 0 (language default, NOT InitValue)');
     end;
 

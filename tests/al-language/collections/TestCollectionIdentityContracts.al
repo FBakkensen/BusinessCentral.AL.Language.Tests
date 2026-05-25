@@ -105,6 +105,7 @@ codeunit 60164 "Test Collection Identity"
     var
         Rec: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Integer Field" := 42;
         Rec.Insert();
@@ -119,6 +120,7 @@ codeunit 60164 "Test Collection Identity"
     var
         Rec: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Integer Field" := 77;
         Rec.Insert();
@@ -135,6 +137,7 @@ codeunit 60164 "Test Collection Identity"
         Rec2: Record "ALT Universal";
         i: Integer;
     begin
+        Cleanup.Initialize();
         for i := 1 to 5 do begin
             Rec1."Entry No." := i;
             Rec1.Insert();
@@ -151,6 +154,7 @@ codeunit 60164 "Test Collection Identity"
         Rec2: Record "ALT Universal";
         i: Integer;
     begin
+        Cleanup.Initialize();
         for i := 1 to 5 do begin
             Rec1."Entry No." := i;
             Rec1.Insert();
@@ -167,6 +171,7 @@ codeunit 60164 "Test Collection Identity"
         Rec: Record "ALT Universal";
         Rec2: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Integer Field" := 99;
         Rec."Text Field" := 'hello';

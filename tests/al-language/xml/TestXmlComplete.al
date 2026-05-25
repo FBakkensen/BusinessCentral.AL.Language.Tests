@@ -255,9 +255,9 @@ codeunit 60141 "Test Xml Complete"
         XDT: XmlDocumentType;
     begin
         Initialize();
-        XmlDocument.ReadFrom('<root/>', XDoc);
+        XmlDocument.ReadFrom('<!DOCTYPE html><root/>', XDoc);
         XDoc.GetDocumentType(XDT);
-        Assert.IsTrue(true, 'GetDocumentType should be callable');
+        Assert.IsTrue(true, 'GetDocumentType should be callable with DOCTYPE declaration');
     end;
 
     [Test]

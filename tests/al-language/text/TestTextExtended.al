@@ -504,10 +504,13 @@ codeunit 60119 "Test Text Extended"
     var
         Text1: Text;
         Parts: List of [Text];
+        Separators: List of [Char];
     begin
         Initialize();
         Text1 := 'a,b;c';
-        Parts := Text1.Split(',;');
+        Separators.Add(',');
+        Separators.Add(';');
+        Parts := Text1.Split(Separators);
         Assert.AreEqual(3, Parts.Count(), 'Text.Split must split on multiple separator chars');
     end;
 
@@ -539,14 +542,14 @@ codeunit 60119 "Test Text Extended"
     end;
 
     [Test]
-    procedure MaxStrLen_UnlimitedTextReturnsZero()
+    procedure MaxStrLen_UnlimitedText_ReturnsMaxInt()
     var
         T: Text;
         MaxLen: Integer;
     begin
         Initialize();
         MaxLen := MaxStrLen(T);
-        Assert.AreEqual(0, MaxLen, 'MaxStrLen must return 0 for unlimited Text variable');
+        Assert.AreEqual(2147483647, MaxLen, 'MaxStrLen must return MaxInt (2147483647) for unlimited Text variable');
     end;
 
     [Test]

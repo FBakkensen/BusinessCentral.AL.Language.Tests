@@ -120,6 +120,7 @@ codeunit 60172 "Test BC System Field Contracts"
         TL.FindFirst();
         FirstId := TL."Entry No.";
         TL.DeleteAll(false);
+        Commit();
         TL.TriggerName := 'T2';
         TL.Insert();
         TL.FindFirst();

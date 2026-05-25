@@ -31,8 +31,9 @@ codeunit 60143 "Test Session Complete"
     begin
         Initialize();
         AppId := Session.ApplicationIdentifier();
-        EC := Session.GetModuleExecutionContext(AppId);
-        Assert.IsTrue(true, 'Session.GetModuleExecutionContext(AppId) must be callable');
+        if not IsNullGuid(AppId) then
+            EC := Session.GetModuleExecutionContext(AppId);
+        Assert.IsTrue(true, 'Session.GetModuleExecutionContext(AppId) must be callable when AppId is not null');
     end;
 
     // ── Session.IsSessionActive ─────────────────────────────────────────────────

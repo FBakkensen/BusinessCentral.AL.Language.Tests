@@ -54,7 +54,7 @@ codeunit 60157 "Test Text Processing Contracts"
     begin
         Initialize();
         asserterror Dummy := CopyStr('abc', 0);
-        Assert.ExpectedError('');
+        Assert.ExpectedError('outside of the permitted range');
     end;
 
     // ============================================================================
@@ -112,10 +112,10 @@ codeunit 60157 "Test Text Processing Contracts"
     // ============================================================================
 
     [Test]
-    procedure IncStr_NonNumericString_AppendOne()
+    procedure IncStr_NonNumericString_ReturnsEmpty()
     begin
         Initialize();
-        Assert.AreEqual('ABC1', IncStr('ABC'), 'IncStr on non-numeric string must append 1');
+        Assert.AreEqual('', IncStr('ABC'), 'IncStr on non-numeric string must return empty');
     end;
 
     [Test]
@@ -136,7 +136,7 @@ codeunit 60157 "Test Text Processing Contracts"
     begin
         Initialize();
         asserterror Dummy := SelectStr(0, 'A,B,C');
-        Assert.ExpectedError('');
+        Assert.ExpectedError('does not contain a value for index');
     end;
 
     [Test]
@@ -146,7 +146,7 @@ codeunit 60157 "Test Text Processing Contracts"
     begin
         Initialize();
         asserterror Dummy := SelectStr(5, 'A,B,C');
-        Assert.ExpectedError('');
+        Assert.ExpectedError('does not contain a value for index');
     end;
 
     // ============================================================================
@@ -169,13 +169,13 @@ codeunit 60157 "Test Text Processing Contracts"
     // ============================================================================
 
     [Test]
-    procedure Text_IndexOf_NotFound_ReturnsNegativeOne()
+    procedure Text_IndexOf_NotFound_ReturnsZero()
     var
         Pos: Integer;
     begin
         Initialize();
         Pos := 'hello'.IndexOf('z');
-        Assert.AreEqual(-1, Pos, 'Text.IndexOf must return -1 when substring not found');
+        Assert.AreEqual(0, Pos, 'Text.IndexOf must return 0 when substring not found');
     end;
 
     [Test]

@@ -17,7 +17,7 @@ codeunit 60175 "Test Security Filtering"
         Rec: Record "ALT Universal";
     begin
         // Default SecurityFiltering mode is Filtered (applies company and permission filters)
-        Assert.AreEqual(SecurityFilter::Filtered, Rec.SecurityFiltering(), 'Default SecurityFiltering must be SecurityFilter::Filtered');
+        Assert.IsTrue(Rec.SecurityFiltering() = SecurityFilter::Filtered, 'Default SecurityFiltering must be SecurityFilter::Filtered');
     end;
 
     [Test]
@@ -94,7 +94,7 @@ codeunit 60175 "Test Security Filtering"
         Rec.SecurityFiltering(SecurityFilter::Ignored);
         Rec.SetRange("Entry No.", 1, 5);
         Rec.Reset(); // Reset clears filters but should preserve SecurityFiltering
-        Assert.AreEqual(SecurityFilter::Ignored, Rec.SecurityFiltering(), 'SecurityFiltering must survive Reset() — it is a property, not a filter');
+        Assert.IsTrue(Rec.SecurityFiltering() = SecurityFilter::Ignored, 'SecurityFiltering must survive Reset() — it is a property, not a filter');
     end;
 
     [Test]

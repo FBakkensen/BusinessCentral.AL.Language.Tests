@@ -14,7 +14,7 @@ codeunit 60150 "Test Collection Contracts"
     // ========== List<T> Contracts ==========
 
     [Test]
-    procedure List_Assignment_IsIndependentCopy()
+    procedure List_Assignment_IsReference()
     var
         L1: List of [Integer];
         L2: List of [Integer];
@@ -25,12 +25,12 @@ codeunit 60150 "Test Collection Contracts"
         L1.Add(3);
 
         // Act
-        L2 := L1;  // copy
-        L2.Add(99); // modify the copy
+        L2 := L1;  // reference, not copy
+        L2.Add(99); // modify via reference
 
         // Assert
-        Assert.AreEqual(3, L1.Count(), 'Original list must be unaffected by changes to assigned copy');
-        Assert.AreEqual(4, L2.Count(), 'Copied list must have 4 elements');
+        Assert.AreEqual(4, L1.Count(), 'List assignment uses reference semantics — original is affected by changes to assigned reference');
+        Assert.AreEqual(4, L2.Count(), 'Both list variables point to same data');
     end;
 
     [Test]
@@ -221,7 +221,7 @@ codeunit 60150 "Test Collection Contracts"
     end;
 
     [Test]
-    procedure Dictionary_Assignment_IsIndependentCopy()
+    procedure Dictionary_Assignment_IsReference()
     var
         D1: Dictionary of [Text, Integer];
         D2: Dictionary of [Text, Integer];
@@ -234,7 +234,7 @@ codeunit 60150 "Test Collection Contracts"
         D2.Add('b', 2);
 
         // Assert
-        Assert.IsFalse(D1.ContainsKey('b'), 'Dictionary copy must be independent — original must not see new key');
+        Assert.IsTrue(D1.ContainsKey('b'), 'Dictionary assignment uses reference semantics — original sees new key added via reference');
     end;
 
     // ========== Interface Contracts ==========

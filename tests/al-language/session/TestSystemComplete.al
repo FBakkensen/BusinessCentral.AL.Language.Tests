@@ -85,8 +85,8 @@ codeunit 60142 "Test System Complete"
     begin
         Initialize();
         Value := 2.5;
-        Result := Round(Value);
-        Assert.AreEqual(2.0, Result, 'Round(2.5) must use banker''s rounding (round half to even) and return 2');
+        Result := Round(Value, 1);
+        Assert.AreEqual(2.0, Result, 'Round(2.5, 1) must use banker''s rounding (round half to even) and return 2');
     end;
 
     [Test]
@@ -109,8 +109,8 @@ codeunit 60142 "Test System Complete"
     begin
         Initialize();
         Value := -2.5;
-        Result := Round(Value);
-        Assert.AreEqual(-3.0, Result, 'Round(-2.5) must round to -3');
+        Result := Round(Value, 1);
+        Assert.AreEqual(-2.0, Result, 'Round(-2.5, 1) with banker''s rounding must round to -2 (round half to even)');
     end;
 
     // ── Math Functions: Power ───────────────────────────────────────────────────

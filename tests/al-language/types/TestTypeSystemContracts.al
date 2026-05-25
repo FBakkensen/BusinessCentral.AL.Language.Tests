@@ -58,6 +58,7 @@ codeunit 60153 "Test Type System Contracts"
     var
         Rec: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Code Field" := 'lowercase';
         Rec.Insert();
@@ -70,6 +71,7 @@ codeunit 60153 "Test Type System Contracts"
     var
         Rec: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Code Field" := 'ABC';
         Rec.Insert();
@@ -83,6 +85,7 @@ codeunit 60153 "Test Type System Contracts"
     var
         Rec: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Code Field" := 'HELLO';
         Rec.Insert();
@@ -95,6 +98,7 @@ codeunit 60153 "Test Type System Contracts"
     var
         Rec: Record "ALT Universal";
     begin
+        Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Text Field" := 'Hello';
         Rec.Insert();

@@ -313,6 +313,7 @@ codeunit 60151 "Test Roundtrip Contracts"
         InStr.ReadText(ReadBack);
 
         // Assert
+        // WriteText adds CR/LF, ReadText reads until CR/LF, so content should match
         Assert.AreEqual('Roundtrip test string 12345', ReadBack, 'Stream write/read must preserve exact content');
     end;
 

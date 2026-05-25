@@ -56,7 +56,7 @@ codeunit 60078 "Test Codeunit Instantiation"
     var
         Result: Boolean;
     begin
-        Initialize();
+        Cleanup.Initialize();
         Result := Codeunit.Run(Codeunit::ALTFixtureCleanup);
         Assert.IsTrue(Result, 'Codeunit.Run must return true on success');
     end;

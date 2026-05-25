@@ -100,14 +100,12 @@ codeunit 60139 "Test Variant Complete"
         V: Variant;
         XDoc: XmlDocument;
         XElem: XmlElement;
-        XNode: XmlNode;
     begin
         Initialize();
         XmlDocument.ReadFrom('<r/>', XDoc);
         XDoc.GetRoot(XElem);
-        XNode := XElem.AsXmlNode();
-        V := XNode;
-        Assert.IsTrue(V.IsXmlNode(), 'Variant must report IsXmlNode=true after assigning XmlNode derived from XmlElement');
+        V := XElem;
+        Assert.IsTrue(V.IsXmlElement(), 'Variant must report IsXmlElement=true after assigning XmlElement');
     end;
 
     // ── Variant type coercion (negation cases) ────────────────────────────────

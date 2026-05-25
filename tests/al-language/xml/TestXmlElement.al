@@ -99,6 +99,8 @@ codeunit 60107 "Test XmlElement"
     var
         E: XmlElement;
         Child: XmlElement;
+        XNode: XmlNode;
+        Found: Boolean;
     begin
         // ARRANGE
         E := XmlElement.Create('parent');
@@ -107,8 +109,9 @@ codeunit 60107 "Test XmlElement"
         // ACT
         E.Add(Child);
 
-        // ASSERT - FAILS if OuterXml does not contain 'child'
-        Assert.IsTrue(StrPos('replaced_outerxml', 'child') > 0, 'Parent element must contain child after Add');
+        // ASSERT — child must be retrievable by name
+        Found := E.SelectSingleNode('child', XNode);
+        Assert.IsTrue(Found, 'Parent element must contain child after Add');
     end;
 
     [Test]

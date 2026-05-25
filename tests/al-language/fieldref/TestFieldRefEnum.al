@@ -34,13 +34,13 @@ codeunit 60131 "Test FieldRef Enum"
         Initialize();
         RecRef.Open(60000);
         FldRef := RecRef.Field(15);
-        // Index 0 returns first enum value ' ' (0-based indexing: 0=' ', 1='Draft', 2='Active', 3='Closed', 4='Archived')
-        Name := FldRef.GetEnumValueName(0);
-        Assert.AreEqual(' ', Name, 'GetEnumValueName(0) must return first enum value (space)');
+        // Index 1 (1-based) returns first enum value ' ' (space)
+        Name := FldRef.GetEnumValueName(1);
+        Assert.AreEqual(' ', Name, 'GetEnumValueName(1) must return first enum value (space)');
     end;
 
     [Test]
-    procedure FieldRef_GetEnumValueName_Index2_ReturnsActive()
+    procedure FieldRef_GetEnumValueName_Index3_ReturnsActive()
     var
         RecRef: RecordRef;
         FldRef: FieldRef;
@@ -49,8 +49,9 @@ codeunit 60131 "Test FieldRef Enum"
         Initialize();
         RecRef.Open(60000);
         FldRef := RecRef.Field(15);
-        Name := FldRef.GetEnumValueName(1);
-        Assert.AreEqual('Draft', Name, 'GetEnumValueName(1) must return "Draft"');
+        // Index 3 (1-based) returns third enum value "Active"
+        Name := FldRef.GetEnumValueName(3);
+        Assert.AreEqual('Active', Name, 'GetEnumValueName(3) must return "Active"');
     end;
 
     [Test]
@@ -63,8 +64,9 @@ codeunit 60131 "Test FieldRef Enum"
         Initialize();
         RecRef.Open(60000);
         FldRef := RecRef.Field(15);
-        Caption := FldRef.GetEnumValueCaption(0);
-        Assert.AreEqual(' ', Caption, 'GetEnumValueCaption(0) must return caption for first enum value');
+        // Index 1 (1-based) returns caption for first enum value (space)
+        Caption := FldRef.GetEnumValueCaption(1);
+        Assert.AreEqual(' ', Caption, 'GetEnumValueCaption(1) must return caption for first enum value');
     end;
 
     [Test]
@@ -77,8 +79,9 @@ codeunit 60131 "Test FieldRef Enum"
         Initialize();
         RecRef.Open(60000);
         FldRef := RecRef.Field(15);
-        Ordinal := FldRef.GetEnumValueOrdinal(0);
-        Assert.AreEqual(0, Ordinal, 'GetEnumValueOrdinal(0) must return ordinal value 0');
+        // Index 1 (1-based) returns ordinal of first enum value (space) = 0
+        Ordinal := FldRef.GetEnumValueOrdinal(1);
+        Assert.AreEqual(0, Ordinal, 'GetEnumValueOrdinal(1) must return ordinal value 0');
     end;
 
     [Test]

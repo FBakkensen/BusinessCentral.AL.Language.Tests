@@ -65,7 +65,7 @@ codeunit 60059 "Test Record Triggers"
         Rec."Entry No." := 5;
         Rec."Text Field" := 'test';
         Rec.Init();
-        Assert.AreEqual(0, Rec."Entry No.", 'Init() must reset Entry No. to 0');
+        Assert.AreEqual(0, Rec."Entry No.", 'Init() must reset ALL fields to defaults; Entry No. to 0');
         Assert.AreEqual(0, Rec."Integer Field", 'Init() must reset Integer Field to 0');
         Assert.AreEqual('', Rec."Text Field", 'Init() must reset Text Field to empty');
     end;

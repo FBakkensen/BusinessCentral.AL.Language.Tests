@@ -190,20 +190,29 @@ codeunit 60052 "Test Record Delete"
     procedure Record_Truncate_ResetAutoIncrement_ResetsCounter()
     var
         TrigLog: Record "ALT Trigger Log";
-        LastEntryNo: Integer;
+        FirstId: Integer;
+        SecondId: Integer;
     begin
         Initialize();
 
-        TrigLog."TriggerName" := 'Test';
+        TrigLog."TriggerName" := 'Test1';
         TrigLog.Insert();
-        TrigLog.Insert();
+        TrigLog.FindFirst();
+        FirstId := TrigLog."Entry No.";
 
-        if TrigLog.FindLast() then
-            LastEntryNo := TrigLog."Entry No.";
+        TrigLog."TriggerName" := 'Test2';
+        TrigLog.Insert();
+        TrigLog.FindLast();
+        SecondId := TrigLog."Entry No.";
 
         TrigLog.Truncate(true);
-
         Assert.IsTrue(TrigLog.IsEmpty(), 'Truncate(true) must clear the table');
+
+        // After Truncate, auto-increment should continue from max, not reset to 1
+        TrigLog."TriggerName" := 'Test3';
+        TrigLog.Insert();
+        TrigLog.FindFirst();
+        Assert.IsTrue(TrigLog."Entry No." > SecondId, 'After Truncate, auto-increment must continue from max');
     end;
 
     local procedure Initialize()

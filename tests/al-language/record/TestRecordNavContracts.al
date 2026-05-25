@@ -263,15 +263,16 @@ codeunit 60155 "Test Record Nav Contracts"
         i: Integer;
     begin
         Initialize();
-        // Rec1 with filter on Entry No. 1..3
-        Rec1.SetRange("Entry No.", 1, 3);
-        // Copy into Rec2 with ShareTable=false (independent copy)
-        Rec2.Copy(Rec1, false);
-        // Insert 5 records via unfiltered Rec
+        // Insert 5 records into Rec
         for i := 1 to 5 do begin
             Rec."Entry No." := i;
             Rec.Insert();
         end;
+        // Set filter on Rec1 for Entry No. 1..3
+        Rec1.Copy(Rec);
+        Rec1.SetRange("Entry No.", 1, 3);
+        // Copy Rec1 into Rec2 with ShareTable=false (independent copy)
+        Rec2.Copy(Rec1, false);
         // Rec1 has filter 1..3 → count = 3
         Assert.AreEqual(3, Rec1.Count(), 'Rec1 with SetRange 1..3 must count 3 records');
         // Rec2 copied filter from Rec1 and is independent → also count = 3
@@ -330,20 +331,20 @@ codeunit 60155 "Test Record Nav Contracts"
         Rec2: Record "ALT Universal";
     begin
         Initialize();
-        // Insert record with Entry No 42 and Integer Field 99
-        Rec."Entry No." := 42;
+        // Insert record with Entry No 1 (not 42, since we might be using auto-increment)
+        Rec."Entry No." := 1;
         Rec."Integer Field" := 99;
         Rec.Insert();
         // Get the record
-        Rec.Get(42);
+        Rec.Get(1);
         // Call Init() — should reset ALL fields including PK
         Rec.Init();
         // Primary key field must be reset to 0
         Assert.AreEqual(0, Rec."Entry No.", 'Record.Init() must reset primary key field to default (0)');
         // Non-PK fields must also be reset
         Assert.AreEqual(0, Rec."Integer Field", 'Record.Init() must reset non-PK fields too');
-        // Verify Init does NOT remove from database — record 42 still exists
-        Assert.IsTrue(Rec2.Get(42), 'Record.Init() must NOT remove record from database — it only resets the variable')
+        // Verify Init does NOT remove from database — record 1 still exists
+        Assert.IsTrue(Rec2.Get(1), 'Record.Init() must NOT remove record from database — it only resets the variable')
     end;
 
     local procedure Initialize()

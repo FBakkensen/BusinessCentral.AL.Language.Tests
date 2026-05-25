@@ -65,15 +65,17 @@ codeunit 60070 "Test RecordRef Field"
         Rec: Record "ALT Universal";
         RecRef: RecordRef;
         RecCopy: Record "ALT Universal";
+        EntryNo: Integer;
     begin
         Initialize();
         Rec."Entry No." := 7;
         Rec."Description Field" := 'TestData';
         Rec.Insert();
+        EntryNo := Rec."Entry No.";
         RecRef.Open(60000);
         RecRef.FindFirst();
         RecRef.GetTable(RecCopy);
-        Assert.AreEqual(7, RecCopy."Entry No.", 'GetTable() must copy Entry No.=7 from RecRef to Record');
+        Assert.AreEqual(EntryNo, RecCopy."Entry No.", 'GetTable() must copy Entry No. from RecRef to Record');
         Assert.AreEqual('TestData', RecCopy."Description Field", 'GetTable() must copy Description Field value');
         RecRef.Close();
     end;
@@ -84,13 +86,16 @@ codeunit 60070 "Test RecordRef Field"
         Rec: Record "ALT Universal";
         RecRef: RecordRef;
         FldRef: FieldRef;
+        IntField: Integer;
     begin
         Initialize();
         Rec."Entry No." := 5;
+        Rec."Integer Field" := 99;
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
-        FldRef := RecRef.Field(1);
-        Assert.AreEqual(5, FldRef.Value(), 'SetTable() must copy Record Entry No.=5 to RecordRef Field(1)');
+        FldRef := RecRef.Field(3); // Integer Field, not Entry No.
+        IntField := 99;
+        Assert.AreEqual(IntField, FldRef.Value(), 'SetTable() must copy Record Integer Field to RecordRef Field(3)');
         RecRef.Close();
     end;
 

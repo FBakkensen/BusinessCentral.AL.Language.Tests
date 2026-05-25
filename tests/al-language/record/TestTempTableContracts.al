@@ -9,6 +9,7 @@ codeunit 60198 "Test Temp Table Contracts"
 
     var
         Assert: Codeunit "Assert";
+        Cleanup: Codeunit ALTFixtureCleanup;
 
     // ── TableType = Temporary ──────────────────────────────────────────────────
 
@@ -17,6 +18,7 @@ codeunit 60198 "Test Temp Table Contracts"
     var
         T: Record "ALT Temp Only";
     begin
+        Initialize();
         Assert.IsTrue(T.IsTemporary(), 'TableType=Temporary must always report IsTemporary=true without the temporary variable modifier');
     end;
 
@@ -25,6 +27,7 @@ codeunit 60198 "Test Temp Table Contracts"
     var
         T: Record "ALT Temp Only";
     begin
+        Initialize();
         // AutoIncrement is a database-level sequence; TableType=Temporary has no DB backing.
         T.Insert();
         Assert.AreEqual(0, T."Entry No.", 'AutoIncrement must NOT auto-assign on TableType=Temporary table');
@@ -36,6 +39,7 @@ codeunit 60198 "Test Temp Table Contracts"
         T1: Record "ALT Temp Only";
         T2: Record "ALT Temp Only";
     begin
+        Initialize();
         T1."Entry No." := 1;
         T1.Insert();
         Assert.AreEqual(1, T1.Count(), 'T1 must have 1 record');
@@ -49,6 +53,7 @@ codeunit 60198 "Test Temp Table Contracts"
     var
         TL: Record "ALT Trigger Log" temporary;
     begin
+        Initialize();
         // ALT Trigger Log has AutoIncrement=true on Entry No.
         // When used as a temporary variable, the DB sequence is never called.
         TL.Insert();
@@ -60,6 +65,7 @@ codeunit 60198 "Test Temp Table Contracts"
     var
         TL: Record "ALT Trigger Log" temporary;
     begin
+        Initialize();
         // Inserting two records without setting Entry No. both get 0 → duplicate key error.
         // Callers must manage the PK themselves on temp tables with AutoIncrement fields.
         TL.Insert();         // Entry No. = 0
@@ -78,6 +84,7 @@ codeunit 60198 "Test Temp Table Contracts"
         Src: Record "ALT Universal" temporary;
         Dst: Record "ALT Universal" temporary;
     begin
+        Initialize();
         Src."Entry No." := 1;
         Src.Insert();
         Dst.Copy(Src, false);
@@ -94,6 +101,7 @@ codeunit 60198 "Test Temp Table Contracts"
         Src: Record "ALT Universal" temporary;
         Dst: Record "ALT Universal" temporary;
     begin
+        Initialize();
         Src."Entry No." := 1;
         Src.Insert();
         Dst.Copy(Src, true);
@@ -109,6 +117,7 @@ codeunit 60198 "Test Temp Table Contracts"
     var
         Caller: Record "ALT Universal" temporary;
     begin
+        Initialize();
         Caller."Entry No." := 1;
         Caller.Insert();
         InsertIntoTempByValue(Caller);
@@ -120,6 +129,7 @@ codeunit 60198 "Test Temp Table Contracts"
     var
         Caller: Record "ALT Universal" temporary;
     begin
+        Initialize();
         Caller."Entry No." := 1;
         Caller.Insert();
         InsertIntoTempByRef(Caller);
@@ -137,5 +147,10 @@ codeunit 60198 "Test Temp Table Contracts"
     begin
         T."Entry No." := 99;
         T.Insert();
+    end;
+
+    local procedure Initialize()
+    begin
+        Cleanup.Initialize();
     end;
 }

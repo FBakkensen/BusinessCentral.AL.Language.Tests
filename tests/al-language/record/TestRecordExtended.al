@@ -16,18 +16,22 @@ codeunit 60129 "Test Record Extended"
     procedure Record_Relation_NonRelatedField_ReturnsZero()
     var
         Rec: Record "ALT Universal";
+        RelationTableNo: Integer;
     begin
         Initialize();
-        Assert.AreEqual(0, Rec.Relation(Rec."Integer Field"), 'Non-FK field must have relation 0');
+        RelationTableNo := Rec.Relation(Rec."Integer Field");
+        Assert.AreEqual(0, RelationTableNo, 'Non-FK field must have relation 0 (no table relation defined)');
     end;
 
     [Test]
     procedure Record_Relation_EntryNoField_ReturnsNonNegative()
     var
         Rec: Record "ALT Universal";
+        RelationTableNo: Integer;
     begin
         Initialize();
-        Assert.IsTrue(Rec.Relation(Rec."Entry No.") >= 0, 'Relation must return non-negative integer');
+        RelationTableNo := Rec.Relation(Rec."Entry No.");
+        Assert.IsTrue(RelationTableNo >= 0, 'Relation must return non-negative integer (0 if no relation, or table number if related)');
     end;
 
     // ── Record.AddLoadFields() ───────────────────────────────────────────────
@@ -40,7 +44,8 @@ codeunit 60129 "Test Record Extended"
     begin
         Initialize();
         Result := Rec.AddLoadFields(Rec."Integer Field");
-        Assert.IsTrue(Result, 'AddLoadFields must return true for valid field');
+        // AddLoadFields returns boolean indicating success
+        Assert.IsTrue(Result, 'AddLoadFields on valid field must return true or not throw error');
     end;
 
     [Test]
@@ -51,7 +56,8 @@ codeunit 60129 "Test Record Extended"
     begin
         Initialize();
         Result := Rec.AddLoadFields(Rec."Integer Field", Rec."Text Field");
-        Assert.IsTrue(Result, 'AddLoadFields with multiple fields must return true');
+        // AddLoadFields with multiple fields should succeed
+        Assert.IsTrue(Result, 'AddLoadFields with multiple fields must succeed');
     end;
 
     // ── Record.SetBaseLoadFields() ───────────────────────────────────────────
@@ -64,7 +70,8 @@ codeunit 60129 "Test Record Extended"
     begin
         Initialize();
         Result := Rec.SetBaseLoadFields();
-        Assert.IsTrue(Result, 'SetBaseLoadFields must return true');
+        // SetBaseLoadFields should succeed and load base fields
+        Assert.IsTrue(Result, 'SetBaseLoadFields must succeed');
     end;
 
     // ── Record.SetAutoCalcFields() + FlowFields ──────────────────────────────
@@ -123,6 +130,8 @@ codeunit 60129 "Test Record Extended"
         Rec."Text Field" := 'hi';
         Rec.Init();
         Assert.AreEqual(0, Rec."Entry No.", 'Init must reset Entry No. to 0');
+        Assert.AreEqual(0, Rec."Integer Field", 'Init must reset Integer Field to 0');
+        Assert.AreEqual('', Rec."Text Field", 'Init must reset Text Field to empty');
     end;
 
     [Test]

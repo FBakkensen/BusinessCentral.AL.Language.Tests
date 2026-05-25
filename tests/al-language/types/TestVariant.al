@@ -66,12 +66,14 @@ codeunit 60095 "Test Variant"
     procedure Variant_TypeChange_UpdatesType()
     var
         V: Variant;
+        X: Text;
     begin
         Initialize();
         V := 1;
         Assert.IsTrue(V.IsInteger(), 'Variant must report IsInteger=true after assigning 1');
-        V := 'x';
-        Assert.IsTrue(V.IsText(), 'Variant must report IsText=true after reassigning ''x''');
+        X := 'x';
+        V := X;
+        Assert.IsTrue(V.IsText(), 'Variant must report IsText=true after reassigning text variable');
     end;
 
     local procedure Initialize()

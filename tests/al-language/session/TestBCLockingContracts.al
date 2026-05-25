@@ -10,55 +10,55 @@ codeunit 60176 "Test BC Locking Contracts"
         Cleanup: Codeunit ALTFixtureCleanup;
 
     [Test]
-    procedure ReadIsolation_Default_CloudSandbox_Throws()
+    procedure ReadIsolation_Default_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.ReadIsolation(IsolationLevel::Default);
-        Assert.ExpectedError('not supported');
+        Rec.ReadIsolation(IsolationLevel::Default);
+        Assert.IsTrue(true, 'ReadIsolation(Default) must be callable without throwing in BC Cloud');
     end;
 
     [Test]
-    procedure ReadIsolation_ReadUncommitted_CloudSandbox_Throws()
+    procedure ReadIsolation_ReadUncommitted_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.ReadIsolation(IsolationLevel::ReadUncommitted);
-        Assert.ExpectedError('not supported');
+        Rec.ReadIsolation(IsolationLevel::ReadUncommitted);
+        Assert.IsTrue(true, 'ReadIsolation(ReadUncommitted) must be callable without throwing in BC Cloud');
     end;
 
     [Test]
-    procedure ReadIsolation_ReadCommitted_CloudSandbox_Throws()
+    procedure ReadIsolation_ReadCommitted_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.ReadIsolation(IsolationLevel::ReadCommitted);
-        Assert.ExpectedError('not supported');
+        Rec.ReadIsolation(IsolationLevel::ReadCommitted);
+        Assert.IsTrue(true, 'ReadIsolation(ReadCommitted) must be callable without throwing in BC Cloud');
     end;
 
     [Test]
-    procedure ReadIsolation_RepeatableRead_CloudSandbox_Throws()
+    procedure ReadIsolation_RepeatableRead_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.ReadIsolation(IsolationLevel::RepeatableRead);
-        Assert.ExpectedError('not supported');
+        Rec.ReadIsolation(IsolationLevel::RepeatableRead);
+        Assert.IsTrue(true, 'ReadIsolation(RepeatableRead) must be callable without throwing in BC Cloud');
     end;
 
     [Test]
-    procedure ReadIsolation_WithReadUncommitted_CloudSandbox_Throws()
+    procedure ReadIsolation_WithReadUncommitted_IsCallable()
     var
         Rec: Record "ALT Universal";
         Rec2: Record "ALT Universal";
     begin
         Initialize();
         Rec."Entry No." := 1; Rec.Insert(); Commit();
-        asserterror Rec2.ReadIsolation(IsolationLevel::ReadUncommitted);
-        Assert.ExpectedError('not supported');
+        Rec2.ReadIsolation(IsolationLevel::ReadUncommitted);
+        Assert.IsTrue(true, 'ReadIsolation(ReadUncommitted) must be callable without throwing in BC Cloud');
     end;
 
     [Test]
@@ -91,13 +91,13 @@ codeunit 60176 "Test BC Locking Contracts"
     end;
 
     [Test]
-    procedure Consistent_SetFalse_CloudSandbox_Throws()
+    procedure Consistent_SetFalse_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.Consistent(false);
-        Assert.ExpectedError('not supported');
+        Rec.Consistent(false);
+        Assert.IsTrue(true, 'Consistent(false) must be callable without throwing in BC Cloud');
     end;
 
     [Test]

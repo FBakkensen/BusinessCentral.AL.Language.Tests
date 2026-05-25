@@ -86,12 +86,13 @@ codeunit 60057 "Test Record Rename"
         Rec."Entry No." := 1;
         Rec."Integer Field" := 42;
         Rec.Insert();
+        Rec.Init();
         Rec."Entry No." := 2;
         Rec."Integer Field" := 99;
         Rec.Insert();
         Rec.Get(1);
         asserterror Rec.Rename(2);
-        Assert.ExpectedError('');
+        Assert.ExpectedError('already exists');
     end;
 
     local procedure Initialize()

@@ -166,8 +166,8 @@ codeunit 60167 "Test Array Stream Contracts"
         BlobRec.Get('S1');
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(T1);
-
-        Assert.IsTrue(StrPos(T1, 'First') > 0, 'ReadText must retrieve written content including "First"');
+        // After WriteText twice, multiple writes add CR/LF, so ReadText reads first line
+        Assert.AreEqual('First', T1, 'ReadText must retrieve written content, first line');
     end;
 
     [Test]
@@ -186,7 +186,7 @@ codeunit 60167 "Test Array Stream Contracts"
         BlobRec.Get('F1');
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(Content);
-
+        // Single WriteText, so ReadText reads until CR/LF and returns the content
         Assert.AreEqual('Hello World 12345', Content, 'ReadText must return complete written content');
     end;
 

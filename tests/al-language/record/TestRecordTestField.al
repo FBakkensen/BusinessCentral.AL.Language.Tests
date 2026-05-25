@@ -266,6 +266,7 @@ codeunit 60066 "Test Record TestField"
     procedure Record_TestField_BigIntegerMatch_Succeeds()
     var
         Rec: Record "ALT Universal";
+        Expected: BigInteger;
     begin
         Initialize();
         Rec."Entry No." := 1;
@@ -273,7 +274,8 @@ codeunit 60066 "Test Record TestField"
         Rec.Insert();
         Rec.Get(1);
         Rec.TestField("BigInteger Field", 1000000000);
-        Assert.AreEqual(1000000000, Rec."BigInteger Field", 'TestField BigInteger match must succeed without throwing');
+        Expected := 1000000000;
+        Assert.AreEqual(Expected, Rec."BigInteger Field", 'TestField BigInteger match must succeed without throwing');
     end;
 
     [Test]

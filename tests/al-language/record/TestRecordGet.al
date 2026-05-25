@@ -118,7 +118,7 @@ codeunit 60053 "Test Record Get"
         Rec1.Insert();
         Rec1.SetRange("Entry No.", 1, 2);
         FilterText := Rec1.GetFilter("Entry No.");
-        Rec1.Copy(Rec2);
+        Rec2.Copy(Rec1);
         Assert.AreEqual(FilterText, Rec2.GetFilter("Entry No."), 'Copy() must preserve filters from source record');
     end;
 
@@ -132,11 +132,12 @@ codeunit 60053 "Test Record Get"
         Rec1."Entry No." := 1;
         Rec1."Integer Field" := 100;
         Rec1.Insert();
-        Rec1.Copy(Rec2, true);
+        Rec2.Copy(Rec1, true);
         Rec2."Entry No." := 2;
+        Rec2."Integer Field" := 100;
         Rec2.Insert();
         Rec1.SetRange("Integer Field", 100);
-        Assert.AreEqual(1, Rec1.Count(), 'Copy(true) with shared table reference: both records reference same table data');
+        Assert.AreEqual(2, Rec1.Count(), 'Copy(true) with shared table reference: both records reference same table data');
     end;
 
     [Test]

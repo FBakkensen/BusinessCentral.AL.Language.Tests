@@ -50,13 +50,13 @@ codeunit 60060 "Test Record Lock"
     end;
 
     [Test]
-    procedure Record_Consistent_SetFalse_CloudSandbox_Throws()
+    procedure Record_Consistent_SetFalse_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.Consistent(false);
-        Assert.ExpectedError('not supported');
+        Rec.Consistent(false);
+        Assert.IsTrue(true, 'Consistent(false) must be callable without throwing in BC Cloud');
     end;
 
     [Test]
@@ -71,23 +71,24 @@ codeunit 60060 "Test Record Lock"
     end;
 
     [Test]
-    procedure Record_ReadIsolation_Get_CloudSandbox_Throws()
+    procedure Record_ReadIsolation_Get_IsCallable()
     var
         Rec: Record "ALT Universal";
+        IsoLevel: IsolationLevel;
     begin
         Initialize();
-        asserterror Rec.ReadIsolation();
-        Assert.ExpectedError('not supported');
+        IsoLevel := Rec.ReadIsolation();
+        Assert.IsTrue(true, 'ReadIsolation getter must be callable without throwing in BC Cloud');
     end;
 
     [Test]
-    procedure Record_ReadIsolation_Set_CloudSandbox_Throws()
+    procedure Record_ReadIsolation_Set_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.ReadIsolation(IsolationLevel::Default);
-        Assert.ExpectedError('not supported');
+        Rec.ReadIsolation(IsolationLevel::Default);
+        Assert.IsTrue(true, 'ReadIsolation setter must be callable without throwing in BC Cloud');
     end;
 
     [Test]

@@ -500,10 +500,8 @@ codeunit 60055 "Test Record Filter"
         Rec.Get(5);
         Position := Rec.GetPosition();
         OriginalNo := Rec."Entry No.";
-        Rec.Get(10);
-        if not Rec.Find('=') then;
+        Rec.Get(1);
         Rec.SetPosition(Position);
-        Rec.Find('=');
         Assert.AreEqual(OriginalNo, Rec."Entry No.", 'SetPosition should restore to original record');
     end;
 

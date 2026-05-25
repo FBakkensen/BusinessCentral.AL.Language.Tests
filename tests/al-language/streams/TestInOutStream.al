@@ -38,6 +38,7 @@ codeunit 60109 "Test InOutStream"
         OutStr: OutStream;
         InStr: InStream;
         ReadText: Text;
+        AllText: Text;
     begin
         Initialize();
         BlobRec.Code := 'T2';
@@ -47,8 +48,13 @@ codeunit 60109 "Test InOutStream"
         BlobRec.Insert();
         BlobRec.Get('T2');
         BlobRec.Data.CreateInStream(InStr);
-        InStr.ReadText(ReadText);
-        Assert.IsTrue(ReadText.Contains('Line1'), 'Multiple writes must all be readable from stream');
+        // ReadText reads until CR/LF or EOS, so we need to loop to read all
+        AllText := '';
+        while not InStr.EOS() do begin
+            InStr.ReadText(ReadText);
+            AllText += ReadText;
+        end;
+        Assert.IsTrue(AllText.Contains('Line1'), 'Multiple writes must all be readable from stream');
     end;
 
     [Test]
@@ -105,7 +111,9 @@ codeunit 60109 "Test InOutStream"
         BlobRec.Get('T5');
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(Line);
-        Assert.IsTrue(StrLen(Line) > 0, 'ReadText() must return non-empty string when data exists');
+        // ReadText should read until CR/LF or EOS. Since WriteText adds CR/LF,
+        // the result should be the text written.
+        Assert.AreEqual('FirstLine', Line, 'ReadText() must return the text written to stream');
     end;
 
     [Test]
@@ -126,7 +134,8 @@ codeunit 60109 "Test InOutStream"
         BlobRec.Get('T6');
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadText);
-        Assert.AreEqual(200, StrLen(ReadText), 'Long text content must be preserved in stream');
+        // Long text roundtrip: 200 character string should be preserved
+        Assert.AreEqual(LongText, ReadText, 'Long text content must be preserved exactly in stream');
     end;
 
     [Test]

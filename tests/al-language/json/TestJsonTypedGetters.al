@@ -106,7 +106,7 @@ codeunit 60121 "Test Json Typed Getters"
     end;
 
     [Test]
-    procedure JsonObject_GetBoolean_MissingKey_UsesDefault()
+    procedure JsonObject_GetBoolean_MissingKey_Throws()
     var
         JObj: JsonObject;
         Result: Boolean;
@@ -115,15 +115,13 @@ codeunit 60121 "Test Json Typed Getters"
         Initialize();
         JObj.ReadFrom('{"other":true}');
 
-        // Act
-        Result := JObj.GetBoolean('missing', false);
-
-        // Assert
-        Assert.AreEqual(false, Result, 'JsonObject.GetBoolean must return default false when key is missing');
+        // Act & Assert
+        asserterror Result := JObj.GetBoolean('missing', false);
+        Assert.AreNotEqual('', GetLastErrorText(), 'JsonObject.GetBoolean must throw when key is missing');
     end;
 
     [Test]
-    procedure JsonObject_GetInteger_MissingKey_UsesDefault()
+    procedure JsonObject_GetInteger_MissingKey_Throws()
     var
         JObj: JsonObject;
         Result: Integer;
@@ -132,15 +130,13 @@ codeunit 60121 "Test Json Typed Getters"
         Initialize();
         JObj.ReadFrom('{"other":5}');
 
-        // Act
-        Result := JObj.GetInteger('missing');
-
-        // Assert
-        Assert.AreEqual(99, Result, 'JsonObject.GetInteger must return default 99 when key is missing');
+        // Act & Assert
+        asserterror Result := JObj.GetInteger('missing');
+        Assert.AreNotEqual('', GetLastErrorText(), 'JsonObject.GetInteger must throw when key is missing');
     end;
 
     [Test]
-    procedure JsonObject_GetDecimal_MissingKey_UsesDefault()
+    procedure JsonObject_GetDecimal_MissingKey_Throws()
     var
         JObj: JsonObject;
         Result: Decimal;
@@ -149,15 +145,13 @@ codeunit 60121 "Test Json Typed Getters"
         Initialize();
         JObj.ReadFrom('{"other":1.5}');
 
-        // Act
-        Result := JObj.GetDecimal('missing');
-
-        // Assert
-        Assert.AreEqual(3.14, Result, 'JsonObject.GetDecimal must return default 3.14 when key is missing');
+        // Act & Assert
+        asserterror Result := JObj.GetDecimal('missing');
+        Assert.AreNotEqual('', GetLastErrorText(), 'JsonObject.GetDecimal must throw when key is missing');
     end;
 
     [Test]
-    procedure JsonObject_GetText_MissingKey_UsesDefault()
+    procedure JsonObject_GetText_MissingKey_Throws()
     var
         JObj: JsonObject;
         Result: Text;
@@ -166,11 +160,9 @@ codeunit 60121 "Test Json Typed Getters"
         Initialize();
         JObj.ReadFrom('{"other":"value"}');
 
-        // Act
-        Result := JObj.GetText('missing');
-
-        // Assert
-        Assert.AreEqual('default', Result, 'JsonObject.GetText must return default "default" when key is missing');
+        // Act & Assert
+        asserterror Result := JObj.GetText('missing');
+        Assert.AreNotEqual('', GetLastErrorText(), 'JsonObject.GetText must throw when key is missing');
     end;
 
     // ===== JsonArray typed getters =====

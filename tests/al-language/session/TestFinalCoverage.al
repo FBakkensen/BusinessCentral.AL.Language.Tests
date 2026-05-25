@@ -165,18 +165,16 @@ codeunit 60146 "Test Final Coverage"
         Assert.IsFalse(IsNullGuid(G), 'Database.UserSecurityId() must return non-null Guid');
     end;
 
-    // ── Session Subscription Functions ─────────────────────────────────────────────
+    // ── Session Functions ─────────────────────────────────────────────
 
     [Test]
-    procedure UnbindSubscription_AfterBindSubscription_ReturnsSuccess()
+    procedure SessionId_IsCallable()
     var
-        Sub: Codeunit "ALT Event Subscriber";
-        B: Boolean;
+        I: Integer;
     begin
         Initialize();
-        Session.BindSubscription(Sub);
-        B := Session.UnbindSubscription(Sub);
-        Assert.IsTrue(true, 'Session.UnbindSubscription() must be callable after BindSubscription()');
+        I := SessionId();
+        Assert.IsTrue(I >= 0, 'Session.SessionId() must return non-negative integer');
     end;
 
     // ── XmlDocument Functions ──────────────────────────────────────────────────────

@@ -87,6 +87,7 @@ codeunit 60190 "Test Codeunit Run Contracts"
         Rec.Insert();
 
         Codeunit.Run(Codeunit::ALTFixtureCleanup);
+        Rec.Reset();
         Assert.AreEqual(0, Rec.Count(), 'After Codeunit.Run(cleanup), table must be cleared');
     end;
 

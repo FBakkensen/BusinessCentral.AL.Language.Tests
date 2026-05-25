@@ -287,6 +287,7 @@ codeunit 60147 "Test Record vs RecordRef"
         InsertedInteger: Integer;
         InsertedText: Text[100];
         InsertedDecimal: Decimal;
+        ReadbackDecimal: Decimal;
     begin
         Initialize();
 
@@ -308,7 +309,9 @@ codeunit 60147 "Test Record vs RecordRef"
 
         Assert.AreEqual(InsertedInteger, RecRef.Field(3).Value(), 'Integer FieldRef.Value must match');
         Assert.AreEqual(InsertedText, RecRef.Field(6).Value(), 'Text FieldRef.Value must match');
-        Assert.AreEqual(InsertedDecimal, RecRef.Field(7).Value(), 'Decimal FieldRef.Value must match');
+        // Convert Decimal Variant to Decimal for proper comparison
+        ReadbackDecimal := RecRef.Field(7).Value();
+        Assert.AreEqual(InsertedDecimal, ReadbackDecimal, 'Decimal FieldRef.Value must match');
     end;
 
     [Test]
@@ -346,6 +349,7 @@ codeunit 60147 "Test Record vs RecordRef"
         // After Initialize, both must agree
         RecRef.Open(60000);
         Assert.AreEqual(Rec.IsEmpty(), RecRef.IsEmpty(), 'IsEmpty must agree when table is empty');
+        RecRef.Close();
 
         // Insert one record
         Rec."Entry No." := 13;
@@ -354,6 +358,7 @@ codeunit 60147 "Test Record vs RecordRef"
         // Now both must agree again
         RecRef.Open(60000);
         Assert.AreEqual(Rec.IsEmpty(), RecRef.IsEmpty(), 'IsEmpty must agree when table is not empty');
+        RecRef.Close();
     end;
 
     [Test]

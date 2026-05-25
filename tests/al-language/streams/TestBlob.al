@@ -53,6 +53,8 @@ codeunit 60110 "Test Blob"
         BlobRec.Get('B3');
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadText);
+        // WriteText writes text with CR/LF, ReadText reads until CR/LF
+        // After Insert/Get from DB, fresh InStream reads the stored data
         Assert.AreEqual('ExportContent', ReadText, 'Blob export/import must preserve exact content');
     end;
 

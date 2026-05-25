@@ -44,6 +44,7 @@ codeunit 60156 "Test Trigger Rollback"
         asserterror ErrRec.Insert(true);
 
         Assert.AreEqual('OnInsert error triggered', GetLastErrorText(), 'asserterror must capture OnInsert error text');
+        // In BC Cloud, when OnInsert throws, the insert is rolled back — the record is NOT in the table
         Assert.AreEqual(0, ErrRec.Count(), 'After OnInsert error, record must NOT be in the table (rolled back)');
     end;
 
@@ -83,6 +84,8 @@ codeunit 60156 "Test Trigger Rollback"
 
         Assert.AreEqual('OnModify error triggered', GetLastErrorText(), 'OnModify error text must be captured');
 
+        // After the error, get a fresh copy from the database to check it wasn't modified
+        Clear(ErrRec);
         ErrRec.Get(1);
         Assert.AreEqual(10, ErrRec."Value", 'After OnModify error, field value must remain unchanged (rolled back)');
         Assert.AreEqual(false, ErrRec."Should Error", 'After OnModify error, record state must be rolled back');

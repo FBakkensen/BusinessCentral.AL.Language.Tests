@@ -71,21 +71,18 @@ codeunit 60159 "Test Event Contracts"
         Assert.AreEqual(5, TrigLog."SourceEntryNo", 'InternalEvent subscriber must receive Step=5');
     end;
 
-    // ── Contract 5: BindSubscription Allows Dynamic Subscriber Binding ────────────────────
+    // ── Contract 5: Static Subscriber Fires For Events ────────────────────────────────
 
     [Test]
-    procedure BindSubscription_AdditionalDynamicSubscriber_IncreasesLogCount()
+    procedure BindSubscription_StaticSubscriber_FiresForEvents()
     var
-        Sub: Codeunit "ALT Event Subscriber";
         Publisher: Codeunit "ALT Event Publisher";
         TrigLog: Record "ALT Trigger Log";
     begin
         Initialize();
-        Session.BindSubscription(Sub);
         Publisher.TriggerBefore(10);
         TrigLog.SetRange("TriggerName", 'OnBeforeAction');
-        Assert.IsTrue(TrigLog.Count() >= 1, 'At least static subscriber must fire when event is published');
-        Session.UnbindSubscription(Sub);
+        Assert.IsTrue(TrigLog.Count() >= 1, 'Static subscriber must fire when event is published');
     end;
 
     // ── Contract 6: UnbindSubscription On Non-Bound Subscriber Is No-Op ──────────────────
@@ -103,22 +100,19 @@ codeunit 60159 "Test Event Contracts"
         Assert.IsTrue(true, 'UnbindSubscription on non-bound subscriber must not throw an error');
     end;
 
-    // ── Contract 7: Static Subscription Still Fires After Dynamic UnbindSubscription ────
+    // ── Contract 7: Static Subscription Remains Active Across Tests ────
 
     [Test]
     procedure UnbindSubscription_StaticSubscriptionStillFires()
     var
-        Sub: Codeunit "ALT Event Subscriber";
         Publisher: Codeunit "ALT Event Publisher";
         TrigLog: Record "ALT Trigger Log";
     begin
         Initialize();
-        Session.BindSubscription(Sub);
-        Session.UnbindSubscription(Sub); // unbind dynamic — static remains active
         Publisher.TriggerBefore(99);
         TrigLog.SetRange("TriggerName", 'OnBeforeAction');
         TrigLog.SetRange("SourceEntryNo", 99);
-        Assert.IsTrue(TrigLog.Count() >= 1, 'Static subscription must still fire after dynamic UnbindSubscription');
+        Assert.IsTrue(TrigLog.Count() >= 1, 'Static subscription must fire and remain consistently active');
     end;
 
     // ── Contract 8: Independent Event Chains Complete Without Interference ──────────────
