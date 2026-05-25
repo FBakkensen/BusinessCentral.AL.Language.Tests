@@ -171,8 +171,4 @@ codeunit 60184 "Test Duration Contracts"
         Assert.AreEqual(D, D2, 'Duration roundtrip: (DT + D) - DT must equal D');
     end;
 
-    local procedure DT2Time(DT: DateTime): Time
-    begin
-        exit(DT2Time(DT));
-    end;
 }

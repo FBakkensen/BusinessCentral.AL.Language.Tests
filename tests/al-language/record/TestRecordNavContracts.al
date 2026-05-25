@@ -322,27 +322,27 @@ codeunit 60155 "Test Record Nav Contracts"
         Assert.IsFalse(Rec2.GetBySystemId(ID), 'GetBySystemId on a deleted record SystemId must return false, not throw')
     end;
 
-    // ── Init() clears primary key and all fields ─────────────────────────────────
+    // ── Init() does NOT reset primary key, but DOES reset non-PK fields ─────────
 
     [Test]
-    procedure Init_On_Gotten_Record_ClearsPrimaryKey()
+    procedure Init_On_Gotten_Record_PKSurvives_NonPKReset()
     var
         Rec: Record "ALT Universal";
         Rec2: Record "ALT Universal";
     begin
         Initialize();
-        // Insert record with Entry No 1 (not 42, since we might be using auto-increment)
+        // Insert record with Entry No 1
         Rec."Entry No." := 1;
         Rec."Integer Field" := 99;
         Rec.Insert();
         // Get the record
         Rec.Get(1);
-        // Call Init() — should reset ALL fields including PK
+        // Call Init() — BC documentation: "Keys and timestamps are not initialized."
         Rec.Init();
-        // Primary key field must be reset to 0
-        Assert.AreEqual(0, Rec."Entry No.", 'Record.Init() must reset primary key field to default (0)');
-        // Non-PK fields must also be reset
-        Assert.AreEqual(0, Rec."Integer Field", 'Record.Init() must reset non-PK fields too');
+        // Primary key field MUST survive Init() — BC docs explicitly state keys are NOT initialized
+        Assert.AreEqual(1, Rec."Entry No.", 'Record.Init() must NOT reset the primary key — keys survive Init() per BC docs');
+        // Non-PK fields must be reset to defaults
+        Assert.AreEqual(0, Rec."Integer Field", 'Record.Init() must reset non-PK fields to their defaults');
         // Verify Init does NOT remove from database — record 1 still exists
         Assert.IsTrue(Rec2.Get(1), 'Record.Init() must NOT remove record from database — it only resets the variable')
     end;

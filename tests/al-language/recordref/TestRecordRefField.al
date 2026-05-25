@@ -73,6 +73,7 @@ codeunit 60070 "Test RecordRef Field"
         Rec.Insert();
         EntryNo := Rec."Entry No.";
         RecRef.Open(60000);
+        RecRef.Field(1).SetRange(7);  // Position RecRef on Entry No.=7 before GetTable
         RecRef.FindFirst();
         RecRef.GetTable(RecCopy);
         Assert.AreEqual(EntryNo, RecCopy."Entry No.", 'GetTable() must copy Entry No. from RecRef to Record');
@@ -89,11 +90,20 @@ codeunit 60070 "Test RecordRef Field"
         IntField: Integer;
     begin
         Initialize();
+        // Insert the record so it exists in the database
         Rec."Entry No." := 5;
         Rec."Integer Field" := 99;
+        Rec.Insert();
+
+        // Read it back so Rec holds the committed field values
+        Rec.Get(5);
+
+        // SetTable copies all fields from Rec into the RecordRef buffer
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
-        FldRef := RecRef.Field(3); // Integer Field, not Entry No.
+
+        // Field(3) in table 60000 is "Integer Field"
+        FldRef := RecRef.Field(3);
         IntField := 99;
         Assert.AreEqual(IntField, FldRef.Value(), 'SetTable() must copy Record Integer Field to RecordRef Field(3)');
         RecRef.Close();

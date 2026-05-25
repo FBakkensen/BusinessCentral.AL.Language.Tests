@@ -309,6 +309,7 @@ codeunit 60151 "Test Roundtrip Contracts"
         OutStr.WriteText('Roundtrip test string 12345');
         BlobRec.Insert();
         BlobRec.Get('RT1');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadBack);
 
@@ -334,6 +335,7 @@ codeunit 60151 "Test Roundtrip Contracts"
         OutStr.Write(12345);
         BlobRec.Insert();
         BlobRec.Get('RT2');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.Read(ReadInt);
 
@@ -359,6 +361,7 @@ codeunit 60151 "Test Roundtrip Contracts"
 
         // Act
         BlobRec.Get('RT3');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(First);
         InStr.ResetPosition();

@@ -91,13 +91,13 @@ codeunit 60176 "Test BC Locking Contracts"
     end;
 
     [Test]
-    procedure Consistent_SetFalse_IsCallable()
+    procedure Consistent_SetFalse_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.Consistent(false);
-        Assert.IsTrue(true, 'Consistent(false) must be callable without throwing in BC Cloud');
+        asserterror Rec.Consistent(false);
+        Assert.ExpectedError('inconsistencies');
     end;
 
     [Test]

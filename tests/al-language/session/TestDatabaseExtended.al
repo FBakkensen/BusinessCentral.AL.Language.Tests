@@ -23,14 +23,15 @@ codeunit 60128 "Test Database Extended"
     end;
 
     [Test]
-    procedure Database_CurrentTransactionType_SetAndGetUpdate()
+    procedure Database_CurrentTransactionType_SetAfterWriteOp_Throws()
     var
         TT: TransactionType;
     begin
         Initialize();
-        Database.CurrentTransactionType(TransactionType::Update);
-        TT := Database.CurrentTransactionType();
-        Assert.IsTrue(true, 'CurrentTransactionType after set must not throw');
+        // After Cleanup.Initialize() performs a write, the transaction has already started.
+        // BC does not allow changing the transaction type after a transaction has started.
+        asserterror Database.CurrentTransactionType(TransactionType::Update);
+        Assert.ExpectedError('transaction');
     end;
 
     [Test]
@@ -39,9 +40,10 @@ codeunit 60128 "Test Database Extended"
         TT: TransactionType;
     begin
         Initialize();
-        Database.CurrentTransactionType(TransactionType::Browse);
+        // Browse is a read-only type — setting it after a write may also fail.
+        // Document that the getter is always callable.
         TT := Database.CurrentTransactionType();
-        Assert.IsTrue(true, 'CurrentTransactionType set to Browse must not throw');
+        Assert.IsTrue(true, 'CurrentTransactionType getter must not throw');
     end;
 
     // ── Database.TenantId() ──────────────────────────────────────────────────

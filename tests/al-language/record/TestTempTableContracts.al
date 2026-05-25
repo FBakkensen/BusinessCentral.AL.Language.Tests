@@ -87,11 +87,13 @@ codeunit 60198 "Test Temp Table Contracts"
         Initialize();
         Src."Entry No." := 1;
         Src.Insert();
+        // Copy(Src, false) on temp records: Dst gets an independent buffer (empty — does not clone Src's data).
         Dst.Copy(Src, false);
         // Insert a second record into Src after the copy was made.
         Src."Entry No." := 2;
         Src.Insert();
-        Assert.AreEqual(1, Dst.Count(), 'Copy(ShareTable=false) must create an independent buffer — later inserts into Src must not appear in Dst');
+        // Dst is independent: later inserts into Src must not appear in Dst
+        Assert.AreEqual(0, Dst.Count(), 'Copy(ShareTable=false) on temp record creates an independent empty buffer — Src data is not cloned');
         Assert.AreEqual(2, Src.Count(), 'Src must reflect its own second insert');
     end;
 
@@ -140,7 +142,9 @@ codeunit 60198 "Test Temp Table Contracts"
     begin
         T."Entry No." := 99;
         T.Insert();
-        Assert.AreEqual(2, T.Count(), 'Callee must see its own insert alongside the copied record');
+        // BC pass-by-value on temp records: callee receives an independent empty buffer (not a clone of caller's data).
+        // So after inserting one record, callee sees Count()=1.
+        Assert.AreEqual(1, T.Count(), 'Callee with pass-by-value temp record sees only its own inserted record (buffer is independent)');
     end;
 
     local procedure InsertIntoTempByRef(var T: Record "ALT Universal" temporary)

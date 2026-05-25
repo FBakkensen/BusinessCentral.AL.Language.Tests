@@ -90,7 +90,7 @@ codeunit 60195 "Test InitValue Contracts"
     end;
 
     [Test]
-    procedure InitValue_PKField_AlwaysZeroAfterInit()
+    procedure InitValue_PKField_SurvivesInit_PKIsNotReset()
     var
         Rec: Record "ALT Init Value";
     begin
@@ -100,12 +100,12 @@ codeunit 60195 "Test InitValue Contracts"
         // Act
         // Set PK to a non-zero value
         Rec."Entry No." := 42;
-        // Init() should reset ALL fields including the PK to their language defaults
-        // (InitValue only applies to non-PK fields; PK always resets to 0)
+        // BC documentation: "Keys and timestamps are not initialized."
+        // Init() must NOT reset the PK — only non-PK fields are reset/given their InitValue.
         Rec.Init();
 
         // Assert
-        Assert.AreEqual(0, Rec."Entry No.", 'Init() must reset PK to 0 even with value set before');
+        Assert.AreEqual(42, Rec."Entry No.", 'Init() must NOT reset the PK — keys survive Init() per BC docs');
     end;
 
     [Test]
@@ -189,17 +189,18 @@ codeunit 60195 "Test InitValue Contracts"
         Initialize();
 
         // Act
-        // WITHOUT calling Init(), insert a record
-        // InitValue should NOT apply because Init() was never called
+        // WITHOUT calling Init() explicitly, insert a record.
+        // In BC, record variable fields with InitValue are pre-set to their InitValue
+        // at variable declaration time — not just when Init() is explicitly called.
         Rec."Entry No." := 2;
-        // Status is not set — using language default (0)
+        // Status is not explicitly set, but InitValue = 1 applies at variable declaration.
         Rec.Insert();
         Rec.Get(2);
 
         // Assert
-        // Status should be 0 (the language default), NOT 1 (the InitValue)
-        // because Init() was not called before Insert()
-        Assert.AreEqual(0, Rec."Status", 'Without Init(), Status must be 0 (language default, NOT InitValue)');
+        // Status must be 1 (the InitValue), even without an explicit Init() call,
+        // because BC applies InitValue to the in-memory variable upon declaration.
+        Assert.AreEqual(1, Rec."Status", 'Without explicit Init(), Status must be 1 (InitValue applies at variable declaration in BC)');
     end;
 
     [Test]

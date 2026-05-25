@@ -34,6 +34,7 @@ codeunit 60110 "Test Blob"
         OutStr.WriteText('content');
         BlobRec.Insert();
         BlobRec.Get('B2');
+        BlobRec.CalcFields(Data);
         Assert.IsTrue(BlobRec.Data.HasValue(), 'HasValue() must return true after writing to blob');
     end;
 
@@ -51,6 +52,7 @@ codeunit 60110 "Test Blob"
         OutStr.WriteText('ExportContent');
         BlobRec.Insert();
         BlobRec.Get('B3');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadText);
         // WriteText writes text with CR/LF, ReadText reads until CR/LF
@@ -70,6 +72,7 @@ codeunit 60110 "Test Blob"
         OutStr.WriteText('LengthTest');
         BlobRec.Insert();
         BlobRec.Get('B4');
+        BlobRec.CalcFields(Data);
         Assert.IsTrue(BlobRec.Data.Length() > 0, 'Blob Length() must be greater than zero after writing');
     end;
 

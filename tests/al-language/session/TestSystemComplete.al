@@ -78,7 +78,7 @@ codeunit 60142 "Test System Complete"
     // ── Math Functions: Rounding ────────────────────────────────────────────────
 
     [Test]
-    procedure System_Round_HalfValue_UsesRoundHalfToEven()
+    procedure System_Round_HalfValue_RoundsHalfUp()
     var
         Value: Decimal;
         Result: Decimal;
@@ -86,7 +86,7 @@ codeunit 60142 "Test System Complete"
         Initialize();
         Value := 2.5;
         Result := Round(Value, 1);
-        Assert.AreEqual(2.0, Result, 'Round(2.5, 1) must use banker''s rounding (round half to even) and return 2');
+        Assert.AreEqual(3.0, Result, 'Round(2.5, 1) must use round-half-away-from-zero (standard BC rounding) and return 3');
     end;
 
     [Test]
@@ -102,7 +102,7 @@ codeunit 60142 "Test System Complete"
     end;
 
     [Test]
-    procedure System_Round_NegativeValue()
+    procedure System_Round_NegativeValue_RoundsHalfAwayFromZero()
     var
         Value: Decimal;
         Result: Decimal;
@@ -110,7 +110,7 @@ codeunit 60142 "Test System Complete"
         Initialize();
         Value := -2.5;
         Result := Round(Value, 1);
-        Assert.AreEqual(-2.0, Result, 'Round(-2.5, 1) with banker''s rounding must round to -2 (round half to even)');
+        Assert.AreEqual(-3.0, Result, 'Round(-2.5, 1) must use round-half-away-from-zero and return -3');
     end;
 
     // ── Math Functions: Power ───────────────────────────────────────────────────

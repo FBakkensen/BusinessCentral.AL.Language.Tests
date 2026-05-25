@@ -41,53 +41,24 @@
         {
           "analysisTarget": [
             {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestBCPlatformContracts.al",
               "region": {
-                "startLine": 28,
-                "startColumn": 22,
-                "endLine": 28,
-                "endColumn": 43
+                "startLine": 36,
+                "startColumn": 13,
+                "endLine": 36,
+                "endColumn": 28
               }
             }
           ]
         }
       ],
-      "fullMessage": "'OptionString' is being deprecated in the versions: '1.0' or greater.  This warning will become an error in a future release.",
+      "fullMessage": "'IsServiceTier' is being deprecated in the versions: '1.0' or greater.  This warning will become an error in a future release.",
       "properties": {
         "severity": "Warning",
         "warningLevel": "4",
         "defaultSeverity": "Warning",
         "category": "Compiler",
         "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al667?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry"
-      }
-    },
-    {
-      "ruleId": "AL0821",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
-              "region": {
-                "startLine": 114,
-                "startColumn": 40,
-                "endLine": 114,
-                "endColumn": 52
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "The method 'Initialize' is missing or does not have exactly one parameter of type Notification.",
-      "properties": {
-        "severity": "Warning",
-        "warningLevel": "4",
-        "defaultSeverity": "Warning",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al821?wt.mc_id=d365bc_inproduct_alextension",
         "isEnabledByDefault": "True",
         "isSuppressedInSource": "False",
         "customTags": "Compiler;Telemetry"
@@ -157,18 +128,18 @@
         {
           "analysisTarget": [
             {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestBCPlatformContracts.al",
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
               "region": {
-                "startLine": 36,
-                "startColumn": 13,
-                "endLine": 36,
-                "endColumn": 28
+                "startLine": 28,
+                "startColumn": 22,
+                "endLine": 28,
+                "endColumn": 43
               }
             }
           ]
         }
       ],
-      "fullMessage": "'IsServiceTier' is being deprecated in the versions: '1.0' or greater.  This warning will become an error in a future release.",
+      "fullMessage": "'OptionString' is being deprecated in the versions: '1.0' or greater.  This warning will become an error in a future release.",
       "properties": {
         "severity": "Warning",
         "warningLevel": "4",
@@ -186,11 +157,11 @@
         {
           "analysisTarget": [
             {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
               "region": {
-                "startLine": 553,
+                "startLine": 114,
                 "startColumn": 40,
-                "endLine": 553,
+                "endLine": 114,
                 "endColumn": 52
               }
             }
@@ -217,9 +188,38 @@
             {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
               "region": {
-                "startLine": 564,
+                "startLine": 558,
+                "startColumn": 40,
+                "endLine": 558,
+                "endColumn": 52
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "The method 'Initialize' is missing or does not have exactly one parameter of type Notification.",
+      "properties": {
+        "severity": "Warning",
+        "warningLevel": "4",
+        "defaultSeverity": "Warning",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al821?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry"
+      }
+    },
+    {
+      "ruleId": "AL0821",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
+              "region": {
+                "startLine": 569,
                 "startColumn": 39,
-                "endLine": 564,
+                "endLine": 569,
                 "endColumn": 51
               }
             }
@@ -246,9 +246,9 @@
             {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
               "region": {
-                "startLine": 565,
+                "startLine": 570,
                 "startColumn": 39,
-                "endLine": 565,
+                "endLine": 570,
                 "endColumn": 51
               }
             }
@@ -265,6 +265,34 @@
         "isEnabledByDefault": "True",
         "isSuppressedInSource": "False",
         "customTags": "Compiler;Telemetry"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
+              "region": {
+                "startLine": 145,
+                "startColumn": 9,
+                "endLine": 145,
+                "endColumn": 23
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
       }
     },
     {
@@ -301,11 +329,67 @@
         {
           "analysisTarget": [
             {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
+              "region": {
+                "startLine": 158,
+                "startColumn": 19,
+                "endLine": 158,
+                "endColumn": 38
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
+              "region": {
+                "startLine": 169,
+                "startColumn": 19,
+                "endLine": 169,
+                "endColumn": 38
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestRecordDelete.al",
               "region": {
-                "startLine": 208,
+                "startLine": 203,
                 "startColumn": 9,
-                "endLine": 208,
+                "endLine": 203,
                 "endColumn": 31
               }
             }
@@ -313,594 +397,6 @@
         }
       ],
       "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
-              "region": {
-                "startLine": 141,
-                "startColumn": 9,
-                "endLine": 141,
-                "endColumn": 23
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
-              "region": {
-                "startLine": 154,
-                "startColumn": 19,
-                "endLine": 154,
-                "endColumn": 38
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
-              "region": {
-                "startLine": 165,
-                "startColumn": 19,
-                "endLine": 165,
-                "endColumn": 38
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 22,
-                "startColumn": 23,
-                "endLine": 22,
-                "endColumn": 46
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 35,
-                "startColumn": 24,
-                "endLine": 35,
-                "endColumn": 47
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 49,
-                "startColumn": 19,
-                "endLine": 49,
-                "endColumn": 43
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 66,
-                "startColumn": 19,
-                "endLine": 66,
-                "endColumn": 43
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetDecimal' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 83,
-                "startColumn": 19,
-                "endLine": 83,
-                "endColumn": 39
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetText' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 101,
-                "startColumn": 19,
-                "endLine": 101,
-                "endColumn": 44
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBigInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 119,
-                "startColumn": 31,
-                "endLine": 119,
-                "endColumn": 64
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 134,
-                "startColumn": 31,
-                "endLine": 134,
-                "endColumn": 57
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 149,
-                "startColumn": 31,
-                "endLine": 149,
-                "endColumn": 57
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetDecimal' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 164,
-                "startColumn": 31,
-                "endLine": 164,
-                "endColumn": 54
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetText' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 180,
-                "startColumn": 23,
-                "endLine": 180,
-                "endColumn": 41
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 193,
-                "startColumn": 24,
-                "endLine": 193,
-                "endColumn": 42
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 207,
-                "startColumn": 19,
-                "endLine": 207,
-                "endColumn": 37
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 224,
-                "startColumn": 19,
-                "endLine": 224,
-                "endColumn": 37
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetDecimal' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 241,
-                "startColumn": 19,
-                "endLine": 241,
-                "endColumn": 34
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetText' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 259,
-                "startColumn": 19,
-                "endLine": 259,
-                "endColumn": 40
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetBigInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 563,
-                "startColumn": 20,
-                "endLine": 563,
-                "endColumn": 44
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
-              "region": {
-                "startLine": 564,
-                "startColumn": 20,
-                "endLine": 564,
-                "endColumn": 45
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
       "properties": {
         "severity": "Error",
         "defaultSeverity": "Error",
@@ -1449,6 +945,510 @@
         {
           "analysisTarget": [
             {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 22,
+                "startColumn": 23,
+                "endLine": 22,
+                "endColumn": 46
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 35,
+                "startColumn": 24,
+                "endLine": 35,
+                "endColumn": 47
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 49,
+                "startColumn": 19,
+                "endLine": 49,
+                "endColumn": 43
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 66,
+                "startColumn": 19,
+                "endLine": 66,
+                "endColumn": 43
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetDecimal' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 83,
+                "startColumn": 19,
+                "endLine": 83,
+                "endColumn": 39
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetText' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 101,
+                "startColumn": 19,
+                "endLine": 101,
+                "endColumn": 44
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBigInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 119,
+                "startColumn": 31,
+                "endLine": 119,
+                "endColumn": 64
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 134,
+                "startColumn": 31,
+                "endLine": 134,
+                "endColumn": 57
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 149,
+                "startColumn": 31,
+                "endLine": 149,
+                "endColumn": 57
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetDecimal' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 164,
+                "startColumn": 31,
+                "endLine": 164,
+                "endColumn": 54
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetText' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 180,
+                "startColumn": 23,
+                "endLine": 180,
+                "endColumn": 41
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 193,
+                "startColumn": 24,
+                "endLine": 193,
+                "endColumn": 42
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBoolean' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 207,
+                "startColumn": 19,
+                "endLine": 207,
+                "endColumn": 37
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 224,
+                "startColumn": 19,
+                "endLine": 224,
+                "endColumn": 37
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetDecimal' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 241,
+                "startColumn": 19,
+                "endLine": 241,
+                "endColumn": 34
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetText' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 259,
+                "startColumn": 19,
+                "endLine": 259,
+                "endColumn": 40
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetBigInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 563,
+                "startColumn": 20,
+                "endLine": 563,
+                "endColumn": 44
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonTypedGetters.al",
+              "region": {
+                "startLine": 564,
+                "startColumn": 20,
+                "endLine": 564,
+                "endColumn": 45
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
               "region": {
                 "startLine": 84,
@@ -1591,9 +1591,9 @@
             {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
               "region": {
-                "startLine": 310,
+                "startLine": 313,
                 "startColumn": 14,
-                "endLine": 310,
+                "endLine": 313,
                 "endColumn": 41
               }
             }
@@ -1619,9 +1619,9 @@
             {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
               "region": {
-                "startLine": 321,
+                "startLine": 324,
                 "startColumn": 15,
-                "endLine": 321,
+                "endLine": 324,
                 "endColumn": 42
               }
             }
@@ -1647,9 +1647,9 @@
             {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
               "region": {
-                "startLine": 322,
+                "startLine": 325,
                 "startColumn": 15,
-                "endLine": 322,
+                "endLine": 325,
                 "endColumn": 42
               }
             }

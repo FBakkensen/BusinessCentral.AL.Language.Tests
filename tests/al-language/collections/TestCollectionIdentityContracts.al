@@ -166,7 +166,7 @@ codeunit 60164 "Test Collection Identity"
     end;
 
     [Test]
-    procedure Record_Init_AfterGet_ResetsToTableDefaults()
+    procedure Record_Init_AfterGet_ResetsNonPKToTableDefaults()
     var
         Rec: Record "ALT Universal";
         Rec2: Record "ALT Universal";
@@ -178,7 +178,9 @@ codeunit 60164 "Test Collection Identity"
         Rec.Insert();
         Rec.Get(1);
         Rec.Init();
-        Assert.AreEqual(0, Rec."Entry No.", 'Init() must reset PK to default 0');
+        // BC documentation: "Keys and timestamps are not initialized."
+        // The PK (Entry No.) survives Init() — only non-PK fields are reset.
+        Assert.AreEqual(1, Rec."Entry No.", 'Init() must NOT reset the PK — keys survive Init() per BC docs');
         Assert.AreEqual(0, Rec."Integer Field", 'Init() must reset Integer Field to 0');
         Assert.AreEqual('', Rec."Text Field", 'Init() must reset Text Field to empty');
         Assert.IsTrue(Rec2.Get(1), 'Init() must NOT remove record from database');

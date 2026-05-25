@@ -84,13 +84,15 @@ codeunit 60153 "Test Type System Contracts"
     procedure CodeField_DirectComparison_CaseInsensitive()
     var
         Rec: Record "ALT Universal";
+        CodeVar: Code[20];
     begin
         Cleanup.Initialize();
         Rec."Entry No." := 1;
         Rec."Code Field" := 'HELLO';
         Rec.Insert();
         Rec.Get(1);
-        Assert.IsTrue(Rec."Code Field" = 'hello', 'Code field comparison must be case-insensitive (HELLO = hello)');
+        CodeVar := 'hello'; // Code[20] assignment uppercases the literal to 'HELLO'
+        Assert.IsTrue(Rec."Code Field" = CodeVar, 'Code field comparison must be case-insensitive (HELLO = hello stored as HELLO)');
     end;
 
     [Test]

@@ -115,14 +115,18 @@ codeunit 60172 "Test BC System Field Contracts"
         SecondId: Integer;
     begin
         Initialize();
+        TL.Init();
         TL.TriggerName := 'T1';
         TL.Insert();
+        Commit();
         TL.FindFirst();
         FirstId := TL."Entry No.";
         TL.DeleteAll(false);
         Commit();
+        TL.Init();
         TL.TriggerName := 'T2';
         TL.Insert();
+        Commit();
         TL.FindFirst();
         SecondId := TL."Entry No.";
         Assert.IsTrue(SecondId > FirstId, 'After DeleteAll, AutoIncrement must continue from previous max, NOT reset to 1');

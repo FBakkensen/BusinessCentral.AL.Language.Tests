@@ -26,6 +26,7 @@ codeunit 60109 "Test InOutStream"
         OutStr.WriteText('Hello World');
         BlobRec.Insert();
         BlobRec.Get('T1');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadText);
         Assert.AreEqual('Hello World', ReadText, 'Written text must be read back exactly as written');
@@ -47,6 +48,7 @@ codeunit 60109 "Test InOutStream"
         OutStr.WriteText('Line2');
         BlobRec.Insert();
         BlobRec.Get('T2');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         // ReadText reads until CR/LF or EOS, so we need to loop to read all
         AllText := '';
@@ -71,6 +73,7 @@ codeunit 60109 "Test InOutStream"
         OutStr.Write(42);
         BlobRec.Insert();
         BlobRec.Get('T3');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.Read(ReadInt);
         Assert.AreEqual(42, ReadInt, 'Integer value must round-trip through stream');
@@ -90,6 +93,7 @@ codeunit 60109 "Test InOutStream"
         OutStr.WriteText('');
         BlobRec.Insert();
         BlobRec.Get('T4');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadText);
         Assert.IsTrue(InStr.EOS(), 'EOS() must return true when stream is at end');
@@ -109,6 +113,7 @@ codeunit 60109 "Test InOutStream"
         OutStr.WriteText('FirstLine');
         BlobRec.Insert();
         BlobRec.Get('T5');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(Line);
         // ReadText should read until CR/LF or EOS. Since WriteText adds CR/LF,
@@ -132,6 +137,7 @@ codeunit 60109 "Test InOutStream"
         OutStr.WriteText(LongText);
         BlobRec.Insert();
         BlobRec.Get('T6');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(ReadText);
         // Long text roundtrip: 200 character string should be preserved

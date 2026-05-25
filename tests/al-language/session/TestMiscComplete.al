@@ -187,10 +187,10 @@ codeunit 60145 "Test Misc Complete"
         // ARRANGE & ACT
         Initialize();
 
-        // ASSERT - RegisterTableConnection with invalid connection may throw or succeed depending on configuration
-        // We document that this is attempted but may fail gracefully
-        Database.RegisterTableConnection(TableConnectionType::ExternalSQL, 'TestConn', '');
-        Assert.IsTrue(true, 'Database.RegisterTableConnection may throw for invalid connection string');
+        // ASSERT - RegisterTableConnection with ExternalSQL type throws a permission error in BC Cloud.
+        // Users do not have permission to register external SQL table connections.
+        asserterror Database.RegisterTableConnection(TableConnectionType::ExternalSQL, 'TestConn', '');
+        Assert.ExpectedError('permission');
     end;
 
     // ── Documentation: Out-of-scope or handler-dependent ──────────────────────

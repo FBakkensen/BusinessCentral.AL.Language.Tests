@@ -112,7 +112,9 @@ codeunit 60166 "Test TryFunction Contracts"
         Initialize();
 
         Rec."Entry No." := 1;
-        TryInsertThenError(Rec);
+        // TryFunction return value MUST be consumed (via if/assignment) to suppress the error.
+        // Calling a TryFunction as a plain statement causes the error to propagate normally.
+        if TryInsertThenError(Rec) then;
 
         Assert.IsTrue(Rec2.Get(1), 'Record inserted inside TryFunction before error must persist (no auto-rollback)');
     end;

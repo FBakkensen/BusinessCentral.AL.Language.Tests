@@ -107,13 +107,18 @@ codeunit 60152 "Test Transaction Contracts"
         SecondId: Integer;
     begin
         Initialize();
+        TL.Init();
         TL.TriggerName := 'A';
         TL.Insert();
+        Commit();
         TL.FindFirst();
         FirstId := TL."Entry No.";
         TL.DeleteAll();
+        Commit();
+        TL.Init();
         TL.TriggerName := 'B';
         TL.Insert();
+        Commit();
         TL.FindFirst();
         SecondId := TL."Entry No.";
         Assert.IsTrue(SecondId > FirstId, 'AutoIncrement must continue from last used value, not restart');

@@ -79,14 +79,15 @@ codeunit 60064 "Test Record TransferFields"
         Initialize();
         // ALT Universal field 1 = "Entry No." (Integer)
         // ALT Base field 1 = "Entry No." (Integer)
-        // Set Src (ALT Universal) Entry No=7; call Base.TransferFields(Src, false)
+        // Set Src (ALT Universal) Entry No=7; call Base.TransferFields(Src, true) to include PK
         Src."Entry No." := 7;
         Src."Integer Field" := 123;
         Src.Insert();
 
         // TransferFields without SkipTypeMismatch will throw because field 2 differs
-        // (Boolean Field vs Name field). So use SkipTypeMismatch=true
-        Dst.TransferFields(Src, false, true);
+        // (Boolean Field vs Name field). So use SkipTypeMismatch=true.
+        // InitPKFields=true so that field 1 (Entry No.) is also copied.
+        Dst.TransferFields(Src, true, true);
 
         // Verify that field 1 was copied (matching by field number)
         Assert.AreEqual(7, Dst."Entry No.", 'TransferFields across tables must copy field 1 (Entry No.) by field number');
@@ -99,42 +100,42 @@ codeunit 60064 "Test Record TransferFields"
         Dst: Record "ALT Base";
     begin
         Initialize();
-        // Use 3-argument overload: TransferFields(Src, false, true)
+        // Use 3-argument overload: TransferFields(Src, true, true)
         // ALT Universal has a field 2 "Boolean Field" (Boolean)
         // ALT Base has field 2 "Name" (Text[50]) — type mismatch
-        // With SkipTypeMismatch=true, the mismatch is skipped but matching types ARE copied
+        // With SkipTypeMismatch=true, the mismatch is skipped but matching types ARE copied.
+        // InitPKFields=true so that field 1 (Entry No., Integer in both tables) is copied.
         Src."Entry No." := 10;
         Src."Boolean Field" := true;
         Src.Insert();
 
         // This must not throw even if field types differ
-        Dst.TransferFields(Src, false, true);
+        Dst.TransferFields(Src, true, true);
 
         // Verify Entry No. was still copied (field 1 matches: both Integer)
         Assert.AreEqual(10, Dst."Entry No.", 'TransferFields with SkipTypeMismatch=true must still copy matching field numbers');
     end;
 
     [Test]
-    procedure Record_TransferFields_SkipTypeMismatchFalse_CopiesMatchingTypes()
+    procedure Record_TransferFields_SkipTypeMismatchFalse_ThrowsOnMismatch()
     var
         Src: Record "ALT Universal";
         Dst: Record "ALT Base";
     begin
         Initialize();
-        // Use TransferFields(Src, false, false) — copies matching field types
-        // Field 1 (Entry No., Integer) exists in both with same type — will be copied
-        // Field 4: ALT Universal has "Decimal Field" (Decimal), ALT Base has "Amount" (Decimal) — both Decimal
+        // CLAIM: TransferFields(Src, false, false) throws a runtime error when field types differ
+        // between source and destination tables.
+        // ALT Universal field 2 = "Boolean Field" (Boolean)
+        // ALT Base field 2 = "Name" (Text[50]) — type mismatch
+        // With SkipTypeMismatch=false, the first field type mismatch causes an error;
+        // the copy does NOT partially succeed.
         Src."Entry No." := 15;
         Src."Decimal Field" := 555.50;
         Src.Insert();
 
-        // This must not throw for fields with matching types
-        Dst.TransferFields(Src, false, false);
-
-        // Verify matching-type fields were copied
-        Assert.AreEqual(15, Dst."Entry No.", 'TransferFields with SkipTypeMismatch=false must copy Entry No. when types match');
-        // Field 4 in both is Decimal, so it should be copied
-        Assert.AreEqual(555.50, Dst."Amount", 'TransferFields must copy field 4 (Decimal) when types match');
+        // Must throw because field 2 types differ (Boolean vs Text[50])
+        asserterror Dst.TransferFields(Src, false, false);
+        Assert.ExpectedError('must have the same type');
     end;
 
     local procedure Initialize()

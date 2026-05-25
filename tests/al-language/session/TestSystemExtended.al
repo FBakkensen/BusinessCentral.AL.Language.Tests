@@ -110,6 +110,7 @@ codeunit 60135 "Test System Extended"
 
         // Copy from first blob to second blob using CopyStream
         Blob1.Get('S1');
+        Blob1.CalcFields(Data);
         Blob1.Data.CreateInStream(InStr);
 
         Blob2.Code := 'S2';
@@ -119,6 +120,7 @@ codeunit 60135 "Test System Extended"
 
         // Verify second blob contains the data — get a fresh InStream from DB after writing
         Blob2.Get('S2');
+        Blob2.CalcFields(Data);
         Blob2.Data.CreateInStream(InStr2);
         InStr2.ReadText(ReadText);
 
@@ -143,6 +145,7 @@ codeunit 60135 "Test System Extended"
 
         // Copy empty stream
         Blob1.Get('S3');
+        Blob1.CalcFields(Data);
         Blob1.Data.CreateInStream(InStr);
 
         Blob2.Code := 'S4';
@@ -404,6 +407,7 @@ codeunit 60135 "Test System Extended"
         Blob.Insert();
 
         Blob.Get('R');
+        Blob.CalcFields(Data);
         Blob.Data.CreateInStream(InStr);
 
         InStr.ReadText(T1);
@@ -430,6 +434,7 @@ codeunit 60135 "Test System Extended"
         Blob.Insert();
 
         Blob.Get('R2');
+        Blob.CalcFields(Data);
         Blob.Data.CreateInStream(InStr);
 
         InStr.ReadText(T1);

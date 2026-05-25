@@ -161,6 +161,7 @@ codeunit 60147 "Test Record vs RecordRef"
         Rec: Record "ALT Universal";
         Rec2: Record "ALT Universal";
         RecRef: RecordRef;
+        FldRef: FieldRef;
     begin
         Initialize();
 
@@ -170,10 +171,11 @@ codeunit 60147 "Test Record vs RecordRef"
         Rec."Text Field" := 'test';
         Rec.Insert();
 
-        // Load via RecordRef and GetTable into Rec2
+        // Load via RecordRef: set filter, find, then GetTable into Rec2
         RecRef.Open(60000);
-        RecRef.Field(1).SetRange(7);
-        RecRef.FindFirst();
+        FldRef := RecRef.Field(1);
+        FldRef.SetRange(7);
+        Assert.IsTrue(RecRef.FindFirst(), 'RecordRef must find Entry No.=7 after SetRange');
         RecRef.GetTable(Rec2);
 
         // Verify fields copied
@@ -190,16 +192,18 @@ codeunit 60147 "Test Record vs RecordRef"
     begin
         Initialize();
 
-        // Populate Record
+        // Insert and read back so Record has committed field values
         Rec."Entry No." := 8;
         Rec."Integer Field" := 77;
         Rec."Text Field" := 'setTable test';
+        Rec.Insert();
+        Rec.Get(8);
 
-        // Load Record into RecordRef via SetTable
+        // Load Record into RecordRef via SetTable — copies field values from Record to RecRef buffer
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
 
-        // Verify fields transferred
+        // Verify fields transferred: Field(3)="Integer Field", Field(6)="Text Field"
         Assert.AreEqual(77, RecRef.Field(3).Value(), 'Integer Field must be transferred via SetTable');
         Assert.AreEqual('setTable test', RecRef.Field(6).Value(), 'Text Field must be transferred via SetTable');
     end;
@@ -309,8 +313,8 @@ codeunit 60147 "Test Record vs RecordRef"
 
         Assert.AreEqual(InsertedInteger, RecRef.Field(3).Value(), 'Integer FieldRef.Value must match');
         Assert.AreEqual(InsertedText, RecRef.Field(6).Value(), 'Text FieldRef.Value must match');
-        // Convert Decimal Variant to Decimal for proper comparison
-        ReadbackDecimal := RecRef.Field(7).Value();
+        // Field(5) = "Decimal Field" (Decimal) in ALT Universal — Field(7) is "Code Field" (Code[20])
+        ReadbackDecimal := RecRef.Field(5).Value();
         Assert.AreEqual(InsertedDecimal, ReadbackDecimal, 'Decimal FieldRef.Value must match');
     end;
 

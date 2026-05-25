@@ -27,13 +27,16 @@ codeunit 60143 "Test Session Complete"
     procedure Session_GetModuleExecutionContext_WithAppId_IsCallable()
     var
         EC: ExecutionContext;
+        ModuleInfo: ModuleInfo;
         AppId: Guid;
     begin
         Initialize();
-        AppId := Session.ApplicationIdentifier();
+        // Use NavApp.GetCurrentModuleInfo() to obtain a valid AppId GUID
+        NavApp.GetCurrentModuleInfo(ModuleInfo);
+        AppId := ModuleInfo.Id();
         if not IsNullGuid(AppId) then
             EC := Session.GetModuleExecutionContext(AppId);
-        Assert.IsTrue(true, 'Session.GetModuleExecutionContext(AppId) must be callable when AppId is not null');
+        Assert.IsTrue(true, 'Session.GetModuleExecutionContext(AppId) must be callable when AppId is a valid GUID');
     end;
 
     // ── Session.IsSessionActive ─────────────────────────────────────────────────

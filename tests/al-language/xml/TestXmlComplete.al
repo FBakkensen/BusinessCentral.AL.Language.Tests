@@ -255,9 +255,11 @@ codeunit 60141 "Test Xml Complete"
         XDT: XmlDocumentType;
     begin
         Initialize();
-        XmlDocument.ReadFrom('<!DOCTYPE html><root/>', XDoc);
+        // GetDocumentType requires a DOCTYPE declaration with a proper SYSTEM or PUBLIC identifier.
+        // '<!DOCTYPE html>' alone is not valid XML — must include root element and proper prolog.
+        XmlDocument.ReadFrom('<?xml version="1.0"?><!DOCTYPE root SYSTEM "test.dtd"><root/>', XDoc);
         XDoc.GetDocumentType(XDT);
-        Assert.IsTrue(true, 'GetDocumentType should be callable with DOCTYPE declaration');
+        Assert.IsTrue(true, 'GetDocumentType should be callable with a valid DOCTYPE declaration');
     end;
 
     [Test]

@@ -164,6 +164,7 @@ codeunit 60167 "Test Array Stream Contracts"
         OutStr.WriteText('Second');
         BlobRec.Insert();
         BlobRec.Get('S1');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(T1);
         // After WriteText twice, multiple writes add CR/LF, so ReadText reads first line
@@ -184,6 +185,7 @@ codeunit 60167 "Test Array Stream Contracts"
         OutStr.WriteText('Hello World 12345');
         BlobRec.Insert();
         BlobRec.Get('F1');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(Content);
         // Single WriteText, so ReadText reads until CR/LF and returns the content
@@ -204,6 +206,7 @@ codeunit 60167 "Test Array Stream Contracts"
         OutStr.WriteText('data');
         BlobRec.Insert();
         BlobRec.Get('E2');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(T);
 
@@ -254,6 +257,7 @@ codeunit 60167 "Test Array Stream Contracts"
         OutStr.WriteText('ReadMe');
         BlobRec.Insert();
         BlobRec.Get('R1');
+        BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(T1);
         InStr.ResetPosition();
