@@ -295,6 +295,60 @@ codeunit 60133 "Test Page Advanced"
         ListPage.Close();
     end;
 
+    // ── FindFirstField / FindPreviousField: Variant parameter is type-sensitive ────
+
+    [Test]
+    procedure Page_FindPreviousField_StringValue_DoesNotMatchIntegerField()
+    // CLAIM: TestPage.FindPreviousField / FindFirstField accept a Variant for the search value.
+    //        The Variant is type-sensitive: passing Text '20' does NOT match an Integer field
+    //        whose stored value is 20. Pass an Integer variable, not a string literal.
+    var
+        ListPage: TestPage "ALT List Page";
+        Rec: Record "ALT Universal";
+        Found: Boolean;
+    begin
+        Initialize();
+        Rec."Entry No." := 1;
+        Rec."Integer Field" := 20;
+        Rec.Insert();
+        Rec."Entry No." := 2;
+        Rec."Integer Field" := 30;
+        Rec.Insert();
+
+        ListPage.OpenView();
+        ListPage.Last();
+        // String '20' does NOT match Integer 20 — type mismatch, find returns false
+        Found := ListPage.FindPreviousField(ListPage."Integer Field", '20');
+        Assert.IsFalse(Found, 'FindPreviousField with Text ''20'' must NOT match Integer field 20 — Variant is type-sensitive');
+        ListPage.Close();
+    end;
+
+    [Test]
+    procedure Page_FindPreviousField_IntegerValue_MatchesIntegerField()
+    // CLAIM: Passing an Integer value to FindPreviousField correctly matches an Integer field.
+    //        This is the required usage pattern — match the type of the field.
+    var
+        ListPage: TestPage "ALT List Page";
+        Rec: Record "ALT Universal";
+        Found: Boolean;
+        IntVal: Integer;
+    begin
+        Initialize();
+        Rec."Entry No." := 1;
+        Rec."Integer Field" := 20;
+        Rec.Insert();
+        Rec."Entry No." := 2;
+        Rec."Integer Field" := 30;
+        Rec.Insert();
+
+        ListPage.OpenView();
+        ListPage.Last();
+        IntVal := 20;
+        Found := ListPage.FindPreviousField(ListPage."Integer Field", IntVal);
+        Assert.IsTrue(Found, 'FindPreviousField with Integer 20 must match Integer field value 20');
+        ListPage.Close();
+    end;
+
     local procedure Initialize()
     begin
         Cleanup.Initialize();

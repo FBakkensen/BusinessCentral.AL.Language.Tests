@@ -157,6 +157,23 @@ codeunit 60175 "Test Security Filtering"
         Assert.IsFalse(Result, 'ChangeCompany to non-existent company must return false');
     end;
 
+    // ── Default SecurityFiltering in test runner context is Validated ─────────────
+
+    [Test]
+    procedure SecurityFiltering_Default_InTestContext_IsValidated_NotIgnored()
+    // CLAIM: When a Record variable is created in the BC test runner context,
+    //        its default SecurityFiltering is Validated — NOT Ignored.
+    //        This differs from runtime AL documentation which may imply Ignored is default.
+    //        Tests that assume Ignored as the default will fail in the test runner.
+    var
+        Rec: Record "ALT Universal";
+    begin
+        Assert.AreEqual(SecurityFilter::Validated, Rec.SecurityFiltering(),
+            'Default SecurityFiltering in test runner context must be Validated');
+        Assert.AreNotEqual(SecurityFilter::Ignored, Rec.SecurityFiltering(),
+            'Default SecurityFiltering must NOT be Ignored in test runner — use explicit SetSecurityFilter before asserting Ignored');
+    end;
+
     local procedure Cleanup()
     var
         Rec: Record "ALT Universal";

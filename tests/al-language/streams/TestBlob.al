@@ -124,6 +124,43 @@ codeunit 60110 "Test Blob"
         Assert.AreEqual('', Content, 'Reading Blob InStream without CalcFields returns empty — CalcFields required after Get');
     end;
 
+    [Test]
+    procedure Blob_CopyStream_WithoutCalcFields_DestinationIsEmpty()
+    // CLAIM: CopyStream from a Blob field that has not been CalcFields'd copies nothing.
+    //        The source InStream reads from an unloaded Blob = empty stream.
+    //        Both ReadText and CopyStream require CalcFields to be called after Get().
+    var
+        Src: Record "ALT Blob";
+        Dst: Record "ALT Blob";
+        OutStr: OutStream;
+        SrcIn: InStream;
+        DstOut: OutStream;
+        DstIn: InStream;
+        Content: Text;
+    begin
+        Initialize();
+        Src.Code := 'CS1';
+        Src.Data.CreateOutStream(OutStr);
+        OutStr.WriteText('OriginalContent');
+        Src.Insert();
+
+        // Re-fetch WITHOUT CalcFields — unloaded Blob
+        Src.Get('CS1');
+        // Intentionally NO CalcFields call here
+
+        Dst.Code := 'CS2';
+        Dst.Data.CreateOutStream(DstOut);
+        Src.Data.CreateInStream(SrcIn);
+        CopyStream(DstOut, SrcIn);  // Source stream is empty — CalcFields was skipped
+        Dst.Insert();
+
+        Dst.Get('CS2');
+        Dst.CalcFields(Data);
+        Dst.Data.CreateInStream(DstIn);
+        DstIn.ReadText(Content);
+        Assert.AreEqual('', Content, 'CopyStream from unloaded Blob (no CalcFields) copies nothing — CalcFields required before CopyStream');
+    end;
+
     local procedure Initialize()
     begin
         Cleanup.Initialize();
