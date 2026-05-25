@@ -275,8 +275,8 @@ codeunit 60155 "Test Record Nav Contracts"
         Rec2.Copy(Rec1, false);
         // Rec1 has filter 1..3 → count = 3
         Assert.AreEqual(3, Rec1.Count(), 'Rec1 with SetRange 1..3 must count 3 records');
-        // Rec2 copied filter from Rec1 and is independent → also count = 3
-        Assert.AreEqual(3, Rec2.Count(), 'Rec2 copied filter from Rec1 must also count 3')
+        // Rec2 is an independent copy (ShareTable=false) — only the filter is copied, not the temp table data
+        Assert.AreEqual(0, Rec2.Count(), 'Copy(ShareTable:=false) on temp record creates empty independent buffer — only filter is copied')
     end;
 
     // ── MarkedOnly(true) with no marks ───────────────────────────────────────────

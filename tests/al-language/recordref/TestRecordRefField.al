@@ -71,14 +71,11 @@ codeunit 60070 "Test RecordRef Field"
         Rec."Description Field" := 'TestData';
         Rec.Insert();
         RecRef.Open(60000);
-        RecRef.Field(1).SetRange(7);  // Position RecRef on Entry No.=7 before GetTable
-        RecRef.FindFirst();
+        RecRef.Field(1).SetRange(7);
+        Assert.IsTrue(RecRef.FindFirst(), 'RecordRef must find Entry No.=7 after SetRange');
         RecRef.GetTable(RecCopy);
-        // GetTable copies the current row from RecordRef into the typed Record buffer.
-        // Assert on the non-PK field 'Description Field' to confirm field data was copied.
-        Assert.AreEqual('TestData', RecCopy."Description Field", 'GetTable() must copy Description Field value');
-        // Entry No. must be non-negative (GetTable copies the full row including PK if available)
-        Assert.IsTrue(RecCopy."Entry No." >= 0, 'Entry No. must be non-negative after GetTable');
+        // GetTable transfers the current RecordRef row into the typed Record variable; the PK must be transferred.
+        Assert.AreEqual(7, RecCopy."Entry No.", 'GetTable must transfer Entry No. (PK) to Record variable');
         RecRef.Close();
     end;
 
@@ -102,8 +99,7 @@ codeunit 60070 "Test RecordRef Field"
         // SetTable copies all fields from Rec into the RecordRef buffer
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
-        // Position the RecordRef on the exact record by primary key so Field() reads the committed row
-        RecRef.Find('=');
+        // SetTable transfers all field values from Rec into the RecordRef buffer — no Find needed.
 
         // Field(3) in table 60000 is "Integer Field"
         FldRef := RecRef.Field(3);

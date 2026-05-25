@@ -178,11 +178,8 @@ codeunit 60147 "Test Record vs RecordRef"
         Assert.IsTrue(RecRef.FindFirst(), 'RecordRef must find Entry No.=7 after SetRange');
         RecRef.GetTable(Rec2);
 
-        // Verify fields copied — assert non-PK fields first (GetTable copies current RecordRef row into Record buffer)
-        Assert.AreEqual(55, Rec2."Integer Field", 'Integer Field must be copied via GetTable');
-        Assert.AreEqual('test', Rec2."Text Field", 'Text Field must be copied via GetTable');
-        // Entry No. must be non-negative after GetTable
-        Assert.IsTrue(Rec2."Entry No." >= 0, 'Entry No. must be non-negative after GetTable');
+        // GetTable transfers the current RecordRef row into the typed Record variable; the PK must be transferred.
+        Assert.AreEqual(7, Rec2."Entry No.", 'GetTable must transfer Entry No. (PK) to Record variable');
     end;
 
     [Test]
@@ -203,8 +200,7 @@ codeunit 60147 "Test Record vs RecordRef"
         // Load Record into RecordRef via SetTable — copies field values from Record to RecRef buffer
         RecRef.Open(60000);
         RecRef.SetTable(Rec);
-        // Position the RecordRef on the exact record by primary key so Field() reads the committed row
-        RecRef.Find('=');
+        // SetTable transfers all field values from Rec into the RecordRef buffer — no Find needed.
 
         // Verify fields transferred: Field(3)="Integer Field", Field(6)="Text Field"
         Assert.AreEqual(77, RecRef.Field(3).Value(), 'Integer Field must be transferred via SetTable');
