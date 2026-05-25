@@ -1,0 +1,55 @@
+name: Wrong or misleading test
+description: A test that passes for the wrong reason, asserts the wrong thing, or documents incorrect behavior
+labels: ["bug", "test-quality"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when an existing test is incorrect — it either asserts a wrong value,
+        passes vacuously (would pass even if the feature were broken), or documents behavior
+        that doesn't match BC Cloud.
+
+  - type: input
+    id: test_file
+    attributes:
+      label: Test file / procedure
+      description: "Example: `tests/al-language/record/TestRecordInsert.al · Record_Insert_AssignsSystemId`"
+      placeholder: "path/to/TestFile.al · Procedure_Name"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: problem_type
+    attributes:
+      label: Type of problem
+      options:
+        - "Vacuous assertion — passes even when the feature is broken"
+        - "Wrong expected value — the asserted value is incorrect"
+        - "Wrong behavior documented — BC Cloud actually behaves differently"
+        - "Missing error check — asserterror without Assert.ExpectedError"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong
+      description: Describe the problem clearly. Include what the test asserts and what it should assert.
+    validations:
+      required: true
+
+  - type: textarea
+    id: correct_behavior
+    attributes:
+      label: Correct BC Cloud behavior
+      description: What does BC Cloud actually do? Include a version if it varies.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+    validations:
+      required: false

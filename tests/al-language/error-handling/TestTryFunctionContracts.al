@@ -13,20 +13,18 @@ codeunit 60166 "Test TryFunction Contracts"
     // ── INSERT is not allowed inside a TryFunction in the test runner ─────────────
 
     [Test]
-    procedure TryFunction_Insert_InTestRunnerContext_ReturnsFalse()
-    // CLAIM: The BC test runner forbids INSERT inside a TryFunction when executing via
-    //        the test framework (RunTests). The error is caught by TryFunction, so the
-    //        TryFunction returns false. asserterror cannot catch this — check return value.
+    procedure TryFunction_Insert_InTestRunnerContext_Throws()
+    // CLAIM: The BC test runner raises an error that propagates THROUGH the TryFunction boundary
+    //        if INSERT is called inside a [TryFunction] during test execution — the TryFunction
+    //        does NOT return false; the error escapes. asserterror catches it at the call site.
     //        Use read operations (FindFirst, Get, etc.) inside TryFunctions instead.
     var
         TL: Record "ALT Trigger Log";
     begin
         Initialize();
         TL."Entry No." := 0;
-        if TryInsertRecord(TL) then
-            Assert.IsTrue(false, 'INSERT inside TryFunction must fail in test runner context — TryFunction should return false')
-        else
-            Assert.IsTrue(true, 'INSERT inside TryFunction correctly returns false in test runner context (write operations are forbidden in TryFunctions)');
+        asserterror TryInsertRecord(TL);
+        Assert.ExpectedError('is not allowed inside the call to');
     end;
 
     [TryFunction]

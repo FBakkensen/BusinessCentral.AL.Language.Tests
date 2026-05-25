@@ -1,0 +1,69 @@
+name: Missing test coverage
+description: An AL language feature or method that isn't tested yet
+labels: ["coverage-gap"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when you notice an AL language feature that has no test in this repo.
+        One issue per feature or method — keep it focused.
+
+  - type: input
+    id: feature
+    attributes:
+      label: AL feature / method
+      description: "The exact type and method name. Example: `Record.Rename`, `JsonObject.ReadFrom`"
+      placeholder: "Type.Method"
+    validations:
+      required: true
+
+  - type: input
+    id: docs_url
+    attributes:
+      label: BC documentation URL
+      description: Link to the learn.microsoft.com page for this feature
+      placeholder: "https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/methods-auto/..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: Is this feature available in BC Cloud?
+      options:
+        - "In-scope — works in Cloud (positive + negative tests needed)"
+        - "Out-of-scope — Cloud-restricted (one negative test confirming it throws)"
+        - "Unsure"
+    validations:
+      required: true
+
+  - type: input
+    id: bc_version
+    attributes:
+      label: Minimum BC version
+      description: "The earliest BC version this API exists on. Leave blank if it's been around since BC 14 or earlier."
+      placeholder: "e.g. 28.0"
+    validations:
+      required: false
+
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Scenarios worth testing
+      description: |
+        What cases are non-obvious or poorly documented? Each line becomes a candidate test procedure.
+        Example:
+          - Insert with RunTrigger=false should not fire OnInsert
+          - FindFirst on an empty table returns false (not an error)
+      placeholder: "- scenario one\n- scenario two"
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Known quirks, Cloud vs. runner differences, relevant GitHub issues, etc.
+    validations:
+      required: false

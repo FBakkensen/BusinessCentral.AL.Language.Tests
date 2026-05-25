@@ -1,20 +1,26 @@
 # BusinessCentral.AL.Language.Tests
 
-> An executable specification proving AL language features work correctly in BC Cloud (SaaS).
+> An executable specification of the AL language — how it works, what it returns, and what it throws — verified against a real BC Cloud tenant on every commit.
 
 [![AL Language Tests](https://github.com/StefanMaron/BusinessCentral.AL.Language.Tests/actions/workflows/ci.yml/badge.svg)](https://github.com/StefanMaron/BusinessCentral.AL.Language.Tests/actions/workflows/ci.yml)
 
 ## Why This Exists
 
-AL behaves differently on BC Cloud than in local runtimes or the AL Runner. This repo answers one question per test: **does this AL language feature actually work in a BC Cloud tenant?**
+AL documentation explains _what_ a method does. This repo shows _exactly_ how it behaves in practice.
 
-Every test is a behavioral contract: a documented AL feature + the actual BC runtime + a passing assertion. If it passes, the feature is cloud-compatible. If it fails, the contract is broken.
+Consider `Record.Copy` — the documentation describes the parameters, but many developers aren't sure whether it copies field values, filters, or both, whether a `TEMP` source record copies data or just structure, or how it interacts with `SetRange`. A single test answers that definitively, and the answer is machine-verified against a real BC Cloud tenant on every commit.
 
-**Primary goal:** Cloud compatibility. File operations, .NET interop, and `HttpClient` are out of scope for positive tests — each gets exactly one negative test confirming it throws in Cloud.
+This repo is useful in two ways:
 
-**Secondary goal:** Full coverage of the in-scope AL language surface.
+**As a language reference** — search by type name or method and find a test that documents the exact behavior, including edge cases and error conditions. Every test is a behavioral contract backed by a CI run, not a prose description that may be out of date.
 
-**Runner gap path:** If `BusinessCentral.AL.Runner` handles something incorrectly, write the test here to prove the correct Cloud behavior. Once the runner is fixed, the test is promoted to its regression suite.
+**As a cross-version compatibility map** — the CI matrix runs against BC 27.5 and BC 28.1. Version-gated tests (`#if BC28PLUS`) document which features changed between versions and exactly how. This is the kind of precision that release notes rarely provide.
+
+The primary goal is BC Cloud compatibility. Every in-scope AL feature gets at least one positive test proving it works and one negative test proving it fails predictably at the boundary. Cloud-restricted features (file I/O, .NET interop, `HttpClient`) get exactly one negative test confirming the expected error.
+
+**AL Runner:** if `BusinessCentral.AL.Runner` handles a feature incorrectly, write the test here to document the correct Cloud behavior. Once the runner is fixed, the test moves to its regression suite.
+
+---
 
 ## Quick Start
 
@@ -31,13 +37,15 @@ Default local dev credentials: `BCRUNNER` / `Admin123!`
 
 See [StefanMaron/MsDyn365Bc.On.Linux](https://github.com/StefanMaron/MsDyn365Bc.On.Linux) for container setup.
 
+---
+
 ## Test Areas
 
 149 test files, 128+ codeunits (ID range 60000–60999), target `Cloud`, runtime 16.1 (BC 27+).
 
 | Area | Description |
 |------|-------------|
-| `record/` | Record CRUD, filters, locking, keys, insert/modify/delete contracts |
+| `record/` | Record CRUD, filters, locking, keys, copy, insert/modify/delete contracts |
 | `recordref/` | Dynamic record access via RecordRef — field iteration, open/close, filters |
 | `fieldref/` | FieldRef read/write, type coercion, option values |
 | `codeunit/` | Codeunit instantiation, interface dispatch, run behavior |
@@ -53,6 +61,8 @@ See [StefanMaron/MsDyn365Bc.On.Linux](https://github.com/StefanMaron/MsDyn365Bc.
 | `xml/` | XmlDocument, XmlNode, namespace handling, serialization |
 | `_fixtures/` | Shared fixture library (see below) |
 
+---
+
 ## Fixture Library
 
 All tests share a single fixture library — no per-test table definitions. The library lives in `_fixtures/` and includes 10 tables, 2 enums, 1 interface, 2 pages, 1 report, and 2 event codeunits.
@@ -61,39 +71,44 @@ Tests reference fixtures directly; they never define their own schema objects. T
 
 Full fixture reference: [PLAN.md](tests/al-language/PLAN.md)
 
+---
+
 ## Contributing
 
-### Writing a Test
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, including:
 
-Each test file makes exactly one behavioral claim. A test must **fail** if the method always returns a default value — assertions must be meaningful.
+- How to write a test (the two-rule contract, Initialize, fixture usage)
+- Naming conventions
+- Version-gated tests with preprocessor directives
+- Local development setup
+- PR checklist
 
-Structure:
-1. One codeunit per file, named for the feature under test
-2. A doc-link comment at the top pointing to the relevant BC documentation page
-3. Procedures named as `Subject_Action_Context_Outcome`, e.g. `Record_Insert_DuplicateKey_Throws`
-4. No local table definitions — use `_fixtures/` only
+### Quick example
 
-### Naming Convention
+```al
+[Test]
+procedure Record_Copy_TempSource_CopiesRows()
+// CLAIM: Copy() from a TEMP record transfers all rows to the destination.
+begin
+    Initialize();
 
+    Source.Init(); Source."No." := 1; Source.Insert();
+    Source.Init(); Source."No." := 2; Source.Insert();
+
+    Dest.Copy(Source);
+
+    Assert.AreEqual(2, Dest.Count(), 'Copy from TEMP must transfer all rows');
+end;
 ```
-Record_Insert_DuplicateKey_Throws
-Record_FindFirst_EmptyTable_ReturnsFalse
-JsonObject_Get_MissingKey_Throws
-```
-
-Pattern: `Subject_Action_Condition_Outcome`. When there is no special condition, omit it: `Record_Insert_AssignsSystemId`.
 
 ### Runner Gap Contribution Path
 
 1. Identify behavior the AL Runner gets wrong
 2. Write a test here that passes against BC Cloud and documents the correct behavior
-3. Open a PR referencing the runner issue
+3. Open a PR referencing the runner issue (use the [runner-gap issue template](.github/ISSUE_TEMPLATE/runner-gap.yml))
 4. Once [BusinessCentral.AL.Runner](https://github.com/StefanMaron/BusinessCentral.AL.Runner) is fixed, the test is promoted to its regression suite
 
-### References
-
-- [PLAN.md](tests/al-language/PLAN.md) — design doc, naming conventions, fixture reference, build workflow
-- [CLAUDE.md](CLAUDE.md) — agent and contributor instructions
+---
 
 ## Related Repos
 
