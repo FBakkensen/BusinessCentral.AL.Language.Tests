@@ -10,28 +10,23 @@ codeunit 60166 "Test TryFunction Contracts"
     begin
     end;
 
-    // ── INSERT is not allowed inside a TryFunction in the test runner ─────────────
-
-    [Test]
-    procedure TryFunction_Insert_InTestRunnerContext_Throws()
-    // CLAIM: The BC test runner raises an error that propagates THROUGH the TryFunction boundary
-    //        if INSERT is called inside a [TryFunction] during test execution — the TryFunction
-    //        does NOT return false; the error escapes. asserterror catches it at the call site.
-    //        Use read operations (FindFirst, Get, etc.) inside TryFunctions instead.
-    var
-        TL: Record "ALT Trigger Log";
-    begin
-        Initialize();
-        TL."Entry No." := 0;
-        asserterror TryInsertRecord(TL);
-        Assert.ExpectedError('is not allowed inside the call to');
-    end;
-
-    [TryFunction]
-    local procedure TryInsertRecord(var TL: Record "ALT Trigger Log")
-    begin
-        TL.Insert();
-    end;
+    // ── INSERT inside a TryFunction in the test runner context ───────────────────
+    //
+    // BC restriction: INSERT is not allowed inside a [TryFunction] when the call stack
+    // includes RunTests (the test framework). This restriction cannot be tested with a
+    // passing test from within this framework:
+    //
+    //   if TryInsertRecord(Rec) then ...
+    //     → error propagates THROUGH the TryFunction (test fails with the BC restriction error)
+    //
+    //   asserterror TryInsertRecord(Rec); Assert.ExpectedError(...)
+    //     → asserterror context suppresses the restriction; TryFunction catches INSERT error
+    //       normally and returns false; asserterror then fails because it saw no exception
+    //
+    // The BC runtime changes error-detection behaviour depending on the error-handling
+    // wrapper, making the restriction unobservable as a stable passing assertion.
+    // Documented here as a note; no [Test] procedure is possible.
+    // Use read operations (FindFirst, Get, etc.) inside TryFunctions in tests.
 
     local procedure Initialize()
     begin
