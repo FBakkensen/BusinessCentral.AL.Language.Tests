@@ -12,6 +12,7 @@ codeunit 60190 "Test Codeunit Run Contracts"
         Result: Boolean;
     begin
         Cleanup.Initialize();
+        Commit();  // ensure clean transaction state before Codeunit.Run
 
         // Assert codeunit has an explicit OnRun trigger (no-op) — safe to call via Codeunit.Run()
         Result := Codeunit.Run(Codeunit::Assert);
@@ -87,6 +88,7 @@ codeunit 60190 "Test Codeunit Run Contracts"
 
         Rec."Entry No." := 1;
         Rec.Insert();
+        Commit();  // ensure clean transaction state before Codeunit.Run
 
         // Codeunit.Run() with a record variable — Assert codeunit has explicit OnRun (no-op),
         // runs successfully, returns true. The record is passed by reference but not mutated.

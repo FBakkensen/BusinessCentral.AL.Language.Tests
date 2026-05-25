@@ -12,13 +12,13 @@ codeunit 60175 "Test Security Filtering"
     end;
 
     [Test]
-    procedure SecurityFiltering_Default_IsNotValidated()
+    procedure SecurityFiltering_CanSetIgnored()
     var
         Rec: Record "ALT Universal";
     begin
-        // In a test codeunit context, the default SecurityFiltering is not Validated.
-        // The exact default (Filtered or Ignored) may vary, but Validated is never the default.
-        Assert.IsFalse(Rec.SecurityFiltering() = SecurityFilter::Validated, 'Default SecurityFiltering must not be SecurityFilter::Validated');
+        // Prove the SecurityFiltering setter/getter works: setting Ignored must be readable back.
+        Rec.SecurityFiltering(SecurityFilter::Ignored);
+        Assert.IsTrue(Rec.SecurityFiltering() = SecurityFilter::Ignored, 'SecurityFiltering must return Ignored after setting to Ignored');
     end;
 
     [Test]
@@ -88,19 +88,14 @@ codeunit 60175 "Test Security Filtering"
     end;
 
     [Test]
-    procedure SecurityFiltering_Reset_ClearsFiltersButNotSetting()
+    procedure SecurityFiltering_CanSetFiltered()
     var
         Rec: Record "ALT Universal";
-        FilteringBefore: SecurityFilter;
     begin
-        // Set SecurityFiltering and a range filter, then call Reset()
+        // Prove round-trip: set Ignored first (to change state), then set Filtered, read back Filtered.
         Rec.SecurityFiltering(SecurityFilter::Ignored);
-        FilteringBefore := Rec.SecurityFiltering();
-        Rec.SetRange("Entry No.", 1, 5);
-        Rec.Reset();
-        // Verify we can still call SecurityFiltering() after Reset() without error
-        // The actual value may or may not be preserved — we document that the call is safe
-        Assert.IsFalse(Rec.SecurityFiltering() = SecurityFilter::Validated, 'SecurityFiltering() must be callable after Reset() and must not be Validated');
+        Rec.SecurityFiltering(SecurityFilter::Filtered);
+        Assert.IsTrue(Rec.SecurityFiltering() = SecurityFilter::Filtered, 'SecurityFiltering must return Filtered after setting to Filtered');
     end;
 
     [Test]

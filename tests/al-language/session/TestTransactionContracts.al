@@ -115,7 +115,7 @@ codeunit 60152 "Test Transaction Contracts"
         FirstId := TL."Entry No.";
         TL.DeleteAll();
         Commit();
-        TL.Init();
+        TL."Entry No." := 0;
         TL.TriggerName := 'B';
         TL.Insert();
         Commit();

@@ -123,64 +123,6 @@
       }
     },
     {
-      "ruleId": "AL0667",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
-              "region": {
-                "startLine": 28,
-                "startColumn": 22,
-                "endLine": 28,
-                "endColumn": 43
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'OptionString' is being deprecated in the versions: '1.0' or greater.  This warning will become an error in a future release.",
-      "properties": {
-        "severity": "Warning",
-        "warningLevel": "4",
-        "defaultSeverity": "Warning",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al667?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry"
-      }
-    },
-    {
-      "ruleId": "AL0821",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
-              "region": {
-                "startLine": 114,
-                "startColumn": 40,
-                "endLine": 114,
-                "endColumn": 52
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "The method 'Initialize' is missing or does not have exactly one parameter of type Notification.",
-      "properties": {
-        "severity": "Warning",
-        "warningLevel": "4",
-        "defaultSeverity": "Warning",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al821?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry"
-      }
-    },
-    {
       "ruleId": "AL0821",
       "locations": [
         {
@@ -268,17 +210,75 @@
       }
     },
     {
+      "ruleId": "AL0667",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
+              "region": {
+                "startLine": 28,
+                "startColumn": 22,
+                "endLine": 28,
+                "endColumn": 43
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'OptionString' is being deprecated in the versions: '1.0' or greater.  This warning will become an error in a future release.",
+      "properties": {
+        "severity": "Warning",
+        "warningLevel": "4",
+        "defaultSeverity": "Warning",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al667?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry"
+      }
+    },
+    {
+      "ruleId": "AL0821",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
+              "region": {
+                "startLine": 114,
+                "startColumn": 40,
+                "endLine": 114,
+                "endColumn": 52
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "The method 'Initialize' is missing or does not have exactly one parameter of type Notification.",
+      "properties": {
+        "severity": "Warning",
+        "warningLevel": "4",
+        "defaultSeverity": "Warning",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al821?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry"
+      }
+    },
+    {
       "ruleId": "AL0666",
       "locations": [
         {
           "analysisTarget": [
             {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestRecordDelete.al",
               "region": {
-                "startLine": 145,
+                "startLine": 184,
                 "startColumn": 9,
-                "endLine": 145,
-                "endColumn": 23
+                "endLine": 184,
+                "endColumn": 29
               }
             }
           ]
@@ -303,10 +303,38 @@
             {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestRecordDelete.al",
               "region": {
-                "startLine": 184,
+                "startLine": 204,
                 "startColumn": 9,
-                "endLine": 184,
-                "endColumn": 29
+                "endLine": 204,
+                "endColumn": 31
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestBCSystemFieldContracts.al",
+              "region": {
+                "startLine": 145,
+                "startColumn": 9,
+                "endLine": 145,
+                "endColumn": 23
               }
             }
           ]
@@ -363,34 +391,6 @@
                 "startColumn": 19,
                 "endLine": 169,
                 "endColumn": 38
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestRecordDelete.al",
-              "region": {
-                "startLine": 203,
-                "startColumn": 9,
-                "endLine": 203,
-                "endColumn": 31
               }
             }
           ]
@@ -1449,6 +1449,90 @@
         {
           "analysisTarget": [
             {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
+              "region": {
+                "startLine": 313,
+                "startColumn": 14,
+                "endLine": 313,
+                "endColumn": 41
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'CreateSequentialGuid' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
+              "region": {
+                "startLine": 324,
+                "startColumn": 15,
+                "endLine": 324,
+                "endColumn": 42
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'CreateSequentialGuid' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
+              "region": {
+                "startLine": 325,
+                "startColumn": 15,
+                "endLine": 325,
+                "endColumn": 42
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'CreateSequentialGuid' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
               "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestMiscComplete.al",
               "region": {
                 "startLine": 84,
@@ -1573,90 +1657,6 @@
         }
       ],
       "fullMessage": "'ListResources' is not available in runtime version '14.0'. The supported runtime versions are: '14.1' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
-              "region": {
-                "startLine": 313,
-                "startColumn": 14,
-                "endLine": 313,
-                "endColumn": 41
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'CreateSequentialGuid' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
-              "region": {
-                "startLine": 324,
-                "startColumn": 15,
-                "endLine": 324,
-                "endColumn": 42
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'CreateSequentialGuid' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/session/TestSystemExtended.al",
-              "region": {
-                "startLine": 325,
-                "startColumn": 15,
-                "endLine": 325,
-                "endColumn": 42
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'CreateSequentialGuid' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
       "properties": {
         "severity": "Error",
         "defaultSeverity": "Error",

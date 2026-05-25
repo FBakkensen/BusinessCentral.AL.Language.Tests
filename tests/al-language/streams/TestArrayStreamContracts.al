@@ -150,7 +150,7 @@ codeunit 60167 "Test Array Stream Contracts"
     end;
 
     [Test]
-    procedure InStream_Sequential_ReadText_ReadsInOrder()
+    procedure InStream_Sequential_WriteText_ConcatenatesContent()
     var
         BlobRec: Record "ALT Blob";
         OutStr: OutStream;
@@ -167,8 +167,9 @@ codeunit 60167 "Test Array Stream Contracts"
         BlobRec.CalcFields(Data);
         BlobRec.Data.CreateInStream(InStr);
         InStr.ReadText(T1);
-        // After WriteText twice, multiple writes add CR/LF, so ReadText reads first line
-        Assert.AreEqual('First', T1, 'ReadText must retrieve written content, first line');
+        // BC Cloud: WriteText does NOT add CR+LF between consecutive writes into a Blob.
+        // Both writes are concatenated; ReadText reads all content up to the terminator.
+        Assert.AreEqual('FirstSecond', T1, 'Sequential WriteText calls are concatenated; ReadText reads all content up to terminator');
     end;
 
     [Test]

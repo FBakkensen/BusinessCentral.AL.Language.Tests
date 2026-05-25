@@ -255,11 +255,12 @@ codeunit 60141 "Test Xml Complete"
         XDT: XmlDocumentType;
     begin
         Initialize();
-        // GetDocumentType requires a DOCTYPE declaration with a proper SYSTEM or PUBLIC identifier.
-        // '<!DOCTYPE html>' alone is not valid XML — must include root element and proper prolog.
-        XmlDocument.ReadFrom('<?xml version="1.0"?><!DOCTYPE root SYSTEM "test.dtd"><root/>', XDoc);
+        // BC Cloud does not resolve external DTD references (SYSTEM/PUBLIC).
+        // Use an internal subset so the parser does not need to fetch an external resource.
+        // GetDocumentType() must return a valid XmlDocumentType when DOCTYPE is present.
+        XmlDocument.ReadFrom('<?xml version="1.0"?><!DOCTYPE root [<!ELEMENT root (#PCDATA)>]><root>test</root>', XDoc);
         XDoc.GetDocumentType(XDT);
-        Assert.IsTrue(true, 'GetDocumentType should be callable with a valid DOCTYPE declaration');
+        Assert.IsTrue(true, 'GetDocumentType must succeed when DOCTYPE with internal subset is present');
     end;
 
     [Test]

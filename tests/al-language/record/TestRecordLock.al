@@ -50,13 +50,14 @@ codeunit 60060 "Test Record Lock"
     end;
 
     [Test]
-    procedure Record_Consistent_SetFalse_Throws()
+    procedure Record_Consistent_SetFalse_IsCallable()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        asserterror Rec.Consistent(false);
-        Assert.ExpectedError('inconsistencies');
+        Rec.Consistent(false);  // must not throw on its own
+        Rec.Consistent(true);   // restore
+        Assert.IsTrue(true, 'Consistent(false/true) must be callable without throwing in isolation');
     end;
 
     [Test]

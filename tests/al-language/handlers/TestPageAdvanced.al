@@ -76,7 +76,7 @@ codeunit 60133 "Test Page Advanced"
         ListPage.Last();
         // FindPreviousField searches backward from current position (record 3)
         // for a record where Integer Field = 20 (record 2 is behind record 3)
-        B := ListPage.FindPreviousField(ListPage."Integer Field", '20');
+        B := ListPage.FindPreviousField(ListPage."Integer Field", 20);
         Assert.IsTrue(B, 'FindPreviousField must find a record with Integer Field=20 when searching backward from last');
         ListPage.Close();
     end;

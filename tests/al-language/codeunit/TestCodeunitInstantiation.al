@@ -57,6 +57,7 @@ codeunit 60078 "Test Codeunit Instantiation"
         Result: Boolean;
     begin
         Cleanup.Initialize();
+        Commit();  // ensure clean transaction state before Codeunit.Run
         // Assert codeunit has an explicit OnRun trigger (no-op) — safe to call via Codeunit.Run()
         Result := Codeunit.Run(Codeunit::Assert);
         Assert.IsTrue(Result, 'Codeunit.Run must return true on success');

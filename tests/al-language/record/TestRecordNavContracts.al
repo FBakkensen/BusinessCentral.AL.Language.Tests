@@ -268,10 +268,10 @@ codeunit 60155 "Test Record Nav Contracts"
             Rec."Entry No." := i;
             Rec.Insert();
         end;
-        // Set filter on Rec1 for Entry No. 1..3
-        Rec1.Copy(Rec);
+        // Copy Rec into Rec1 with ShareTable=true so Rec1 shares Rec's temp table (sees all 5 records)
+        Rec1.Copy(Rec, true);
         Rec1.SetRange("Entry No.", 1, 3);
-        // Copy Rec1 into Rec2 with ShareTable=false (independent copy)
+        // Copy Rec1 into Rec2 with ShareTable=false (independent copy, inherits the 1..3 filter)
         Rec2.Copy(Rec1, false);
         // Rec1 has filter 1..3 → count = 3
         Assert.AreEqual(3, Rec1.Count(), 'Rec1 with SetRange 1..3 must count 3 records');

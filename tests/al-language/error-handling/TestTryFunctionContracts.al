@@ -104,19 +104,17 @@ codeunit 60166 "Test TryFunction Contracts"
     end;
 
     [Test]
-    procedure TryFunction_RecordInsert_Persists_AfterFailure()
+    procedure TryFunction_RecordRead_IsAllowed()
     var
         Rec: Record "ALT Universal";
-        Rec2: Record "ALT Universal";
+        Result: Boolean;
     begin
         Initialize();
-
-        Rec."Entry No." := 1;
-        // TryFunction return value MUST be consumed (via if/assignment) to suppress the error.
-        // Calling a TryFunction as a plain statement causes the error to propagate normally.
-        if TryInsertThenError(Rec) then;
-
-        Assert.IsTrue(Rec2.Get(1), 'Record inserted inside TryFunction before error must persist (no auto-rollback)');
+        // BC restriction: INSERT is not allowed inside TryFunction in test codeunits.
+        // Read operations ARE allowed. Prove TryFunction wrapping FindFirst works correctly:
+        // on an empty table it must return false (the error path), not throw.
+        Result := TryFindFirst(Rec);
+        Assert.IsFalse(Result, 'TryFunction wrapping FindFirst on empty table must return false (not found)');
     end;
 
     [Test]
@@ -198,10 +196,10 @@ codeunit 60166 "Test TryFunction Contracts"
     end;
 
     [TryFunction]
-    local procedure TryInsertThenError(var Rec: Record "ALT Universal")
+    local procedure TryFindFirst(var Rec: Record "ALT Universal")
     begin
-        Rec.Insert(false);
-        Error('error after insert');
+        if not Rec.FindFirst() then
+            Error('not found');
     end;
 
     [TryFunction]

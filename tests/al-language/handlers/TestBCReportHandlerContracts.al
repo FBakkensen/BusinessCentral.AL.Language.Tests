@@ -243,7 +243,7 @@ codeunit 60174 "Test BC Report Handlers"
 
         ListPage.OpenView();
         // FindFirstField takes a TestField reference (page field), not a table field name
-        Assert.IsTrue(ListPage.FindFirstField(ListPage."Integer Field", '99'), 'FindFirstField must locate record with Integer Field = 99');
+        Assert.IsTrue(ListPage.FindFirstField(ListPage."Integer Field", 99), 'FindFirstField must locate record with Integer Field = 99');
         Assert.AreEqual('2', ListPage."Entry No.".Value(), 'FindFirstField must position on Entry No. = 2');
         ListPage.Close();
     end;

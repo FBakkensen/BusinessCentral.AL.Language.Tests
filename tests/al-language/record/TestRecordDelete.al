@@ -194,9 +194,10 @@ codeunit 60052 "Test Record Delete"
         Initialize();
 
         TrigLog.Init();
+        TrigLog."Entry No." := 0;
         TrigLog."TriggerName" := 'Test1';
         TrigLog.Insert();
-        TrigLog.Init();
+        TrigLog."Entry No." := 0;
         TrigLog."TriggerName" := 'Test2';
         TrigLog.Insert();
 
@@ -204,7 +205,7 @@ codeunit 60052 "Test Record Delete"
         Assert.IsTrue(TrigLog.IsEmpty(), 'Truncate(true) must clear the table');
 
         // After Truncate(true), auto-increment resets to 1
-        TrigLog.Init();
+        TrigLog."Entry No." := 0;
         TrigLog."TriggerName" := 'Test3';
         TrigLog.Insert();
         TrigLog.FindFirst();

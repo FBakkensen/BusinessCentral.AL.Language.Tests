@@ -123,7 +123,7 @@ codeunit 60172 "Test BC System Field Contracts"
         FirstId := TL."Entry No.";
         TL.DeleteAll(false);
         Commit();
-        TL.Init();
+        TL."Entry No." := 0;
         TL.TriggerName := 'T2';
         TL.Insert();
         Commit();
