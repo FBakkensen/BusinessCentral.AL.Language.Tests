@@ -413,46 +413,18 @@
         {
           "analysisTarget": [
             {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonXmlDeepContracts.al",
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/record/TestAutoIncrementContracts.al",
               "region": {
-                "startLine": 129,
-                "startColumn": 28,
-                "endLine": 129,
-                "endColumn": 60
+                "startLine": 113,
+                "startColumn": 9,
+                "endLine": 113,
+                "endColumn": 26
               }
             }
           ]
         }
       ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
-      "properties": {
-        "severity": "Error",
-        "defaultSeverity": "Error",
-        "category": "Compiler",
-        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
-        "isEnabledByDefault": "True",
-        "isSuppressedInSource": "False",
-        "customTags": "Compiler;Telemetry;NotConfigurable"
-      }
-    },
-    {
-      "ruleId": "AL0666",
-      "locations": [
-        {
-          "analysisTarget": [
-            {
-              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonXmlDeepContracts.al",
-              "region": {
-                "startLine": 132,
-                "startColumn": 28,
-                "endLine": 132,
-                "endColumn": 60
-              }
-            }
-          ]
-        }
-      ],
-      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "fullMessage": "'Truncate' is not available in runtime version '14.0'. The supported runtime versions are: '16.0' or greater.",
       "properties": {
         "severity": "Error",
         "defaultSeverity": "Error",
@@ -1427,6 +1399,62 @@
                 "startColumn": 20,
                 "endLine": 564,
                 "endColumn": 45
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonXmlDeepContracts.al",
+              "region": {
+                "startLine": 129,
+                "startColumn": 28,
+                "endLine": 129,
+                "endColumn": 60
+              }
+            }
+          ]
+        }
+      ],
+      "fullMessage": "'GetInteger' is not available in runtime version '14.0'. The supported runtime versions are: '15.0' or greater.",
+      "properties": {
+        "severity": "Error",
+        "defaultSeverity": "Error",
+        "category": "Compiler",
+        "helpLink": "https://learn.microsoft.com/dynamics365/business-central/dev-itpro/developer/diagnostics/diagnostic-al666?wt.mc_id=d365bc_inproduct_alextension",
+        "isEnabledByDefault": "True",
+        "isSuppressedInSource": "False",
+        "customTags": "Compiler;Telemetry;NotConfigurable"
+      }
+    },
+    {
+      "ruleId": "AL0666",
+      "locations": [
+        {
+          "analysisTarget": [
+            {
+              "uri": "/home/stefan/Documents/Repos/community/BusinessCentral.AL.Language/tests/al-language/json/TestJsonXmlDeepContracts.al",
+              "region": {
+                "startLine": 132,
+                "startColumn": 28,
+                "endLine": 132,
+                "endColumn": 60
               }
             }
           ]

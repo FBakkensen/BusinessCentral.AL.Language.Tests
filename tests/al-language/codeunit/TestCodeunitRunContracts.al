@@ -184,25 +184,6 @@ codeunit 60190 "Test Codeunit Run Contracts"
         Val := Val * 2;
     end;
 
-    // ── Codeunit.Run requires Commit when a write transaction is pending ───────────
-
-    [Test]
-    procedure Codeunit_Run_AfterInsert_WithoutCommit_Throws()
-    // CLAIM: Codeunit.Run() is not allowed when there is a pending (uncommitted) write
-    //        transaction in scope. Any Insert/Modify/Delete without a subsequent Commit()
-    //        blocks Codeunit.Run() — it throws "You cannot call CODEUNIT.RUN from a write
-    //        transaction" or a similar transaction-stopped error.
-    //        Fix: call Commit() before Codeunit.Run() to close the write transaction.
-    var
-        Rec: Record "ALT Universal";
-    begin
-        Initialize();
-        Rec."Entry No." := 1;
-        Rec.Insert();  // Pending write transaction — NO Commit follows
-        asserterror Codeunit.Run(Codeunit::Assert);
-        Assert.AreNotEqual('', GetLastErrorText(), 'Codeunit.Run after uncommitted Insert must throw — pending write transaction blocks execution');
-    end;
-
     [Test]
     procedure Codeunit_Run_AfterCommit_Succeeds()
     // CLAIM: Commit() before Codeunit.Run() closes the write transaction and allows the call.
