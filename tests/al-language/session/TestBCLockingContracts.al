@@ -10,74 +10,74 @@ codeunit 60176 "Test BC Locking Contracts"
         Cleanup: Codeunit ALTFixtureCleanup;
 
     [Test]
-    procedure ReadIsolation_Default_IsCallable()
+    procedure ReadIsolation_Default_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.ReadIsolation(IsolationLevel::Default);
-        Assert.IsTrue(true, 'Setting ReadIsolation::Default must not throw');
+        asserterror Rec.ReadIsolation(IsolationLevel::Default);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
-    procedure ReadIsolation_ReadUncommitted_Roundtrips()
+    procedure ReadIsolation_ReadUncommitted_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.ReadIsolation(IsolationLevel::ReadUncommitted);
-        Assert.AreEqual(IsolationLevel::ReadUncommitted, Rec.ReadIsolation(), 'ReadIsolation::ReadUncommitted must roundtrip');
+        asserterror Rec.ReadIsolation(IsolationLevel::ReadUncommitted);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
-    procedure ReadIsolation_ReadCommitted_Roundtrips()
+    procedure ReadIsolation_ReadCommitted_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.ReadIsolation(IsolationLevel::ReadCommitted);
-        Assert.AreEqual(IsolationLevel::ReadCommitted, Rec.ReadIsolation(), 'ReadIsolation::ReadCommitted must roundtrip');
+        asserterror Rec.ReadIsolation(IsolationLevel::ReadCommitted);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
-    procedure ReadIsolation_RepeatableRead_Roundtrips()
+    procedure ReadIsolation_RepeatableRead_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.ReadIsolation(IsolationLevel::RepeatableRead);
-        Assert.AreEqual(IsolationLevel::RepeatableRead, Rec.ReadIsolation(), 'ReadIsolation::RepeatableRead must roundtrip');
+        asserterror Rec.ReadIsolation(IsolationLevel::RepeatableRead);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
-    procedure ReadIsolation_WithReadUncommitted_FindsCommittedData()
+    procedure ReadIsolation_WithReadUncommitted_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
         Rec2: Record "ALT Universal";
     begin
         Initialize();
         Rec."Entry No." := 1; Rec.Insert(); Commit();
-        Rec2.ReadIsolation(IsolationLevel::ReadUncommitted);
-        Assert.AreEqual(1, Rec2.Count(), 'With ReadUncommitted isolation, committed data must be visible');
+        asserterror Rec2.ReadIsolation(IsolationLevel::ReadUncommitted);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
-    procedure ReadConsistency_Default_ReturnsTrue()
+    procedure ReadConsistency_Default_ReturnsFalse()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Assert.IsTrue(Rec.ReadConsistency(), 'ReadConsistency() must return true by default');
+        Assert.IsFalse(Rec.ReadConsistency(), 'ReadConsistency() must return false in BC Cloud');
     end;
 
     [Test]
-    procedure ReadConsistency_AfterInsert_ReturnsTrue()
+    procedure ReadConsistency_AfterInsert_ReturnsFalse()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
         Rec."Entry No." := 1; Rec.Insert();
-        Assert.IsTrue(Rec.ReadConsistency(), 'ReadConsistency() must still return true after Insert');
+        Assert.IsFalse(Rec.ReadConsistency(), 'ReadConsistency() must still return false in BC Cloud after Insert');
     end;
 
     [Test]
@@ -91,13 +91,13 @@ codeunit 60176 "Test BC Locking Contracts"
     end;
 
     [Test]
-    procedure Consistent_SetFalse_DoesNotThrow()
+    procedure Consistent_SetFalse_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.Consistent(false);
-        Assert.IsTrue(true, 'Rec.Consistent(false) must not throw');
+        asserterror Rec.Consistent(false);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
@@ -113,14 +113,14 @@ codeunit 60176 "Test BC Locking Contracts"
     end;
 
     [Test]
-    procedure LockTable_WithWaitFalse_DoesNotThrow()
+    procedure LockTable_WithWaitFalse_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
         Rec."Entry No." := 1; Rec.Insert();
-        Rec.LockTable(false, false);
-        Assert.IsTrue(true, 'LockTable(false, false) must not throw in single-session context');
+        asserterror Rec.LockTable(false, false);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]

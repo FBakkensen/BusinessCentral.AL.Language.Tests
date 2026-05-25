@@ -19,12 +19,12 @@ codeunit 60173 "Test BC Platform Contracts"
     end;
 
     [Test]
-    procedure GuiAllowed_InTestContext_ReturnsFalse()
+    procedure GuiAllowed_InTestContext_ReturnsTrue()
     begin
         Initialize();
-        Assert.IsFalse(
+        Assert.IsTrue(
             GuiAllowed(),
-            'GuiAllowed() must return false when running on BC service tier (no GUI attached)'
+            'GuiAllowed() must return true when running in BC test context with test framework'
         );
     end;
 

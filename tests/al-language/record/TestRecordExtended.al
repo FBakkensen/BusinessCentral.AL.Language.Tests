@@ -142,8 +142,8 @@ codeunit 60129 "Test Record Extended"
     [Test]
     procedure Record_Copy_WithShareTable_True_SharesUnderlying()
     var
-        Rec1: Record "ALT Universal";
-        Rec2: Record "ALT Universal";
+        Rec1: Record "ALT Universal" temporary;
+        Rec2: Record "ALT Universal" temporary;
     begin
         Initialize();
         Rec1."Entry No." := 1;
@@ -155,8 +155,8 @@ codeunit 60129 "Test Record Extended"
     [Test]
     procedure Record_Copy_WithShareTable_False_IndependentView()
     var
-        Rec1: Record "ALT Universal";
-        Rec2: Record "ALT Universal";
+        Rec1: Record "ALT Universal" temporary;
+        Rec2: Record "ALT Universal" temporary;
     begin
         Initialize();
         Rec1."Entry No." := 1;
@@ -173,10 +173,12 @@ codeunit 60129 "Test Record Extended"
     var
         Rec: Record "ALT Universal";
         Pos: Text;
+        FirstEntryNo: Integer;
     begin
         Initialize();
         Rec."Entry No." := 1;
         Rec.Insert();
+        FirstEntryNo := Rec."Entry No.";
         Rec."Entry No." := 2;
         Rec.Insert();
         Rec.FindFirst();
@@ -184,7 +186,7 @@ codeunit 60129 "Test Record Extended"
         Rec.FindLast();
         Rec.SetPosition(Pos);
         Rec.Find('=');
-        Assert.AreEqual(1, Rec."Entry No.", 'SetPosition must restore correct record position');
+        Assert.AreEqual(FirstEntryNo, Rec."Entry No.", 'SetPosition must restore correct record position');
     end;
 
     local procedure Initialize()

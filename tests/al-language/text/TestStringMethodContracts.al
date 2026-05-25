@@ -171,8 +171,8 @@ codeunit 60191 "Test String Method Contracts"
     begin
         Initialize();
         TestString := 'Hello World';
-        Result := TestString.Substring(6);
-        Assert.AreEqual('World', Result, 'Substring(6) from 0-based index 6 must return "World"');
+        Result := TestString.Substring(7);
+        Assert.AreEqual('World', Result, 'Substring(7) from 1-based position 7 must return "World"');
     end;
 
     // ── Text.Substring(StartIndex: Integer; Length: Integer) ────────────────
@@ -185,14 +185,14 @@ codeunit 60191 "Test String Method Contracts"
     begin
         Initialize();
         TestString := 'Hello World';
-        Result := TestString.Substring(0, 5);
-        Assert.AreEqual('Hello', Result, 'Substring(0,5) must return first 5 chars');
+        Result := TestString.Substring(1, 5);
+        Assert.AreEqual('Hello', Result, 'Substring(1,5) must return first 5 chars (1-based)');
     end;
 
     // ── Text.IndexOf() ──────────────────────────────────────────────────────
 
     [Test]
-    procedure Text_IndexOf_Found_ZeroBased()
+    procedure Text_IndexOf_Found_OneBased()
     var
         TestString: Text;
         Result: Integer;
@@ -200,11 +200,11 @@ codeunit 60191 "Test String Method Contracts"
         Initialize();
         TestString := 'Hello World';
         Result := TestString.IndexOf('World');
-        Assert.AreEqual(6, Result, 'IndexOf returns 0-based index: "World" starts at index 6');
+        Assert.AreEqual(7, Result, 'IndexOf returns 1-based position: "World" starts at position 7');
     end;
 
     [Test]
-    procedure Text_IndexOf_NotFound_MinusOne()
+    procedure Text_IndexOf_NotFound_Zero()
     var
         TestString: Text;
         Result: Integer;
@@ -212,7 +212,7 @@ codeunit 60191 "Test String Method Contracts"
         Initialize();
         TestString := 'Hello';
         Result := TestString.IndexOf('xyz');
-        Assert.AreEqual(-1, Result, 'IndexOf returns -1 when not found');
+        Assert.AreEqual(0, Result, 'IndexOf returns 0 when not found');
     end;
 
     // ── Text.Split() ────────────────────────────────────────────────────────

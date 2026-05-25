@@ -84,6 +84,8 @@ codeunit 60152 "Test Transaction Contracts"
     var
         TL1: Record "ALT Trigger Log";
         TL2: Record "ALT Trigger Log";
+        FirstId: Integer;
+        LastId: Integer;
     begin
         Initialize();
         TL1.TriggerName := 'T1';
@@ -91,8 +93,10 @@ codeunit 60152 "Test Transaction Contracts"
         TL2.TriggerName := 'T2';
         TL2.Insert();
         TL1.FindFirst();
+        FirstId := TL1."Entry No.";
         TL2.FindLast();
-        Assert.IsTrue(TL2."Entry No." > TL1."Entry No.", 'AutoIncrement must produce increasing values');
+        LastId := TL2."Entry No.";
+        Assert.IsTrue(LastId > FirstId, 'AutoIncrement must produce increasing values');
     end;
 
     [Test]
@@ -100,6 +104,7 @@ codeunit 60152 "Test Transaction Contracts"
     var
         TL: Record "ALT Trigger Log";
         FirstId: Integer;
+        SecondId: Integer;
     begin
         Initialize();
         TL.TriggerName := 'A';
@@ -110,7 +115,8 @@ codeunit 60152 "Test Transaction Contracts"
         TL.TriggerName := 'B';
         TL.Insert();
         TL.FindFirst();
-        Assert.IsTrue(TL."Entry No." > FirstId, 'AutoIncrement must continue from last used value, not restart');
+        SecondId := TL."Entry No.";
+        Assert.IsTrue(SecondId > FirstId, 'AutoIncrement must continue from last used value, not restart');
     end;
 
     // ── System Fields: SystemModifiedAt ──────────────────────────────────────────

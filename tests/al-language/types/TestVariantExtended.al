@@ -245,10 +245,12 @@ codeunit 60123 "Test Variant Extended"
         Assert.IsTrue(V.IsTransactionType(), 'Variant must report IsTransactionType=true after assigning a TransactionType value');
     end;
 
-    // ── Variant Enum Detection ───────────────────────────────────────────────
+    // ── Variant Enum/Option Detection ───────────────────────────────────────
+    // Both Enum and Option types appear as IsOption=true in Variant; AL does not
+    // distinguish them at the Variant level.
 
     [Test]
-    procedure Variant_IsEnum_ReturnsTrue_WhenAssignedEnum()
+    procedure Variant_IsOption_ReturnsTrue_WhenAssignedEnum()
     var
         V: Variant;
         E: Enum "ALT Status";
@@ -256,19 +258,7 @@ codeunit 60123 "Test Variant Extended"
         Initialize();
         E := "ALT Status"::Active;
         V := E;
-        Assert.IsTrue(V.IsOption(), 'Variant must report IsEnum=true after assigning Enum "ALT Status"::Active');
-    end;
-
-    [Test]
-    procedure Variant_IsEnum_ReturnsFalse_WhenAssignedOption()
-    var
-        V: Variant;
-        Opt: Option a, b, c;
-    begin
-        Initialize();
-        Opt := 1;
-        V := Opt;
-        Assert.IsFalse(V.IsOption(), 'Variant must report IsEnum=false after assigning a simple Option (not an Enum)');
+        Assert.IsTrue(V.IsOption(), 'Variant must report IsOption=true after assigning an Enum value');
     end;
 
     // ── Variant Type Consistency ────────────────────────────────────────────

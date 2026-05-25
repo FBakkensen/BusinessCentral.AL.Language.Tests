@@ -30,10 +30,10 @@ codeunit 60157 "Test Text Processing Contracts"
     end;
 
     [Test]
-    procedure StrPos_EmptySubstring_ReturnsOne()
+    procedure StrPos_EmptySubstring_ReturnsZero()
     begin
         Initialize();
-        Assert.AreEqual(1, StrPos('hello', ''), 'StrPos with empty search string must return 1');
+        Assert.AreEqual(0, StrPos('hello', ''), 'StrPos with empty search string must return 0');
     end;
 
     // ============================================================================
@@ -48,13 +48,13 @@ codeunit 60157 "Test Text Processing Contracts"
     end;
 
     [Test]
-    procedure CopyStr_PositionZero_ReturnsEmptyOrFull()
+    procedure CopyStr_PositionZero_Throws()
     var
-        S: Text;
+        Dummy: Text;
     begin
         Initialize();
-        S := CopyStr('abc', 0);
-        Assert.IsTrue((S = '') or (S = 'abc'), 'CopyStr(str, 0) must return either empty or full string — not throw');
+        asserterror Dummy := CopyStr('abc', 0);
+        Assert.ExpectedError('');
     end;
 
     // ============================================================================
@@ -130,17 +130,23 @@ codeunit 60157 "Test Text Processing Contracts"
     // ============================================================================
 
     [Test]
-    procedure SelectStr_IndexZero_ReturnsEmpty()
+    procedure SelectStr_IndexZero_Throws()
+    var
+        Dummy: Text;
     begin
         Initialize();
-        Assert.AreEqual('', SelectStr(0, 'A,B,C'), 'SelectStr with index 0 must return empty string');
+        asserterror Dummy := SelectStr(0, 'A,B,C');
+        Assert.ExpectedError('');
     end;
 
     [Test]
-    procedure SelectStr_IndexBeyondCount_ReturnsEmpty()
+    procedure SelectStr_IndexBeyondCount_Throws()
+    var
+        Dummy: Text;
     begin
         Initialize();
-        Assert.AreEqual('', SelectStr(5, 'A,B,C'), 'SelectStr with index > count must return empty string');
+        asserterror Dummy := SelectStr(5, 'A,B,C');
+        Assert.ExpectedError('');
     end;
 
     // ============================================================================
@@ -173,13 +179,13 @@ codeunit 60157 "Test Text Processing Contracts"
     end;
 
     [Test]
-    procedure Text_IndexOf_FoundAtStart_ReturnsZero()
+    procedure Text_IndexOf_FoundAtStart_ReturnsOne()
     var
         Pos: Integer;
     begin
         Initialize();
         Pos := 'hello'.IndexOf('h');
-        Assert.AreEqual(0, Pos, 'Text.IndexOf must return 0 for match at start (0-based)');
+        Assert.AreEqual(1, Pos, 'Text.IndexOf must return 1 for match at start (1-based)');
     end;
 
     // ============================================================================
@@ -187,14 +193,14 @@ codeunit 60157 "Test Text Processing Contracts"
     // ============================================================================
 
     [Test]
-    procedure TextBuilder_Insert_AtZero_Prepends()
+    procedure TextBuilder_Insert_AtOne_Prepends()
     var
         TB: TextBuilder;
     begin
         Initialize();
         TB.Append('world');
-        TB.Insert(0, 'hello ');
-        Assert.AreEqual('hello world', TB.ToText(), 'TextBuilder.Insert(0, ...) must prepend text');
+        TB.Insert(1, 'hello ');
+        Assert.AreEqual('hello world', TB.ToText(), 'TextBuilder.Insert(1, ...) must prepend text before position 1');
     end;
 
     // ============================================================================

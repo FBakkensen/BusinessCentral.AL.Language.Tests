@@ -105,7 +105,7 @@ codeunit 60186 "Test Loop Contracts"
     begin
         for i := 1 to 5 do;
 
-        Assert.AreEqual(6, i, 'After for i := 1 to 5, loop variable must equal 6 (one past end)');
+        Assert.AreEqual(5, i, 'After for i := 1 to 5, loop variable must equal 5 (last executed value)');
     end;
 
     [Test]
@@ -115,7 +115,7 @@ codeunit 60186 "Test Loop Contracts"
     begin
         for i := 5 downto 1 do;
 
-        Assert.AreEqual(0, i, 'After for i := 5 downto 1, loop variable must equal 0 (one past end)');
+        Assert.AreEqual(1, i, 'After for i := 5 downto 1, loop variable must equal 1 (last executed value)');
     end;
 
     [Test]

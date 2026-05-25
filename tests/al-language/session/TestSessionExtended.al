@@ -33,13 +33,13 @@ codeunit 60122 "Test Session Extended"
     end;
 
     [Test]
-    procedure Session_ApplicationIdentifier_ReturnsNonNullGuid()
+    procedure Session_ApplicationIdentifier_ReturnsNonEmpty()
     var
-        AppId: Guid;
+        AppId: Text;
     begin
         Initialize();
         AppId := Session.ApplicationIdentifier();
-        Assert.IsFalse(IsNullGuid(AppId), 'ApplicationIdentifier() must return a non-null GUID');
+        Assert.AreNotEqual('', AppId, 'ApplicationIdentifier() must return a non-empty value');
     end;
 
     [Test]

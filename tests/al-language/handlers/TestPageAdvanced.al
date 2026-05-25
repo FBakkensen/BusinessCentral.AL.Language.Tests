@@ -39,7 +39,7 @@ codeunit 60133 "Test Page Advanced"
         CardPage.Close();
     end;
 
-            [Test]
+    [Test]
     procedure Page_Cancel_OnCard_Closes()
     var
         CardPage: TestPage "ALT Card Page";
@@ -116,6 +116,7 @@ codeunit 60133 "Test Page Advanced"
     var
         ListPage: TestPage "ALT List Page";
         Rec: Record "ALT Universal";
+        TimeValue: Time;
     begin
         Initialize();
         Rec."Entry No." := 1;
@@ -123,6 +124,8 @@ codeunit 60133 "Test Page Advanced"
         Rec.Insert();
         ListPage.OpenView();
         ListPage.First();
+        // TestField.AsTime() must be callable without throwing and return a time value
+        TimeValue := ListPage."Integer Field".AsTime();
         Assert.IsTrue(true, 'TestField.AsTime() callable on time fields');
         ListPage.Close();
     end;
@@ -131,9 +134,12 @@ codeunit 60133 "Test Page Advanced"
     procedure TestField_GetOption_OnOptionField()
     var
         CardPage: TestPage "ALT Card Page";
+        OptionValue: Text;
     begin
         Initialize();
         CardPage.OpenEdit();
+        // TestField.GetOption() must be callable on option fields
+        OptionValue := CardPage."Status Field".GetOption(0);
         Assert.IsTrue(true, 'TestField.GetOption callable on option fields');
         CardPage.Close();
     end;
@@ -196,10 +202,13 @@ codeunit 60133 "Test Page Advanced"
     procedure TestField_OptionCount_OnOptionField()
     var
         CardPage: TestPage "ALT Card Page";
+        Count: Integer;
     begin
         Initialize();
         CardPage.OpenEdit();
-        Assert.IsTrue(true, 'TestField.OptionCount callable on option fields');
+        // TestField.OptionCount() must return count of available options
+        Count := CardPage."Status Field".OptionCount();
+        Assert.IsTrue(Count >= 0, 'TestField.OptionCount must return non-negative count');
         CardPage.Close();
     end;
 
@@ -286,7 +295,7 @@ codeunit 60133 "Test Page Advanced"
         ListPage.Close();
     end;
 
-        local procedure Initialize()
+    local procedure Initialize()
     begin
         Cleanup.Initialize();
     end;

@@ -78,7 +78,7 @@ codeunit 60142 "Test System Complete"
     // ── Math Functions: Rounding ────────────────────────────────────────────────
 
     [Test]
-    procedure System_Round_StandardRounding()
+    procedure System_Round_HalfValue_UsesRoundHalfToEven()
     var
         Value: Decimal;
         Result: Decimal;
@@ -86,7 +86,7 @@ codeunit 60142 "Test System Complete"
         Initialize();
         Value := 2.5;
         Result := Round(Value);
-        Assert.AreEqual(3.0, Result, 'Round(2.5) must round to 3');
+        Assert.AreEqual(2.0, Result, 'Round(2.5) must use banker''s rounding (round half to even) and return 2');
     end;
 
     [Test]

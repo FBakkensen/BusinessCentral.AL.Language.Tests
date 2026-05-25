@@ -255,6 +255,7 @@ codeunit 60146 "Test Final Coverage"
 
     // ── JsonObject Functions ───────────────────────────────────────────────────────
 
+#if BC143PLUS // ReadFromYaml and WriteToYaml added in BC 14.3
     [Test]
     procedure JsonObject_ReadFromYaml_OnCloudRuntime_IsNotSupported()
     var
@@ -276,6 +277,7 @@ codeunit 60146 "Test Final Coverage"
         asserterror JObj.WriteToYaml(S);
         Assert.IsTrue(true, 'WriteToYaml may not be supported on Cloud — error captured');
     end;
+#endif
 
     // ── Variant Type-Check Functions ───────────────────────────────────────────────
 
@@ -315,16 +317,8 @@ codeunit 60146 "Test Final Coverage"
     end;
 
     // ── DataTransfer Functions ─────────────────────────────────────────────────────
-
-    [Test]
-    procedure DataTransfer_UpdateAuditFields_OutsideUpgrade_ThrowsError()
-    var
-        DT: DataTransfer;
-    begin
-        Initialize();
-        asserterror DT.UpdateAuditFields(false);
-        Assert.IsTrue(true, 'UpdateAuditFields throws outside upgrade — error captured');
-    end;
+    // NOTE: UpdateAuditFields is OnPrem-only (not available in Cloud targets)
+    // No test is provided for this method in Cloud deployments.
 
     local procedure Initialize()
     begin

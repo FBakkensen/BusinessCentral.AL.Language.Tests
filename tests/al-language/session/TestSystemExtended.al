@@ -54,7 +54,7 @@ codeunit 60135 "Test System Extended"
     procedure CopyArray_CopiesAllElements_FromPosition()
     var
         Src: array[3] of Integer;
-        Dst: array[3] of Integer;
+        Dst: array[4] of Integer;
     begin
         Initialize();
         Src[1] := 10;
@@ -117,7 +117,7 @@ codeunit 60135 "Test System Extended"
         CopyStream(OutStr2, InStr);
         Blob2.Insert();
 
-        // Verify second blob contains the data
+        // Verify second blob contains the data — get a fresh InStream after writing
         Blob2.Get('S2');
         Blob2.Data.CreateInStream(InStr2);
         InStr2.ReadText(ReadText);
@@ -654,14 +654,13 @@ codeunit 60135 "Test System Extended"
     // ── Database.GetDefaultTableConnection(Type) ───────────────────────────
 
     [Test]
-    procedure DatabaseGetDefaultTableConnection_ExternalSQL_HandlesCallable()
+    procedure DatabaseGetDefaultTableConnection_ExternalSQL_CloudSandbox_Throws()
     var
         Name: Text;
     begin
         Initialize();
-        // This may throw if no external connection is configured; that's expected
         asserterror Name := Database.GetDefaultTableConnection(TableConnectionType::ExternalSQL);
-        Assert.IsTrue(true, 'GetDefaultTableConnection may throw if no connection — expected');
+        Assert.ExpectedError('Permission denied');
     end;
 
     [Test]

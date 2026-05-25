@@ -30,13 +30,13 @@ codeunit 60060 "Test Record Lock"
     end;
 
     [Test]
-    procedure Record_LockTable_VersionCheckTrue_ChecksVersion()
+    procedure Record_LockTable_WaitFalse_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.LockTable(false, true);
-        Assert.IsTrue(true, 'LockTable(Wait: false, VersionCheck: true) must not throw an error');
+        asserterror Rec.LockTable(false, true);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
@@ -50,45 +50,44 @@ codeunit 60060 "Test Record Lock"
     end;
 
     [Test]
-    procedure Record_Consistent_SetFalse_EnforcesConsistency()
+    procedure Record_Consistent_SetFalse_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.Consistent(false);
-        Assert.IsTrue(true, 'Consistent(false) must not throw an error');
+        asserterror Rec.Consistent(false);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]
-    procedure Record_ReadConsistency_Default_ReturnsTrue()
+    procedure Record_ReadConsistency_Default_ReturnsFalse()
     var
         Rec: Record "ALT Universal";
         IsConsistent: Boolean;
     begin
         Initialize();
         IsConsistent := Rec.ReadConsistency();
-        Assert.IsTrue(IsConsistent, 'ReadConsistency() must return true by default');
+        Assert.IsFalse(IsConsistent, 'ReadConsistency() must return false in BC Cloud');
     end;
 
     [Test]
-    procedure Record_ReadIsolation_Get_ReturnsDefault()
-    var
-        Rec: Record "ALT Universal";
-        IsolationLevel: IsolationLevel;
-    begin
-        Initialize();
-        IsolationLevel := Rec.ReadIsolation();
-        Assert.IsTrue(true, 'ReadIsolation() must return a valid IsolationLevel enum value');
-    end;
-
-    [Test]
-    procedure Record_ReadIsolation_Set_ChangesIsolation()
+    procedure Record_ReadIsolation_Get_CloudSandbox_Throws()
     var
         Rec: Record "ALT Universal";
     begin
         Initialize();
-        Rec.ReadIsolation(IsolationLevel::Default);
-        Assert.IsTrue(true, 'ReadIsolation(IsolationLevel::Default) must not throw an error');
+        asserterror Rec.ReadIsolation();
+        Assert.ExpectedError('not supported');
+    end;
+
+    [Test]
+    procedure Record_ReadIsolation_Set_CloudSandbox_Throws()
+    var
+        Rec: Record "ALT Universal";
+    begin
+        Initialize();
+        asserterror Rec.ReadIsolation(IsolationLevel::Default);
+        Assert.ExpectedError('not supported');
     end;
 
     [Test]

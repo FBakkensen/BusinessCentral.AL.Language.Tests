@@ -118,9 +118,9 @@ codeunit 60155 "Test Record Nav Contracts"
         Rec.Insert();
         // Position at last record
         Rec.FindLast();
-        // Next(-1) should move to record 2
+        // Next(-1) should move to record 2 and return -1
         Steps := Rec.Next(-1);
-        Assert.AreEqual(1, Steps, 'Next(-1) must return 1 (steps actually moved)');
+        Assert.AreEqual(-1, Steps, 'Next(-1) must return -1 (negative number of steps moved)');
         Assert.AreEqual(2, Rec."Entry No.", 'Next(-1) from record 3 must position at record 2')
     end;
 
@@ -167,9 +167,9 @@ codeunit 60155 "Test Record Nav Contracts"
         Rec.Insert();
         // Position at last record
         Rec.FindLast();
-        // Next(-2) should move from 5 to 3
+        // Next(-2) should move from 5 to 3 and return -2
         Steps := Rec.Next(-2);
-        Assert.AreEqual(2, Steps, 'Next(-2) must return 2 (moved 2 steps)');
+        Assert.AreEqual(-2, Steps, 'Next(-2) must return -2 (negative number of steps moved)');
         Assert.AreEqual(3, Rec."Entry No.", 'Next(-2) from 5 must position at record 3')
     end;
 
@@ -234,8 +234,8 @@ codeunit 60155 "Test Record Nav Contracts"
     [Test]
     procedure Copy_ShareTable_True_InsertVisibleInBoth()
     var
-        Rec1: Record "ALT Universal";
-        Rec2: Record "ALT Universal";
+        Rec1: Record "ALT Universal" temporary;
+        Rec2: Record "ALT Universal" temporary;
     begin
         Initialize();
         // Insert first record
@@ -257,9 +257,9 @@ codeunit 60155 "Test Record Nav Contracts"
     [Test]
     procedure Copy_ShareTable_False_IndependentView()
     var
-        Rec: Record "ALT Universal";
-        Rec1: Record "ALT Universal";
-        Rec2: Record "ALT Universal";
+        Rec: Record "ALT Universal" temporary;
+        Rec1: Record "ALT Universal" temporary;
+        Rec2: Record "ALT Universal" temporary;
         i: Integer;
     begin
         Initialize();

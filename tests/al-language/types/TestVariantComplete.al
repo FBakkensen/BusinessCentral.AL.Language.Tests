@@ -107,7 +107,7 @@ codeunit 60139 "Test Variant Complete"
         XDoc.GetRoot(XElem);
         XNode := XElem.AsXmlNode();
         V := XNode;
-        Assert.IsTrue(V.IsXmlNode(), 'Variant must report IsXmlNode=true after assigning XmlNode');
+        Assert.IsTrue(V.IsXmlNode(), 'Variant must report IsXmlNode=true after assigning XmlNode derived from XmlElement');
     end;
 
     // ── Variant type coercion (negation cases) ────────────────────────────────

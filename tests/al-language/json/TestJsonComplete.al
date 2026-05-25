@@ -14,11 +14,13 @@ codeunit 60140 "Test Json Complete"
     var
         JObj: JsonObject;
         B: Byte;
+        Expected: Byte;
     begin
         Initialize();
         JObj.ReadFrom('{"b":200}');
         B := JObj.GetByte('b');
-        Assert.AreEqual(200, B, 'JsonObject.GetByte must return 200');
+        Expected := 200;
+        Assert.AreEqual(Expected, B, 'JsonObject.GetByte must return 200');
     end;
 
     [Test]
@@ -114,11 +116,13 @@ codeunit 60140 "Test Json Complete"
     var
         JArr: JsonArray;
         B: Byte;
+        Expected: Byte;
     begin
         Initialize();
         JArr.ReadFrom('[100,200]');
         B := JArr.GetByte(0);
-        Assert.AreEqual(100, B, 'JsonArray.GetByte must return 100 from first element');
+        Expected := 100;
+        Assert.AreEqual(Expected, B, 'JsonArray.GetByte must return 100 from first element');
     end;
 
     [Test]

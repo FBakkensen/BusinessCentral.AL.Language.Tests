@@ -81,9 +81,9 @@ codeunit 60088 "Test TextBuilder"
     begin
         Initialize();
         TB.Append('hllo');
-        TB.Insert(1, 'e');
+        TB.Insert(2, 'e');
         Result := TB.ToText();
-        Assert.AreEqual('hello', Result, 'TextBuilder.Insert at position 1 must insert "e" to form "hello"');
+        Assert.AreEqual('hello', Result, 'TextBuilder.Insert(2, "e") must insert "e" before position 2 to form "hello"');
     end;
 
     [Test]
@@ -94,9 +94,9 @@ codeunit 60088 "Test TextBuilder"
     begin
         Initialize();
         TB.Append('hello');
-        TB.Remove(1, 2);
+        TB.Remove(2, 2);
         Result := TB.ToText();
-        Assert.AreEqual('hlo', Result, 'TextBuilder.Remove(1, 2) must remove 2 chars starting at position 1');
+        Assert.AreEqual('hlo', Result, 'TextBuilder.Remove(2, 2) must remove 2 chars starting at position 2 (1-based)');
     end;
 
     [Test]

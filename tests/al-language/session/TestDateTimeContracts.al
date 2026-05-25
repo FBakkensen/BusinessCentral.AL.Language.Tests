@@ -80,11 +80,13 @@ codeunit 60162 "Test DateTime Contracts"
         DT1: DateTime;
         DT2: DateTime;
         Diff: Duration;
+        ExpDur: Duration;
     begin
         DT1 := CreateDateTime(20240101D, 120000T);
         DT2 := CreateDateTime(20240101D, 130000T);
+        ExpDur := 3600000;
         Diff := DT2 - DT1;
-        Assert.AreEqual(3600000, Diff, 'DT2 - DT1 where DT2 is 1 hour later must give Duration of 3600000ms');
+        Assert.AreEqual(ExpDur, Diff, 'DT2 - DT1 where DT2 is 1 hour later must give Duration of 3600000ms');
     end;
 
     [Test]

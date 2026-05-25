@@ -16,24 +16,28 @@ codeunit 60184 "Test Duration Contracts"
     procedure Duration_OneDayIs86400000Ms()
     var
         D: Duration;
+        ExpDur: Duration;
     begin
         // Arrange
         D := 86400000;
+        ExpDur := 86400000;
 
         // Act & Assert
-        Assert.AreEqual(86400000, D, 'Duration of 86400000 must equal itself (1 day in ms)');
+        Assert.AreEqual(ExpDur, D, 'Duration of 86400000 must equal itself (1 day in ms)');
     end;
 
     [Test]
     procedure Duration_OneHourIs3600000Ms()
     var
         D: Duration;
+        ExpDur: Duration;
     begin
         // Arrange
         D := 3600000;
+        ExpDur := 3600000;
 
         // Act & Assert
-        Assert.AreEqual(3600000, D, 'Duration of 3600000 must equal itself (1 hour in ms)');
+        Assert.AreEqual(ExpDur, D, 'Duration of 3600000 must equal itself (1 hour in ms)');
     end;
 
     [Test]
@@ -60,53 +64,61 @@ codeunit 60184 "Test Duration Contracts"
         DT1: DateTime;
         DT2: DateTime;
         Diff: Duration;
+        ExpDur: Duration;
     begin
         // Arrange
         DT1 := CreateDateTime(20240101D, 120000T);
         DT2 := CreateDateTime(20240101D, 130000T);
+        ExpDur := 3600000;
 
         // Act
         Diff := DT2 - DT1;
 
         // Assert
-        Assert.AreEqual(3600000, Diff, 'DT2 - DT1 = 1 hour = 3600000ms Duration');
+        Assert.AreEqual(ExpDur, Diff, 'DT2 - DT1 = 1 hour = 3600000ms Duration');
     end;
 
     [Test]
     procedure Duration_Default_IsZero()
     var
         D: Duration;
+        ExpDur: Duration;
     begin
         // Arrange & Act
         // D is default initialized
+        ExpDur := 0;
 
         // Assert
-        Assert.AreEqual(0, D, 'Default Duration must be 0');
+        Assert.AreEqual(ExpDur, D, 'Default Duration must be 0');
     end;
 
     [Test]
     procedure Duration_Negative_IsValid()
     var
         D: Duration;
+        ExpDur: Duration;
     begin
         // Arrange
         D := -3600000; // negative 1 hour
+        ExpDur := -3600000;
 
         // Act & Assert
         Assert.IsTrue(D < 0, 'Duration can be negative');
-        Assert.AreEqual(-3600000, D, 'Negative Duration must equal -3600000');
+        Assert.AreEqual(ExpDur, D, 'Negative Duration must equal -3600000');
     end;
 
     [Test]
     procedure Duration_Arithmetic_Multiply()
     var
         D: Duration;
+        ExpDur: Duration;
     begin
         // Arrange & Act
         D := 1000 * 60; // 60 seconds in ms
+        ExpDur := 60000;
 
         // Assert
-        Assert.AreEqual(60000, D, 'Duration arithmetic: 1000 * 60 = 60000ms');
+        Assert.AreEqual(ExpDur, D, 'Duration arithmetic: 1000 * 60 = 60000ms');
     end;
 
     [Test]

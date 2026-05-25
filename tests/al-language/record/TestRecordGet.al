@@ -125,8 +125,8 @@ codeunit 60053 "Test Record Get"
     [Test]
     procedure Record_Copy_ShareTableTrue_SameUnderlying()
     var
-        Rec1: Record "ALT Universal";
-        Rec2: Record "ALT Universal";
+        Rec1: Record "ALT Universal" temporary;
+        Rec2: Record "ALT Universal" temporary;
     begin
         Initialize();
         Rec1."Entry No." := 1;

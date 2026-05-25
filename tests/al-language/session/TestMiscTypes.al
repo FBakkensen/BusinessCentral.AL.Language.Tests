@@ -71,7 +71,7 @@ codeunit 60127 "Test Misc Types"
     begin
         Initialize();
         Evaluate(V, '5.6.7.8');
-        Assert.AreEqual(7, V.Revision(), 'Revision() of version 5.6.7.8 must return 7');
+        Assert.AreEqual(8, V.Revision(), 'Revision() of version 5.6.7.8 must return 8');
     end;
 
     // ── CompanyProperty type methods ────────────────────────────────────────────

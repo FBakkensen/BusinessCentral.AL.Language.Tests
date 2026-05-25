@@ -91,6 +91,7 @@ codeunit 60121 "Test Json Typed Getters"
     var
         JObj: JsonObject;
         Result: BigInteger;
+        Expected: BigInteger;
     begin
         // Arrange
         Initialize();
@@ -100,7 +101,8 @@ codeunit 60121 "Test Json Typed Getters"
         Result := JObj.GetBigInteger('big');
 
         // Assert
-        Assert.AreEqual(1000000, Result, 'JsonObject.GetBigInteger must return 1000000');
+        Expected := 1000000;
+        Assert.AreEqual(Expected, Result, 'JsonObject.GetBigInteger must return 1000000');
     end;
 
     [Test]
@@ -255,6 +257,7 @@ codeunit 60121 "Test Json Typed Getters"
     var
         JArr: JsonArray;
         Result: BigInteger;
+        Expected: BigInteger;
     begin
         // Arrange
         Initialize();
@@ -264,7 +267,8 @@ codeunit 60121 "Test Json Typed Getters"
         Result := JArr.GetBigInteger(0);
 
         // Assert
-        Assert.AreEqual(999999, Result, 'JsonArray.GetBigInteger(0) must return 999999');
+        Expected := 999999;
+        Assert.AreEqual(Expected, Result, 'JsonArray.GetBigInteger(0) must return 999999');
     end;
 
     // ===== JsonValue As* methods =====
@@ -274,6 +278,7 @@ codeunit 60121 "Test Json Typed Getters"
     var
         JVal: JsonValue;
         Result: BigInteger;
+        Expected: BigInteger;
     begin
         // Arrange
         Initialize();
@@ -283,14 +288,16 @@ codeunit 60121 "Test Json Typed Getters"
         Result := JVal.AsBigInteger();
 
         // Assert
-        Assert.AreEqual(42, Result, 'JsonValue.AsBigInteger must return 42');
+        Expected := 42;
+        Assert.AreEqual(Expected, Result, 'JsonValue.AsBigInteger must return 42');
     end;
 
     [Test]
     procedure JsonValue_AsByte_ReturnsValue()
     var
         JVal: JsonValue;
-        Result: Byte;
+        Result: Char;
+        Expected: Char;
     begin
         // Arrange
         Initialize();
@@ -300,7 +307,8 @@ codeunit 60121 "Test Json Typed Getters"
         Result := JVal.AsByte();
 
         // Assert
-        Assert.AreEqual(100, Result, 'JsonValue.AsByte must return 100');
+        Expected := 100;
+        Assert.AreEqual(Expected, Result, 'JsonValue.AsByte must return char value 100 (d)');
     end;
 
     [Test]

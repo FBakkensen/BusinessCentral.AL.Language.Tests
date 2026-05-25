@@ -112,6 +112,7 @@ codeunit 60172 "Test BC System Field Contracts"
     var
         TL: Record "ALT Trigger Log";
         FirstId: Integer;
+        SecondId: Integer;
     begin
         Initialize();
         TL.TriggerName := 'T1';
@@ -122,7 +123,8 @@ codeunit 60172 "Test BC System Field Contracts"
         TL.TriggerName := 'T2';
         TL.Insert();
         TL.FindFirst();
-        Assert.IsTrue(TL."Entry No." > FirstId, 'After DeleteAll, AutoIncrement must continue from previous max, NOT reset to 1');
+        SecondId := TL."Entry No.";
+        Assert.IsTrue(SecondId > FirstId, 'After DeleteAll, AutoIncrement must continue from previous max, NOT reset to 1');
     end;
 
     [Test]

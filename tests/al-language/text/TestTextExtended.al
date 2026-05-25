@@ -287,7 +287,7 @@ codeunit 60119 "Test Text Extended"
     end;
 
     // ============================================================================
-    // Text.Substring(StartIndex [, Length]) - 0-based indexing
+    // Text.Substring(StartIndex [, Length]) - 1-based indexing
     // ============================================================================
 
     [Test]
@@ -298,8 +298,8 @@ codeunit 60119 "Test Text Extended"
     begin
         Initialize();
         Text1 := 'hello';
-        Result := Text1.Substring(1);
-        Assert.AreEqual('ello', Result, 'Text.Substring(1) must extract from index 1 to end');
+        Result := Text1.Substring(2);
+        Assert.AreEqual('ello', Result, 'Text.Substring(2) must extract from position 2 to end (1-based)');
     end;
 
     [Test]
@@ -310,8 +310,8 @@ codeunit 60119 "Test Text Extended"
     begin
         Initialize();
         Text1 := 'hello';
-        Result := Text1.Substring(1, 3);
-        Assert.AreEqual('ell', Result, 'Text.Substring(1, 3) must extract 3 chars from index 1');
+        Result := Text1.Substring(2, 3);
+        Assert.AreEqual('ell', Result, 'Text.Substring(2, 3) must extract 3 chars starting at position 2 (1-based)');
     end;
 
     [Test]
@@ -322,12 +322,12 @@ codeunit 60119 "Test Text Extended"
     begin
         Initialize();
         Text1 := 'hello';
-        Result := Text1.Substring(0, 2);
-        Assert.AreEqual('he', Result, 'Text.Substring(0, 2) must extract first 2 characters');
+        Result := Text1.Substring(1, 2);
+        Assert.AreEqual('he', Result, 'Text.Substring(1, 2) must extract first 2 characters (1-based)');
     end;
 
     // ============================================================================
-    // Text.IndexOf(Value [, StartIndex]) - 0-based, returns -1 if not found
+    // Text.IndexOf(Value [, StartIndex]) - 1-based, returns 0 if not found
     // ============================================================================
 
     [Test]
@@ -339,11 +339,11 @@ codeunit 60119 "Test Text Extended"
         Initialize();
         Text1 := 'hello';
         Index := Text1.IndexOf('ll');
-        Assert.AreEqual(2, Index, 'Text.IndexOf must find "ll" at 0-based index 2');
+        Assert.AreEqual(3, Index, 'Text.IndexOf must find "ll" at 1-based position 3');
     end;
 
     [Test]
-    procedure TextIndexOf_NotFound_ReturnsNegativeOne()
+    procedure TextIndexOf_NotFound_ReturnsZero()
     var
         Text1: Text;
         Index: Integer;
@@ -351,7 +351,7 @@ codeunit 60119 "Test Text Extended"
         Initialize();
         Text1 := 'hello';
         Index := Text1.IndexOf('xyz');
-        Assert.AreEqual(-1, Index, 'Text.IndexOf must return -1 when substring not found');
+        Assert.AreEqual(0, Index, 'Text.IndexOf must return 0 when substring not found');
     end;
 
     [Test]
@@ -362,8 +362,8 @@ codeunit 60119 "Test Text Extended"
     begin
         Initialize();
         Text1 := 'hello';
-        Index := Text1.IndexOf('l', 2);
-        Assert.AreEqual(2, Index, 'Text.IndexOf(l, 2) must find "l" at index 2 or later');
+        Index := Text1.IndexOf('l', 3);
+        Assert.AreEqual(3, Index, 'Text.IndexOf(l, 3) must find "l" at position 3 or later (1-based)');
     end;
 
     // ============================================================================
@@ -382,11 +382,11 @@ codeunit 60119 "Test Text Extended"
         Chars.Add('e');
         Chars.Add('o');
         Index := Text1.IndexOfAny(Chars);
-        Assert.AreEqual(1, Index, 'Text.IndexOfAny must find first matching char "e" at index 1');
+        Assert.AreEqual(2, Index, 'Text.IndexOfAny must find first matching char "e" at position 2 (1-based)');
     end;
 
     [Test]
-    procedure TextIndexOfAny_NoMatch_ReturnsNegativeOne()
+    procedure TextIndexOfAny_NoMatch_ReturnsZero()
     var
         Text1: Text;
         Chars: List of [Char];
@@ -397,7 +397,7 @@ codeunit 60119 "Test Text Extended"
         Chars.Add('x');
         Chars.Add('y');
         Index := Text1.IndexOfAny(Chars);
-        Assert.AreEqual(-1, Index, 'Text.IndexOfAny must return -1 when no chars match');
+        Assert.AreEqual(0, Index, 'Text.IndexOfAny must return 0 when no chars match');
     end;
 
     // ============================================================================
@@ -413,11 +413,11 @@ codeunit 60119 "Test Text Extended"
         Initialize();
         Text1 := 'hello';
         Index := Text1.LastIndexOf('l');
-        Assert.AreEqual(3, Index, 'Text.LastIndexOf must find last "l" at index 3');
+        Assert.AreEqual(4, Index, 'Text.LastIndexOf must find last "l" at position 4 (1-based)');
     end;
 
     [Test]
-    procedure TextLastIndexOf_NotFound_ReturnsNegativeOne()
+    procedure TextLastIndexOf_NotFound_ReturnsZero()
     var
         Text1: Text;
         Index: Integer;
@@ -425,7 +425,7 @@ codeunit 60119 "Test Text Extended"
         Initialize();
         Text1 := 'hello';
         Index := Text1.LastIndexOf('xyz');
-        Assert.AreEqual(-1, Index, 'Text.LastIndexOf must return -1 when substring not found');
+        Assert.AreEqual(0, Index, 'Text.LastIndexOf must return 0 when substring not found');
     end;
 
     // ============================================================================

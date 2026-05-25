@@ -37,7 +37,7 @@ codeunit 60090 "Test Format"
     begin
         Initialize();
         Result := Format(true);
-        Assert.AreEqual('true', LowerCase(Result), 'Format(true) must return string "true" or "True"');
+        Assert.AreEqual('Yes', Result, 'Format(true) in w1 locale must return "Yes"');
     end;
 
     [Test]

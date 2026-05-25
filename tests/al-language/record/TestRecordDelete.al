@@ -14,13 +14,15 @@ codeunit 60052 "Test Record Delete"
     var
         Universal: Record "ALT Universal";
         Result: Boolean;
+        EntryNo: Integer;
     begin
         Initialize();
         Universal."Entry No." := 1;
         Universal."Integer Field" := 10;
         Universal.Insert();
+        EntryNo := Universal."Entry No.";
 
-        Universal.Get(1);
+        Universal.Get(EntryNo);
         Result := Universal.Delete();
 
         Assert.IsTrue(Result, 'Delete() must return true when record exists');
@@ -47,16 +49,18 @@ codeunit 60052 "Test Record Delete"
         Triggered: Record "ALT Triggered";
         TrigLog: Record "ALT Trigger Log";
         InitialCount: Integer;
+        EntryNo: Integer;
     begin
         Initialize();
         Triggered."Entry No." := 1;
         Triggered."Name" := 'Test';
         Triggered.Insert(false);
+        EntryNo := Triggered."Entry No.";
 
         TrigLog.SetRange("TriggerName", 'OnDelete');
         InitialCount := TrigLog.Count();
 
-        Triggered.Get(1);
+        Triggered.Get(EntryNo);
         Triggered.Delete(true);
 
         TrigLog.SetRange("TriggerName", 'OnDelete');
@@ -67,13 +71,15 @@ codeunit 60052 "Test Record Delete"
     procedure Record_Delete_TableEmptyAfterDelete()
     var
         Universal: Record "ALT Universal";
+        EntryNo: Integer;
     begin
         Initialize();
         Universal."Entry No." := 1;
         Universal."Integer Field" := 10;
         Universal.Insert();
+        EntryNo := Universal."Entry No.";
 
-        Universal.Get(1);
+        Universal.Get(EntryNo);
         Universal.Delete();
 
         Assert.IsTrue(Universal.IsEmpty(), 'Table must be empty after deleting the only record');

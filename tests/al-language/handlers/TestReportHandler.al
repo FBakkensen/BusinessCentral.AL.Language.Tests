@@ -32,8 +32,9 @@ codeunit 60116 "Test Report Handler"
         Initialize();
         Rec."Entry No." := 1;
         Rec.Insert();
+        // Report.Run must not throw even without showing request page
         Report.Run(60018, false, false, Rec);
-        Assert.IsTrue(true, 'Report.Run without request page must not throw');
+        // If we reach here, Report.Run succeeded without error
     end;
 
     [Test]
@@ -48,8 +49,9 @@ codeunit 60116 "Test Report Handler"
             Rec."Integer Field" := i * 10;
             Rec.Insert();
         end;
+        // Report.Run in processing-only mode must iterate over records without error
         Report.Run(60018, false, false, Rec);
-        Assert.IsTrue(true, 'Report processing with multiple records must not throw');
+        // If we reach here, the report processed all records successfully
     end;
 
     [Test]
@@ -61,8 +63,9 @@ codeunit 60116 "Test Report Handler"
         Initialize();
         Rec."Entry No." := 1;
         Rec.Insert();
+        // Report.Run with handler must invoke the handler and proceed with report
         Report.Run(60018, true, false, Rec);
-        Assert.IsTrue(true, 'Report request page with OK button invoked must complete');
+        // If we reach here, the handler was called and did not throw
     end;
 
     [RequestPageHandler]

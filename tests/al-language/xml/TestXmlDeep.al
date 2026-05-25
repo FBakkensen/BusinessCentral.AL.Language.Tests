@@ -338,7 +338,7 @@ codeunit 60134 "Test Xml Deep"
         XAttr := XmlAttribute.CreateNamespaceDeclaration('ns', 'http://example.com');
 
         // ASSERT
-        Assert.AreEqual('ns', XAttr.NamespacePrefix(), 'Namespace declaration must have prefix');
+        Assert.AreEqual('xmlns', XAttr.NamespacePrefix(), 'Namespace declaration attribute prefix must be xmlns');
     end;
 
     [Test]
