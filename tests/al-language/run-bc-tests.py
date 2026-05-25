@@ -114,15 +114,17 @@ def run_codeunit(cfg, company_id, cu_id, timeout=180, retries=2):
                 status = data.get("Status", "")
                 if status in ("Finished", "Error"):
                     result_msg = data.get("LastResult", "")
-                    # Fetch log entries for failure details
+                    # Always fetch log entries — the BC test framework catches
+                    # [Test] procedure failures and continues, so the codeunit
+                    # status is "Finished" even when procedures fail. Checking
+                    # LastResult for "failed" is not reliable.
                     failures = []
-                    if status == "Error" or "failed" in result_msg.lower():
-                        logs = fetch_log_failures(cfg, company_id, cu_id)
-                        for entry in logs:
-                            failures.append({
-                                "method": entry.get("functionName", ""),
-                                "error": entry.get("errorMessage", ""),
-                            })
+                    logs = fetch_log_failures(cfg, company_id, cu_id)
+                    for entry in logs:
+                        failures.append({
+                            "method": entry.get("functionName", ""),
+                            "error": entry.get("errorMessage", ""),
+                        })
                     return {
                         "id": cu_id,
                         "status": status,
