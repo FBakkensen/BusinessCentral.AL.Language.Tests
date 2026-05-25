@@ -139,7 +139,11 @@ def run_codeunit(cfg, company_id, cu_id, timeout=180, retries=2):
 
 def discover_codeunit_ids(bucket_dir):
     ids = set()
-    for f in Path(bucket_dir).rglob("test/*.al"):
+    root = Path(bucket_dir)
+    fixtures = root / "_fixtures"
+    for f in root.rglob("*.al"):
+        if fixtures in f.parents:
+            continue
         for line in f.read_text(errors="replace").splitlines():
             m = re.match(r'^codeunit\s+(\d+)', line.strip(), re.IGNORECASE)
             if m:

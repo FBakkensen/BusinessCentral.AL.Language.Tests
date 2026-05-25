@@ -1,0 +1,67 @@
+name: AL Language Test Suite
+
+# Runs the full AL language coverage suite against a real BC Cloud sandbox
+# on BC 27.5 and BC 28.1. Both matrix legs boot BC on Linux (no Windows
+# runner required) via StefanMaron/MsDyn365Bc.On.Linux.
+#
+# Adding a new BC version:
+#   1. Append it to the matrix below.
+#   2. If the new version requires a different AL compiler, add an `include:`
+#      entry with its al_tool_version (find via:
+#      dotnet tool search Microsoft.Dynamics.BusinessCentral.Development.Tools.Linux)
+#   3. If new API/keywords only exist from that version, guard tests with
+#      #if BC<major><minor>PLUS  (e.g. #if BC28PLUS) and define the symbol
+#      in the matrix include below.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      bc_version:
+        description: 'Override BC version (e.g. 28.1). Runs only that version when set.'
+        required: false
+        default: ''
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+    steps:
+      - id: set
+        run: |
+          OVERRIDE='${{ github.event.inputs.bc_version }}'
+          if [ -n "$OVERRIDE" ]; then
+            JSON=$(python3 -c "import json; print(json.dumps({'bc_version': ['$OVERRIDE']}))")
+          else
+            JSON='{"bc_version":["27.5","28.1"]}'
+          fi
+          echo "matrix=$JSON" >> "$GITHUB_OUTPUT"
+
+  test:
+    name: BC ${{ matrix.bc_version }}
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    uses: StefanMaron/MsDyn365Bc.On.Linux/.github/workflows/bc-test-from-source.yml@master
+    with:
+      bc_version:     ${{ matrix.bc_version }}
+      bc_country:     "w1"
+      app_dirs:       ""               # no production app — test suite IS the app
+      test_app_dirs:  "tests/al-language"
+      codeunit_range: "60000..60999"   # full id range declared in app.json
+      # app.json declares runtime 16.1 (BC 27+), so the 16.2.x compiler
+      # works for both BC 27.5 and 28.1. Bump this when a future BC version
+      # requires a higher runtime declaration in app.json.
+      al_tool_version: "16.2.28.57946"
+
+    # Optional: supply a base64-encoded BC developer license.
+    # Without this, BC boots with the public Cronus license (sufficient
+    # for all language coverage tests — no ISV app IDs needed).
+    #   base64 -w0 < your.bclicense | gh secret set BC_LICENSE
+    # secrets:
+    #   bc_license: ${{ secrets.BC_LICENSE }}

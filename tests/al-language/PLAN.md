@@ -2,16 +2,25 @@
 
 ## What This Is
 
-A ground-up, human- and agent-readable test suite that proves the AL language works
-correctly against a real Business Central instance. It is **not** a runner regression
-suite. Its only job is to serve as an executable specification of the AL language.
+A ground-up, human- and agent-readable test suite with two goals, in priority order:
 
-Every test in this suite is a proof. A reader — human or agent — should be able to
-open any test file, read one test method, and know exactly:
+**Primary — BC Cloud compatibility proofs.**
+Every test proves that a documented AL language feature works correctly in the
+BC Cloud (SaaS) runtime. The question this suite answers is: *does this AL feature
+actually work in a BC Cloud tenant?* File operations, .NET interop, HttpClient, and
+anything else that is unavailable in Cloud are out of scope for positive tests. Each
+out-of-scope surface gets exactly one negative test confirming it throws.
+
+**Secondary — Language surface coverage.**
+Over time, cover the full in-scope AL language surface. Every in-scope method should
+have at least one positive test and one negative test.
+
+A reader — human or agent — should be able to open any test file, read one test
+method, and know exactly:
 
 1. Which AL language feature it covers
 2. What the BC documentation says should happen
-3. That BC actually does that thing when run against a real container
+3. That BC Cloud actually does that thing when run against a real container
 
 ## Why Start From Scratch
 
@@ -23,14 +32,20 @@ Salvaging them into a coverage document would cost more than building clean.
 The existing tests remain valuable — they stay in place as runner CI — but they are
 not this.
 
-## Relationship to the AL Runner
+## Relationship to the AL Runner — Contributing Runner Gaps
 
-This folder is **isolated from the runner**. The runner CI picks up `tests/bucket-*/`
-only. This folder has its own `app.json` and is never compiled or executed by the
-runner pipeline.
+This suite serves as the **executable specification** for the AL Runner. If the runner
+handles a language feature incorrectly:
 
-A test that passes on the runner but fails here means the runner has a gap.
-A test that passes here but fails on the runner is a runner bug to fix.
+1. Write a test here that proves the correct Cloud behavior.
+2. The test becomes an executable spec the runner must pass.
+3. Once the runner is fixed, promote the test to `tests/bucket-*/` as a regression guard.
+
+A test that passes here but fails on the runner → **runner bug to fix**.
+A test that passes on the runner but fails here → **runner has a gap**.
+
+This folder is **isolated from the runner CI**. The runner picks up `tests/bucket-*/`
+only. This folder has its own `app.json` and its own CI pipeline.
 
 ---
 
@@ -433,6 +448,32 @@ Each test file opens with a comment block:
 //   dev-itpro/developer/methods-auto/record/record-insert-method
 // Scope: in-scope (runner supports Record.Insert)
 // Fixtures used: ALT Universal, ALT Triggered
+```
+
+---
+
+## Version Compatibility
+
+The CI matrix runs the suite against BC 27.5 and BC 28.1. All tests must
+pass on both versions by default.
+
+For features introduced after BC 27.0, wrap the test in a preprocessor guard:
+
+```al
+#if BC28PLUS  // <brief reason why this guard exists>
+[Test]
+procedure SomeNewFeature_Works()
+begin
+    ...
+end;
+#endif
+```
+
+The symbols `BC27PLUS` and `BC28PLUS` are defined by the CI workflow per
+matrix version. When compiling locally, define them in `app.json`:
+
+```json
+"preprocessorSymbols": ["BC27PLUS", "BC28PLUS"]
 ```
 
 ---

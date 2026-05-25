@@ -1,0 +1,19 @@
+# AL compiler output
+tests/al-language/*.app
+tests/al-language/.alpackages/
+
+# Test run artifacts (committed selectively when updating baseline)
+tests/al-language/bc-full-results.json
+tests/al-language/.dev/
+
+# Coverage/classification snapshots (generated, not source-of-truth)
+v2-classification.json
+tests/al-language/v2-classification.json
+
+# Claude Code worktree scratch dirs
+.claude/worktrees/
+
+# Editor / OS
+.DS_Store
+*.swp
+*~
