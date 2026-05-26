@@ -56,7 +56,7 @@ jobs:
     with:
       bc_version:           ${{ matrix.bc_version }}
       bc_country:           "w1"
-      app_dirs:             ""
+      app_dirs:             "tests/al-language-internals-fixture"
       test_app_dirs:        "tests/al-language"
       codeunit_range:       "60000..60999"
       preprocessor_symbols: ${{ matrix.preprocessor_symbols }}

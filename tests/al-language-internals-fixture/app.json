@@ -1,0 +1,31 @@
+{
+  "id": "f1e2d3c4-b5a6-7890-fedc-ba9876543210",
+  "name": "AL Internals Test Fixture",
+  "publisher": "AL Language",
+  "version": "1.0.0.0",
+  "brief": "Dependency fixture exposing internal objects to the AL Language Coverage Tests app.",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "internalsVisibleTo": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "AL Language Coverage Tests",
+      "publisher": "AL Language"
+    }
+  ],
+  "idRanges": [
+    {
+      "from": 61000,
+      "to": 61099
+    }
+  ],
+  "features": [],
+  "runtime": "14.0",
+  "target": "Cloud"
+}
