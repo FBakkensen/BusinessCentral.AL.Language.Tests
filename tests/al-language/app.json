@@ -10,7 +10,14 @@
   "help": "",
   "url": "",
   "logo": "",
-  "dependencies": [],
+  "dependencies": [
+    {
+      "id": "f1e2d3c4-b5a6-7890-fedc-ba9876543210",
+      "name": "AL Internals Test Fixture",
+      "publisher": "AL Language",
+      "version": "1.0.0.0"
+    }
+  ],
   "screenshots": [],
   "idRanges": [
     {
