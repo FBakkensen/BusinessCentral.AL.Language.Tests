@@ -86,9 +86,11 @@ codeunit 60203 "Test TableExt Cross App"
     end;
 
     [Test]
-    procedure TableExt_CrossApp_DuplicateInsert_Throws()
-    // CLAIM: inserting a duplicate PK on "Item Journal Batch" throws — proves the
-    // table (with its extension) is live and enforces standard PK uniqueness.
+    procedure TableExt_CrossApp_DuplicateInsert_ReturnsFalse()
+    // CLAIM: Insert(false) on a duplicate PK returns false — proves the table (with
+    // its extension) is live and enforces PK uniqueness.
+    // NOTE: Insert(RunTrigger: Boolean) returns false on duplicate; it does not throw.
+    // The no-parameter Insert() variant throws instead.
     var
         Batch: Record "Item Journal Batch";
     begin
@@ -98,8 +100,7 @@ codeunit 60203 "Test TableExt Cross App"
         Batch."ALT Foo" := 5;
         Batch.Insert(false);
 
-        asserterror Batch.Insert(false);
-        Assert.IsTrue(GetLastErrorText() <> '', 'Duplicate Insert must throw a runtime error');
+        Assert.IsFalse(Batch.Insert(false), 'Duplicate Insert(false) must return false');
     end;
 
     local procedure Initialize()
