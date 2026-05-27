@@ -1,0 +1,9 @@
+{
+  "name": "AL Language Tests Ruleset",
+  "rules": [
+    {
+      "id": "PC0002",
+      "action": "Warning"
+    }
+  ]
+}
