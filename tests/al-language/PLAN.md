@@ -312,6 +312,18 @@ never modified by tests — tests insert/modify/delete data, not schema.
 |---|---|
 | `ALT Universal Query` (60022) | Query fixture over `ALT Universal`. Covers `Open()`, `Read()`, `Close()`, `SetFilter()`, `SetRange()`, `GetFilter()`, `GetFilters()`, `ColumnName()`, `ColumnCaption()`, `ColumnNo()`, `TopNumberOfRows()`, `SecurityFiltering()`, and the `SaveAs*` OutStream export surface. |
 
+### XmlPort
+
+| Object | Purpose |
+|---|---|
+| `ALT Universal XmlPort` (60023) | XmlPort fixture over `ALT Universal`. Covers instance `SetDestination()` + `Export()`, instance `SetSource()` + `Import()`, `SetTableView()`, and static `XmlPort.Export()` / `XmlPort.Import()` over streams. |
+| `ALT Parent Child XmlPort` (60024) | Nested parent/child XmlPort fixture over `ALT Parent` and `ALT Child`. Covers multiple tableelements, LinkFields-based nesting, and `fieldattribute` import/export. |
+| `ALT Variable XmlPort` (60025) | XmlPort fixture over `ALT Universal` with `textelement` and `textattribute` variables. Covers `OnBeforePassVariable()`, `OnAfterAssignVariable()`, and `OnAfterAssignField()`. |
+| `ALT Universal Update XmlPort` (60026) | Partial import XmlPort over `ALT Universal`. Covers `AutoUpdate=true` semantics for preserving omitted fields. |
+| `ALT Universal Replace XmlPort` (60027) | Partial import XmlPort over `ALT Universal`. Covers `AutoReplace=true` semantics for reinitializing omitted fields. |
+| `ALT Universal Manual XmlPort` (60028) | Import XmlPort over `ALT Universal` with `AutoSave=false` and `AutoUpdate=true`. Covers manual persistence through `OnAfterInitRecord()`, `OnBeforeInsertRecord()`, `OnAfterInsertRecord()`, `OnBeforeModifyRecord()`, and `OnAfterModifyRecord()`. |
+| `ALT Temp Universal XmlPort` (60029) | Import XmlPort over `ALT Universal` with `UseTemporary=true`. Covers temporary import buffering with manual persistence into real records. |
+
 ---
 
 ## Folder Structure
@@ -346,6 +358,14 @@ tests/al-language/
       ALTSimpleReport.al
     queries/
       ALTUniversalQuery.al
+    xmlports/
+      ALTUniversalXmlPort.al
+      ALTParentChildXmlPort.al
+      ALTVariableXmlPort.al
+      ALTUniversalUpdateXmlPort.al
+      ALTUniversalReplaceXmlPort.al
+      ALTUniversalManualXmlPort.al
+      ALTUniversalTemporaryXmlPort.al
     ALTFixtureCleanup.al           ← codeunit with DeleteAll on every fixture table
   record/
     TestRecordInsert.al
@@ -414,6 +434,9 @@ tests/al-language/
     TestJsonValue.al
   query/
     TestQueryObject.al
+  xmlport/
+    TestXmlPortObject.al
+    TestXmlPortAdvanced.al
   xml/
     TestXmlDocument.al
     TestXmlElement.al

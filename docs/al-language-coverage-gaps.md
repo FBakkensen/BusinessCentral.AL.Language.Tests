@@ -61,12 +61,32 @@ Notes:
 
 ### 2. XmlPort objects
 
-Status: not yet covered.
+Status: broad baseline implemented; some specialized method/property coverage still pending.
 
 Why it matters:
 
 - Microsoft documents `XmlPort` separately from `XML` data types.
-- The suite currently covers XML document manipulation, but not the object model used for import/export style processing.
+- The suite now covers the cloud-safe import/export object model rather than only raw XML document manipulation.
+
+Current coverage:
+
+- instance `SetDestination()` + `Export()`
+- instance `SetSource()` + `Import()`
+- `SetTableView()` for filtered export
+- static `XmlPort.Export(Integer, OutStream [, Record])`
+- static `XmlPort.Import(Integer, InStream)`
+- nested `tableelement` trees with parent/child `LinkFields`
+- `fieldattribute`, `textelement`, and `textattribute` nodes
+- `OnBeforePassVariable()`, `OnAfterAssignVariable()`, and `OnAfterAssignField()`
+- `AutoUpdate=true`
+- `AutoReplace=true`
+- `AutoSave=false` with manual insert/modify in record triggers
+- `UseTemporary=true` with manual persistence from temporary rows
+
+Notes:
+
+- The current slice is still intentionally stream-based. File-name and request-page driven execution paths are less useful for the repo’s cloud-safe runtime focus.
+- `Break()`, `BreakUnbound()`, `CurrentPath()`, `Skip()`, `OnPreXmlPort()` / `OnPostXmlPort()`, and text/fixed-width separator methods still need dedicated fixtures if we want full method-surface coverage.
 
 ### 3. SecretText
 
