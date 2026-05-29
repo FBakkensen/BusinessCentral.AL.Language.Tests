@@ -291,7 +291,9 @@ never modified by tests — tests insert/modify/delete data, not schema.
 | Object | Purpose |
 |---|---|
 | `ALT Event Publisher` (50910) | Codeunit with 3 published events: `OnBeforeAction` (integration event), `OnAfterAction` (business event), `OnInternalStep` (internal event). Has `TriggerBefore`, `TriggerAfter`, `TriggerInternal` procedures that fire each. |
-| `ALT Event Subscriber` (50911) | Default subscriber — records which events fired into `ALT Trigger Log`. Tests bind/unbind it explicitly. |
+| `ALT Event Subscriber` (50911) | Default subscriber — records which codeunit-published events fired into `ALT Trigger Log`. Tests bind/unbind it explicitly. |
+| `ALT Table Event Subscriber` (50912) | Subscriber fixture for `ALT Triggered` table-published events. Records `OnAfterValidateEvent`, `OnAfterInsertEvent`, `OnAfterModifyEvent`, `OnAfterDeleteEvent`, and `OnAfterRenameEvent` into `ALT Trigger Log`. |
+| `ALT Internals Fanout Subscriber` (50913) | Additional subscribers for `ALT Internal Codeunit.OnValueComputed`. Used to prove integration-event fanout reaches multiple subscribers per publish. |
 
 ### Pages
 

@@ -278,8 +278,13 @@ codeunit 60148 "Test Trigger Contracts"
         Triggered.Get(1);
         Triggered.Value := 99;
         Triggered.Modify(false);
+
         TrigLog.Reset();
-        Assert.AreEqual(0, TrigLog.Count(), 'Modify(false) must not fire any triggers');
+        TrigLog.SetRange("TriggerName", 'OnModify');
+        Assert.AreEqual(0, TrigLog.Count(), 'Modify(false) must not fire the table OnModify trigger');
+
+        TrigLog.SetRange("TriggerName", 'TableOnAfterModify');
+        Assert.AreEqual(1, TrigLog.Count(), 'Modify(false) must still publish the table OnAfterModifyEvent subscriber');
     end;
 
     // ── Insert and Delete with triggers both fire ────────────────────────────

@@ -41,6 +41,9 @@ codeunit 60074 "Test FieldRef Validate"
         Rec."Name" := 'Test';
         Rec.Insert();
 
+        TrigLog.Reset();
+        TrigLog.SetRange("TriggerName", 'OnValidate');
+        TrigLog.SetRange("SourceEntryNo", 2);
         InitialCount := TrigLog.Count();
 
         RecRef.Open(60002);
