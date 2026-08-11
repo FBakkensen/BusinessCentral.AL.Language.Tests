@@ -15,5 +15,6 @@ permissionset 60022 ALTPermissionSet
         tabledata "ALT Init Value" = RIMD,
         tabledata "ALT Internal Table" = RIMD,
         tabledata "ALT Relation Parent" = RIMD,
+        tabledata "ALT Relation Parent B" = RIMD,
         tabledata "ALT Relation Child" = RIMD;
 }
