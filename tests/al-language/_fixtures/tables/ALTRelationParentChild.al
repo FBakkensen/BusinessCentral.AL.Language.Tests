@@ -8,6 +8,31 @@ table 60028 "ALT Relation Parent"
         {
             DataClassification = SystemMetadata;
         }
+        field(2; Blocked; Boolean)
+        {
+            DataClassification = SystemMetadata;
+        }
+    }
+
+    keys
+    {
+        key(PK; "Code")
+        {
+            Clustered = true;
+        }
+    }
+}
+
+table 60030 "ALT Relation Parent B"
+{
+    DataClassification = SystemMetadata;
+
+    fields
+    {
+        field(1; "Code"; Code[20])
+        {
+            DataClassification = SystemMetadata;
+        }
     }
 
     keys
@@ -43,6 +68,26 @@ table 60029 "ALT Relation Child"
         field(4; "Soft Ref"; Code[20])
         {
             DataClassification = SystemMetadata;
+        }
+        field(5; Kind; Option)
+        {
+            DataClassification = SystemMetadata;
+            OptionMembers = A,B;
+        }
+        field(6; "Conditional Ref"; Code[20])
+        {
+            DataClassification = SystemMetadata;
+            TableRelation = if (Kind = const(A)) "ALT Relation Parent"."Code" else "ALT Relation Parent B"."Code";
+        }
+        field(7; "Single Cond Ref"; Code[20])
+        {
+            DataClassification = SystemMetadata;
+            TableRelation = if (Kind = const(A)) "ALT Relation Parent"."Code";
+        }
+        field(8; "Filtered Ref"; Code[20])
+        {
+            DataClassification = SystemMetadata;
+            TableRelation = "ALT Relation Parent"."Code" where(Blocked = const(false));
         }
     }
 
