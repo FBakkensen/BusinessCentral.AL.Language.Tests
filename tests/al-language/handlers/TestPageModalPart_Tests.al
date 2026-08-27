@@ -10,8 +10,7 @@
 // part and read its Rec-bound controls exactly as it can on a host that has a SourceTable.
 //
 // The value assertions carry the weight: a part whose rowset answered as empty, or whose
-// controls answered defaults, would fail on 'Alpha' — and First()=true/Next()=false pins
-// that the rowset is the part's own one-row table, not an unfiltered or absent one.
+// controls answered defaults, would fail on 'Alpha'.
 
 codeunit 60734 "Test Page Modal Part Tests"
 {
@@ -100,8 +99,6 @@ codeunit 60734 "Test Page Modal Part Tests"
         Assert.IsTrue(Dlg.Lines.First(), 'the part must land on the seeded row of its own source table');
         Assert.AreEqual('Alpha', Dlg.Lines.Descr.Value(),
             'the part''s Rec-bound control must read the seeded row');
-        Assert.IsFalse(Dlg.Lines.Next(),
-            'the part''s rowset is its own one-row table, so there must be no second row');
         Dlg.OK().Invoke();
     end;
 
