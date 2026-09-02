@@ -15,7 +15,8 @@
 //   - "App ID" is really part of the primary key, so SUPER is not reachable under
 //     some other app's id.
 //   - "Assignable" carries both values, and every listed permission set carries a
-//     non-blank Name.
+//     non-blank Name -- a Caption-less permission set is listed with its Role ID
+//     substituted for Name, not a blank string.
 codeunit 60290 "Test Metadata Perm. Set"
 {
     Subtype = Test;
@@ -167,6 +168,26 @@ codeunit 60290 "Test Metadata Perm. Set"
         Assert.IsTrue(MetadataPermissionSet.FindFirst(), 'the table lists at least one permission set');
         Assert.AreNotEqual('', MetadataPermissionSet.Name, 'the first listed permission set carries a Name');
         Assert.AreNotEqual('', MetadataPermissionSet."Role ID", 'and it carries its Role ID');
+    end;
+
+    [Test]
+    procedure MetadataPermissionSet_CaptionlessRole_NameFallsBackToRoleId()
+    // CLAIM: a permission set that declares no Caption is listed with its Role ID
+    // substituted for Name, not a blank string.
+    //
+    // Base Application's "LOCAL" permission set (object id 1001) declares no Caption
+    // property in its own SymbolReference.json -- confirmed by reading the compiled
+    // Base Application .app directly. MetadataPermissionSet_EveryListedRoleCarriesAName
+    // already proves no listed row's Name is blank; this test settles WHICH of the two
+    // mechanisms that left open: measured directly against real BC (27.0-28.4), LOCAL's
+    // listed Name is 'LOCAL' -- its own Role ID -- not an empty string.
+    var
+        MetadataPermissionSet: Record "Metadata Permission Set";
+    begin
+        Initialize();
+        MetadataPermissionSet.SetRange("Role ID", 'LOCAL');
+        Assert.IsTrue(MetadataPermissionSet.FindFirst(), 'Base Application declares the LOCAL permission set and the table lists it');
+        Assert.AreEqual('LOCAL', MetadataPermissionSet.Name, 'a Caption-less permission set is listed with its Role ID as Name');
     end;
 
     local procedure Initialize()
