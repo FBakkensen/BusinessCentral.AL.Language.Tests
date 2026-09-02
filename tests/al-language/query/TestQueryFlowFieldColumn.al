@@ -1,11 +1,14 @@
 // BC Documentation: https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/methods-auto/query/query-data-type
 //   dev-itpro/developer/devenv-query-object
 // Scope: in-scope
-// Fixtures used: QFF Line (60974), QFF Header (60975), QFF Header FlowField (60979)
+// Fixtures used: QFF Line (60974), QFF Header (60975), QFF Header FlowField (60979),
+//   QFF Link (60953), QFF Join Header FlowField (60955)
 //
 // A query column selecting a FlowField reads the FlowField's calculated value, the same
 // value Record.CalcFields would compute for that row — not the field's raw/unset storage,
-// and not zero when no source rows exist yet to sum.
+// and not zero when no source rows exist yet to sum. That holds even when the FlowField
+// column's dataitem also participates in a multi-dataitem JOIN — real BC's SQL executes the
+// FlowField's OuterApply sub-query per outer row regardless of any application-level JOIN.
 codeunit 60987 "QFF Query FlowField Tests"
 {
     Subtype = Test;
@@ -74,6 +77,40 @@ codeunit 60987 "QFF Query FlowField Tests"
 
         Assert.IsTrue(Q.Read(), 'Query must return the one matching header row');
         Assert.AreEqual(0, Q.TotalAmount, 'Query FlowField column with no matching source rows must read 0, not fail');
+        Q.Close();
+    end;
+
+    [Test]
+    procedure JoinFlowFieldColumn_ReadsCalculatedValue()
+    var
+        QffHeader: Record "QFF Header";
+        QffLine: Record "QFF Line";
+        QffLink: Record "QFF Link";
+        Q: Query "QFF Join Header FlowField";
+    begin
+        Initialize();
+        QffLink.DeleteAll();
+
+        QffHeader.Init();
+        QffHeader."No." := 'H3';
+        QffHeader.Insert();
+
+        QffLine.Init();
+        QffLine."Entry No." := 1;
+        QffLine."Header No." := 'H3';
+        QffLine.Amount := 7.25;
+        QffLine.Insert();
+
+        QffLink.Init();
+        QffLink."Entry No." := 1;
+        QffLink."Header No." := 'H3';
+        QffLink.Insert();
+
+        Q.Open();
+
+        Assert.IsTrue(Q.Read(), 'Query must return the one joined row');
+        Assert.AreEqual(7.25, Q.TotalAmount, 'A JOIN that also selects a FlowField column must read the FlowField''s calculated value for the joined row');
+        Assert.IsFalse(Q.Read(), 'Query must only return one row');
         Q.Close();
     end;
 }
