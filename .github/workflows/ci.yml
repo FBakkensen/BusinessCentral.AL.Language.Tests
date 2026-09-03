@@ -27,7 +27,25 @@ on:
         default: ''
 
 jobs:
+  object-ids:
+    # Fast gate, seconds not minutes: two PRs can each declare the SAME object id,
+    # each compile green in isolation, and break master the moment both merge --
+    # neither PR's own CI can see the other. Branch protection's "require branches
+    # to be up to date" used to catch that as a side effect, by forcing the second
+    # PR to be rebased onto the first and recompiled. This checks it directly, so
+    # that setting is no longer load-bearing and corpus PRs need not be serialized.
+    name: Object IDs must be unique and in range
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 .github/scripts/check-object-ids.py .
+
   prepare:
+    # Gated on object-ids so a duplicate/out-of-range id never spends the BC matrix.
+    # An id collision does eventually surface as AL0297 inside each leg, but that is
+    # 8 parallel BC boots and ~8 minutes per leg to learn something a 2-second scan
+    # already knows. Failing here means the matrix is never dispatched at all.
+    needs: object-ids
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set.outputs.matrix }}
