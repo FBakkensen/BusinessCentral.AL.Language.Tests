@@ -13,6 +13,21 @@
 // refused, and a Text carried in a Variant onto the field itself is refused even in the ISO
 // spelling a control accepts. Without those, "accepts everything" would pass a control that
 // silently ignored what it was given.
+//
+// Two things here look over-careful and are not; both are what the BC 27.0/27.3/27.5 legs
+// measured on the first run of this file.
+//
+//  * The date is the literal 1 January 2024, not a month offset from WorkDate(). Writing a
+//    Date into a table field through a control goes through the license's allowed-date
+//    interval, which on those legs is the filter '??11*|??12*|??01*|??02*' - and WorkDate() is
+//    session state whose value differs per tier, so deriving the date from it made the test's
+//    input differ per leg. A literal with both the month and the day 01 sits inside that filter
+//    whichever field order the tier renders a date in. A DateTime or Time field is not checked
+//    against it, which is why only the three Date arms failed.
+//
+//  * The refusal assertions name the type, not the rejected value. 27.x refuses a Text carried
+//    in a Variant with 'Unable to convert from ...NavText to System.DateTime.', which never
+//    quotes the value; 28.x quotes it. Asserting the quoted value pinned one version's wording.
 
 codeunit 60670 "Test TestPage Temporal Value"
 {
@@ -22,12 +37,11 @@ codeunit 60670 "Test TestPage Temporal Value"
     var
         Assert: Codeunit Assert;
 
-    // January of the working year. Deliberately not WorkDate() itself: a fixed month and day
-    // make the expected value independent of when the suite runs, and the year comes from
-    // WorkDate() so the date stays inside the working period.
-    local procedure TemporalSetValue_JanuaryDate(): Date
+    // See the header: a literal, with month and day both 01 so it sits inside the license's
+    // allowed-date interval on every leg, and with nothing session-scoped in it.
+    local procedure TemporalSetValue_Date(): Date
     begin
-        exit(DMY2Date(15, 1, Date2DMY(WorkDate(), 3)));
+        exit(20240101D);
     end;
 
     local procedure TemporalSetValue_Seed(No: Code[20]) Row: Record "ALT Temporal Row"
@@ -49,7 +63,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: Date;
     begin
         Row := TemporalSetValue_Seed('TSV-B');
-        Expected := TemporalSetValue_JanuaryDate();
+        Expected := TemporalSetValue_Date();
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
@@ -68,7 +82,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: Date;
     begin
         Row := TemporalSetValue_Seed('TSV-C1');
-        Expected := TemporalSetValue_JanuaryDate();
+        Expected := TemporalSetValue_Date();
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
@@ -87,7 +101,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: Date;
     begin
         Row := TemporalSetValue_Seed('TSV-C2');
-        Expected := TemporalSetValue_JanuaryDate();
+        Expected := TemporalSetValue_Date();
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
@@ -106,7 +120,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: DateTime;
     begin
         Row := TemporalSetValue_Seed('TSV-D');
-        Expected := CreateDateTime(TemporalSetValue_JanuaryDate(), 0T);
+        Expected := CreateDateTime(TemporalSetValue_Date(), 0T);
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
@@ -142,7 +156,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Globals: TestPage "ALT Temporal Globals";
         Expected: Date;
     begin
-        Expected := TemporalSetValue_JanuaryDate();
+        Expected := TemporalSetValue_Date();
 
         Globals.OpenEdit();
         Globals.GDate.SetValue(Expected);
@@ -159,7 +173,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Globals: TestPage "ALT Temporal Globals";
         Expected: Date;
     begin
-        Expected := TemporalSetValue_JanuaryDate();
+        Expected := TemporalSetValue_Date();
 
         Globals.OpenEdit();
         Globals.GDate.SetValue(Format(Expected, 0, '<Year4>-<Month,2>-<Day,2>'));
@@ -176,7 +190,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Globals: TestPage "ALT Temporal Globals";
         Expected: DateTime;
     begin
-        Expected := CreateDateTime(TemporalSetValue_JanuaryDate(), 0T);
+        Expected := CreateDateTime(TemporalSetValue_Date(), 0T);
 
         Globals.OpenEdit();
         Globals.GDateTime.SetValue(Expected);
@@ -204,9 +218,10 @@ codeunit 60670 "Test TestPage Temporal Value"
         Globals.Close();
     end;
 
-    // The negative direction. Only the quoted value is asserted, not the whole message: the
-    // wording around it is the platform's and varies by version, but a refusal that does not
-    // name what was rejected is useless to whoever has to read it.
+    // The negative direction, and the arm that stops the nine above from passing against a
+    // control that silently ignores what it is handed. The refusal must name the type it could
+    // not produce; the wording around that is the platform's and differs by version, so it is
+    // not asserted.
     [Test]
     procedure TemporalSetValue_RecBoundDateControlRefusesAnUnevaluableSpelling()
     var
@@ -220,8 +235,31 @@ codeunit 60670 "Test TestPage Temporal Value"
         asserterror Card."The Date".SetValue('not-a-date');
 
         Assert.IsTrue(
-            StrPos(GetLastErrorText(), 'not-a-date') > 0,
-            StrSubstNo('the refusal should name the rejected value; it said <%1>', GetLastErrorText()));
+            StrPos(GetLastErrorText(), 'Date') > 0,
+            StrSubstNo('the refusal should name the Date type; it said <%1>', GetLastErrorText()));
+        Assert.AreEqual(
+            0D, Row."The Date", 'a refused control write must not have reached the field');
+    end;
+
+    // 'w' is the working date, and it is the arm that decides HOW a control reads its text: no
+    // general-purpose date parser accepts it under any culture, so a control that resolves it
+    // is going through the platform's own date evaluator rather than a parser standing in for
+    // one. Asserted against WorkDate() itself, so the tier's own value is the expected value.
+    // On a page variable rather than a table field, because the resulting date is whatever the
+    // tier's working date happens to be and a table field would put that through the license's
+    // allowed-date interval - see the header.
+    [Test]
+    procedure TemporalSetValue_PageVariableDateControlTakesTheWorkingDateShorthand()
+    var
+        Globals: TestPage "ALT Temporal Globals";
+    begin
+        Globals.OpenEdit();
+        Globals.GDate.SetValue('w');
+
+        Assert.AreEqual(
+            Format(WorkDate(), 0, '<Year4>-<Month,2>-<Day,2>'), Globals.GEcho.Value(),
+            'page-variable Date control, the working-date shorthand');
+        Globals.Close();
     end;
 
     // Not the same claim, and it is here so nobody reads the tests above as making it: a Text
@@ -235,12 +273,15 @@ codeunit 60670 "Test TestPage Temporal Value"
     begin
         Row.Init();
         Row."No." := 'TSV-P2';
-        AsText := Format(TemporalSetValue_JanuaryDate(), 0, '<Year4>-<Month,2>-<Day,2>');
+        AsText := Format(TemporalSetValue_Date(), 0, '<Year4>-<Month,2>-<Day,2>');
 
         asserterror Row.Validate("The Date", AsText);
 
+        // Named type, not quoted value: 27.x says 'Unable to convert from ...NavText to
+        // System.DateTime.' and never quotes the text, where 28.x quotes it.
         Assert.IsTrue(
-            StrPos(GetLastErrorText(), Format(AsText)) > 0,
-            StrSubstNo('the refusal should name the rejected value; it said <%1>', GetLastErrorText()));
+            StrPos(GetLastErrorText(), 'Date') > 0,
+            StrSubstNo('the refusal should name the Date type; it said <%1>', GetLastErrorText()));
+        Assert.AreEqual(0D, Row."The Date", 'a refused Validate must leave the field blank');
     end;
 }
