@@ -17,13 +17,18 @@
 // Two things here look over-careful and are not; both are what the BC 27.0/27.3/27.5 legs
 // measured on the first run of this file.
 //
-//  * The date is the literal 1 January 2024, not a month offset from WorkDate(). Writing a
-//    Date into a table field through a control goes through the license's allowed-date
-//    interval, which on those legs is the filter '??11*|??12*|??01*|??02*' - and WorkDate() is
-//    session state whose value differs per tier, so deriving the date from it made the test's
-//    input differ per leg. A literal with both the month and the day 01 sits inside that filter
-//    whichever field order the tier renders a date in. A DateTime or Time field is not checked
-//    against it, which is why only the three Date arms failed.
+//  * The Rec-bound Date arms enter WorkDate() itself, with no offset. Writing a Date into a
+//    table FIELD through a control goes through the license's allowed-date interval, which on
+//    those legs is the filter '??11*|??12*|??01*|??02*'. Two literals were tried against it and
+//    both were refused there while passing on 28.x, so which dates a tier permits is a property
+//    of that tier's license and cannot be predicted from here. WorkDate() is the one date a
+//    tier vouches for itself, and the arms assert against WorkDate() so the tier's own value is
+//    the expected value. A DateTime or Time field is not checked against the interval, and
+//    neither is a page variable, which is why only the three Date arms ever failed.
+//
+//    The page-variable arms keep a literal on purpose. They are the control: they exercise the
+//    same spellings with nothing session-scoped in them, so if one of THEM ever fails with the
+//    interval message, what changed is where BC applies the check, not this test's input.
 //
 //  * The refusal assertions name the type, not the rejected value. 27.x refuses a Text carried
 //    in a Variant with 'Unable to convert from ...NavText to System.DateTime.', which never
@@ -37,11 +42,20 @@ codeunit 60670 "Test TestPage Temporal Value"
     var
         Assert: Codeunit Assert;
 
-    // See the header: a literal, with month and day both 01 so it sits inside the license's
-    // allowed-date interval on every leg, and with nothing session-scoped in it.
+    // For a page-variable control: a literal, with nothing session-scoped in it. Not used by
+    // the Rec-bound Date arms - see the header for why those enter WorkDate() instead.
     local procedure TemporalSetValue_Date(): Date
     begin
         exit(20240101D);
+    end;
+
+    // For a Rec-bound Date control: the tier's own working date, which is the only date a tier
+    // vouches for against its own license. Guarded, because a blank WorkDate() would make the
+    // arms below assert 0D against 0D and pass without proving anything.
+    local procedure TemporalSetValue_TableDate(): Date
+    begin
+        Assert.AreNotEqual(0D, WorkDate(), 'the tier must have a working date for these arms to mean anything');
+        exit(WorkDate());
     end;
 
     local procedure TemporalSetValue_Seed(No: Code[20]) Row: Record "ALT Temporal Row"
@@ -63,7 +77,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: Date;
     begin
         Row := TemporalSetValue_Seed('TSV-B');
-        Expected := TemporalSetValue_Date();
+        Expected := TemporalSetValue_TableDate();
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
@@ -82,7 +96,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: Date;
     begin
         Row := TemporalSetValue_Seed('TSV-C1');
-        Expected := TemporalSetValue_Date();
+        Expected := TemporalSetValue_TableDate();
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
@@ -101,11 +115,13 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: Date;
     begin
         Row := TemporalSetValue_Seed('TSV-C2');
-        Expected := TemporalSetValue_Date();
+        Expected := TemporalSetValue_TableDate();
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
-        Card."The Date".SetValue(Format(Expected, 0, '<Year4>-<Month,2>-<Day,2>'));
+        // Format 9 is BC's own XML/invariant rendering, yyyy-MM-dd - the spelling the
+        // platform's refusal message names as the one that always works.
+        Card."The Date".SetValue(Format(Expected, 0, 9));
         Card.Close();
 
         Row.Get('TSV-C2');
@@ -120,7 +136,7 @@ codeunit 60670 "Test TestPage Temporal Value"
         Expected: DateTime;
     begin
         Row := TemporalSetValue_Seed('TSV-D');
-        Expected := CreateDateTime(TemporalSetValue_Date(), 0T);
+        Expected := CreateDateTime(TemporalSetValue_TableDate(), 0T);
 
         Card.OpenEdit();
         Card.GoToRecord(Row);
