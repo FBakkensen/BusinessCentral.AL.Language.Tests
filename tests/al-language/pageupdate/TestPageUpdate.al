@@ -55,17 +55,18 @@ codeunit 60496 "ALT Page Update Test"
         Assert: Codeunit Assert;
         Trace: Codeunit "ALT Page Update Trace";
 
+    // Every row is cleared first, so the Card can only ever open on the row this test seeded.
+    // Without that, a row an earlier test in this codeunit left behind sorts ahead of the new
+    // one, the Card opens on it, and the "before" reading measures the wrong row -- which is
+    // what the tier reported the first time this suite ran.
     local procedure SeedRow(var Row: Record "ALT Page Update Row"; RowNo: Code[20])
     begin
-        if Row.Get(RowNo) then begin
-            Row.Amount := 20;
-            Row.Modify();
-        end else begin
-            Row.Init();
-            Row."No." := RowNo;
-            Row.Amount := 20;
-            Row.Insert();
-        end;
+        Row.Reset();
+        Row.DeleteAll();
+        Row.Init();
+        Row."No." := RowNo;
+        Row.Amount := 20;
+        Row.Insert();
     end;
 
     [Test]
