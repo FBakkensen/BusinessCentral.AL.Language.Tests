@@ -18,6 +18,12 @@
 // The Ok-behaviour twin (..._Unattributed_...) is in this suite deliberately: it is the same
 // helper body without the attribute, and it is what makes each Ignore assertion a statement
 // about the ATTRIBUTE rather than about the shape of the call.
+//
+// How the two Ignore/Error behaviours interact with
+// [TransactionModel(TransactionModel::AutoRollback)] is pinned separately, in
+// record/TestTransactionModelAutoRollback.al (codeunit 60899, tests 07 and 08): Ignore exempts
+// the platform's refusal of an explicit Commit() inside an AutoRollback test, and Error does not
+// outrank it.
 codeunit 60881 "Test Commit Behavior Attr"
 {
     Subtype = Test;
