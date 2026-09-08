@@ -174,19 +174,36 @@ codeunit 61201 "Test Published App Sys Table"
     end;
 
     [Test]
-    procedure PublishedApplication_ThisApp_PackageIdIsItsRuntimePackageId()
-    // CLAIM: within ONE row the two GUID columns carry the same value.
+    procedure PublishedApplication_ThisApp_BothPackageColumnsAreNonBlank()
+    // CLAIM: a published app carries a non-blank GUID in each of the two package columns.
     //
-    // Measured, and the reason this test exists rather than its opposite. The first revision
-    // of this file asserted that the two columns differ, on the reading that publishing
-    // assigns them independently. All eight BC legs, 27.0 through 28.4, of run 34023230684
-    // disagreed: every one reported the two columns equal for this app. So the pair does not
-    // discriminate within a row - what tells two apps apart is the values differing BETWEEN
-    // rows, which the test above pins.
+    // This test used to assert the stronger claim that the two columns hold the SAME value within
+    // one row. They do here and they do not on an official Microsoft BC container on Windows
+    // (nightly run 34182689878, BC 28.4), and BC's own code says why. From
+    // NavAppPackageCompiler.CreateRuntimePackageId in Microsoft.Dynamics.Nav.Ncl.dll, BC 28.4:
     //
-    // What this does NOT claim: that they are equal for every app on every tier. An app
-    // republished over an earlier version can carry a runtime package id from the later
-    // publish. The claim is about a freshly published app, which is what this tier has.
+    //     return new RuntimePackageId(
+    //         (isDeveloperExtension && !forceUniqueRuntimePackageId)
+    //             ? packageId.Value.Value
+    //             : Guid.NewGuid());
+    //
+    // A developer-extension publish deliberately reuses the package id as the runtime package id.
+    // Every other publish route gets a fresh GUID. bc-linux publishes through the dev endpoint,
+    // which is a developer-extension publish; BcContainerHelper publishes with Publish-NAVApp,
+    // which is not. One rule, two answers, decided by the route rather than by the tier --
+    // established on a live container in MsDyn365Bc.On.Linux#69 and recorded in that repository's
+    // KNOWN-LIMITATIONS.md.
+    //
+    // So the equality is a property of how this corpus happens to be published, and a corpus test
+    // cannot assert either branch of that rule universally: both tiers run the same BC code and
+    // reach it by different routes. What both agree on is that each column is populated, which is
+    // what is asserted below. See #283.
+    //
+    // The claim that the pair actually DISCRIMINATES between apps is asserted by
+    // PublishedApplication_TwoApps_DoNotShareEitherPackageId above, which passed on both tiers and
+    // is the assertion ownership questions rest on. Note it holds under either branch of the rule:
+    // distinct apps have distinct package ids, so reusing the package id still yields distinct
+    // runtime package ids.
     var
         ThisApp: Record "Published Application";
         ThisModule: ModuleInfo;
@@ -199,9 +216,7 @@ codeunit 61201 "Test Published App Sys Table"
         Assert.IsTrue(ThisApp.FindFirst(), 'This app must have a Published Application row of its own.');
 
         Assert.AreNotEqual(EmptyId, ThisApp."Package ID", 'A published app must carry a non-blank Package ID.');
-        Assert.AreEqual(
-            ThisApp."Package ID", ThisApp."Runtime Package ID",
-            'A freshly published app carries one GUID in both package columns.');
+        Assert.AreNotEqual(EmptyId, ThisApp."Runtime Package ID", 'A published app must carry a non-blank Runtime Package ID.');
     end;
 
     [Test]
