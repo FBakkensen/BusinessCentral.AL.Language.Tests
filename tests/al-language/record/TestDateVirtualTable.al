@@ -262,6 +262,92 @@ codeunit 60983 "Test Date Virtual Table"
         Assert.ExpectedErrorCannotFind(Database::Date);
     end;
 
+    [Test]
+    procedure Record_Date_RangeOpenAtTheLowEnd_ReachesBackToTheFirstPeriodStart()
+    var
+        DateRec: Record Date;
+    begin
+        Initialize();
+
+        // A "Period Start" filter closed at its HIGH end only. The platform runs the open end
+        // back to its own first period start for the period type - 3 January of year 1 for
+        // Date - so the range is every day from there to 1 January 1850. A provider that
+        // answers from a bounded set of precomputed rows returns nothing here, or returns a
+        // first row that is wherever its own rows happen to begin.
+        DateRec.SetRange("Period Type", DateRec."Period Type"::Date);
+        DateRec.SetFilter("Period Start", '..%1', DMY2Date(1, 1, 1850));
+
+        Assert.AreEqual(675332, DateRec.Count(), 'Expected every Date period from the first one up to 1 January 1850.');
+        Assert.IsTrue(DateRec.FindFirst(), 'Record Date returned no row for a range open at its low end.');
+        Assert.AreEqual(DMY2Date(3, 1, 1), DateRec."Period Start", 'The first Date period starts on 3 January of year 1.');
+        Assert.IsTrue(DateRec.FindLast(), 'Record Date returned no last row for a range open at its low end.');
+        Assert.AreEqual(DMY2Date(1, 1, 1850), DateRec."Period Start", 'The range ends on its closed bound, 1 January 1850.');
+    end;
+
+    [Test]
+    procedure Record_Date_TwoClosedRanges_SelectTheirUnionNotTheirEnvelope()
+    var
+        DateRec: Record Date;
+        I: Integer;
+    begin
+        Initialize();
+
+        // A filter expression may name several ranges separated by `|`, and the rows it
+        // selects are their UNION. The envelope of these two ranges spans 36 days; the union
+        // is 15, so a provider that reads only the outermost bounds fails on the count and on
+        // the row that follows the first range's end.
+        DateRec.SetRange("Period Type", DateRec."Period Type"::Date);
+        DateRec.SetFilter("Period Start", '%1..%2|%3..%4',
+            DMY2Date(1, 1, 2000), DMY2Date(10, 1, 2000), DMY2Date(1, 2, 2000), DMY2Date(5, 2, 2000));
+
+        Assert.AreEqual(15, DateRec.Count(), 'Expected 10 days in January plus 5 in February, not the 36 days they span.');
+        Assert.IsTrue(DateRec.FindSet(), 'Record Date returned no rows for a two-range filter.');
+        Assert.AreEqual(DMY2Date(1, 1, 2000), DateRec."Period Start", 'Expected the first range to start on 1 January 2000.');
+
+        // Next is asserted step by step rather than driven from a loop condition, because AL
+        // does not short-circuit `and`.
+        for I := 1 to 9 do
+            Assert.AreEqual(1, DateRec.Next(), 'Expected the first range to yield 10 consecutive days.');
+        Assert.AreEqual(DMY2Date(10, 1, 2000), DateRec."Period Start", 'Expected the first range to end on 10 January 2000.');
+
+        // The row after the first range's end is the second range's low bound, not 11 January.
+        Assert.AreEqual(1, DateRec.Next(), 'Expected a row after the first range ended - the second range was dropped.');
+        Assert.AreEqual(DMY2Date(1, 2, 2000), DateRec."Period Start", 'Expected the row after 10 January to be 1 February, the second range''s low bound.');
+    end;
+
+    [Test]
+    procedure Record_Date_ClosedRangePlusRangeOpenAtTheHighEnd_SelectsBoth()
+    var
+        DateRec: Record Date;
+        I: Integer;
+    begin
+        Initialize();
+
+        // The same union rule with one of the two ranges open at its high end. The platform
+        // runs that end out to its own last period start, 31 December 9999, so the answer is
+        // the 10 days of the closed range plus every day from 1 January 2300 on. The outermost
+        // closed bounds of the whole filter are 1 and 10 January 2000, both far from where the
+        // rows actually end, so a provider that reads the envelope drops the second range
+        // whole and answers 10.
+        DateRec.SetRange("Period Type", DateRec."Period Type"::Date);
+        DateRec.SetFilter("Period Start", '%1..%2|%3..',
+            DMY2Date(1, 1, 2000), DMY2Date(10, 1, 2000), DMY2Date(1, 1, 2300));
+
+        Assert.AreEqual(2812377, DateRec.Count(), 'Expected the union of a 10-day range and a range running to the last Date period.');
+        Assert.IsTrue(DateRec.FindFirst(), 'Record Date returned no rows for a closed range plus an open-ended one.');
+        Assert.AreEqual(DMY2Date(1, 1, 2000), DateRec."Period Start", 'Expected the first row to be the closed range''s low bound.');
+        Assert.IsTrue(DateRec.FindLast(), 'Record Date returned no last row for a range open at its high end.');
+        Assert.AreEqual(DMY2Date(31, 12, 9999), DateRec."Period Start", 'The last Date period starts on 31 December 9999.');
+
+        // The row after the closed range's end is the open-ended range's low bound.
+        Assert.IsTrue(DateRec.FindSet(), 'Record Date returned no rows to walk.');
+        for I := 1 to 9 do
+            Assert.AreEqual(1, DateRec.Next(), 'Expected the closed range to yield 10 consecutive days.');
+        Assert.AreEqual(DMY2Date(10, 1, 2000), DateRec."Period Start", 'Expected the closed range to end on 10 January 2000.');
+        Assert.AreEqual(1, DateRec.Next(), 'Expected a row after the closed range ended - the open-ended range was dropped.');
+        Assert.AreEqual(DMY2Date(1, 1, 2300), DateRec."Period Start", 'Expected the row after 10 January 2000 to be 1 January 2300.');
+    end;
+
     local procedure Initialize()
     begin
         // Record Date is a read-only computed system virtual table — nothing to clean up.
