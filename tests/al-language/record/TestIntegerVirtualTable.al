@@ -16,6 +16,10 @@
 // all of them; these say that Number 250000 and Number -250000 are ordinary rows, and that
 // `SetFilter(Number, '>=1')` — the shape a report loop driver uses — yields rows rather
 // than an error.
+//
+// Three later tests ask what a filter naming SEVERAL ranges selects — the union of all of
+// them, not the outermost bounds they span — and how far the table reaches by KEY in both
+// directions.
 
 codeunit 60368 "Test Integer Virtual Table"
 {
@@ -174,6 +178,86 @@ codeunit 60368 "Test Integer Virtual Table"
         IntRec.SetFilter(Number, '..7');
         Assert.IsTrue(IntRec.FindLast(), 'A low-open Integer filter returned no rows.');
         Assert.AreEqual(7, IntRec.Number, 'Expected the low-open range to end at 7.');
+    end;
+
+    [Test]
+    procedure Record_Integer_MultiRangeFilter_YieldsEveryRangeNotJustTheFirst()
+    var
+        IntRec: Record Integer;
+        I: Integer;
+    begin
+        Initialize();
+
+        // A filter expression may name several ranges separated by `|`, and the rows it selects
+        // are their UNION. Mixing a closed range with a half-open one is the shape a provider
+        // that reads only the filter's outermost bounds gets wrong: the envelope of
+        // `1..50|200000..` is 1..50, so such a provider answers 50 rows and drops the second
+        // range entirely without reporting anything.
+        //
+        // The walk stays inside 51 rows and never names the bound the service tier substitutes
+        // for the open end. `Next` is asserted step by step rather than driven from a loop
+        // condition, because AL does not short-circuit `and`.
+        IntRec.SetFilter(Number, '1..50|200000..');
+        Assert.IsTrue(IntRec.FindSet(), 'A multi-range Integer filter returned no rows.');
+        Assert.AreEqual(1, IntRec.Number, 'Expected the first range to start at 1.');
+
+        for I := 1 to 49 do
+            Assert.AreEqual(1, IntRec.Next(), 'Expected the first range to yield 50 consecutive rows.');
+        Assert.AreEqual(50, IntRec.Number, 'Expected the 50th row of the first range to be Number 50.');
+
+        // The row after the closed range's end is the second range's closed end, not nothing.
+        Assert.AreEqual(1, IntRec.Next(), 'Expected a row after the first range ended — the second range was dropped.');
+        Assert.AreEqual(200000, IntRec.Number, 'Expected the row after 50 to be the second range''s low bound 200000.');
+
+        // The mirror: the half-open range comes FIRST and is open at the LOW end, so its closed
+        // end (-200000) is not the filter's outermost bound in either direction either.
+        IntRec.Reset();
+        IntRec.SetFilter(Number, '..-200000|1..50');
+        Assert.IsTrue(IntRec.FindLast(), 'A multi-range Integer filter with a low-open range returned no rows.');
+        Assert.AreEqual(50, IntRec.Number, 'Expected the last row to be the closed range''s high bound 50.');
+
+        for I := 1 to 49 do
+            Assert.AreEqual(-1, IntRec.Next(-1), 'Expected the closed range to yield 50 consecutive rows walked backwards.');
+        Assert.AreEqual(1, IntRec.Number, 'Expected the 50th row walked backwards to be Number 1.');
+
+        Assert.AreEqual(-1, IntRec.Next(-1), 'Expected a row below 1 — the low-open range was dropped.');
+        Assert.AreEqual(-200000, IntRec.Number, 'Expected the row below 1 to be the low-open range''s high bound -200000.');
+    end;
+
+    [Test]
+    procedure Record_Integer_TwoClosedRanges_CountTheirUnion()
+    var
+        IntRec: Record Integer;
+    begin
+        Initialize();
+
+        // The same union, with both ranges closed so the total is a number this test can name.
+        // 50 rows from 1..50 and 10 from 200000..200009; a provider answering from the envelope
+        // 1..200009 would report 200009, and one reading only the first range would report 50.
+        IntRec.SetFilter(Number, '1..50|200000..200009');
+        Assert.AreEqual(60, IntRec.Count(), 'Expected a two-range Integer filter to count the union of both ranges.');
+
+        IntRec.Reset();
+        IntRec.SetFilter(Number, '-200009..-200000|1..50');
+        Assert.AreEqual(60, IntRec.Count(), 'Expected a two-range Integer filter spanning zero to count the union of both ranges.');
+    end;
+
+    [Test]
+    procedure Record_Integer_KeyedGetPastOneBillion_AnswersFalse()
+    var
+        IntRec: Record Integer;
+    begin
+        Initialize();
+
+        // How far the table reaches by KEY, in both directions. 1000000000 and -1000000000 are
+        // rows; one step further is not. Pairing each edge with its neighbour is what makes this
+        // a statement about where the boundary IS — a provider that answers FALSE for everything
+        // large, or TRUE for every Get, fails one half or the other.
+        Assert.IsTrue(IntRec.Get(1000000000), 'Expected Number 1000000000 to be a row of the Integer table.');
+        Assert.IsTrue(IntRec.Get(-1000000000), 'Expected Number -1000000000 to be a row of the Integer table.');
+
+        Assert.IsFalse(IntRec.Get(1000000001), 'Expected Number 1000000001 to be past the Integer table''s upper end.');
+        Assert.IsFalse(IntRec.Get(-1000000001), 'Expected Number -1000000001 to be past the Integer table''s lower end.');
     end;
 
     local procedure Initialize()
